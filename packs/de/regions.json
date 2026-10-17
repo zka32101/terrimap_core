@@ -2,67 +2,221 @@
  "regions": [
   {
    "id": "DE-BB",
-   "capitalId": "cap_DE-BB"
+   "capitalId": "cap_DE-BB",
+   "capitalPos": {
+    "x": 13.0645,
+    "y": 52.3906
+   },
+   "neighbors": [
+    "DE-BE",
+    "DE-MV",
+    "DE-NI",
+    "DE-SN",
+    "DE-ST"
+   ]
   },
   {
    "id": "DE-BE",
-   "capitalId": "cap_DE-BE"
+   "capitalId": "cap_DE-BE",
+   "capitalPos": {
+    "x": 13.405,
+    "y": 52.52
+   },
+   "neighbors": [
+    "DE-BB"
+   ]
   },
   {
    "id": "DE-BW",
-   "capitalId": "cap_DE-BW"
+   "capitalId": "cap_DE-BW",
+   "capitalPos": {
+    "x": 9.1829,
+    "y": 48.7758
+   },
+   "neighbors": [
+    "DE-BY",
+    "DE-HE",
+    "DE-RP"
+   ]
   },
   {
    "id": "DE-BY",
-   "capitalId": "cap_DE-BY"
+   "capitalId": "cap_DE-BY",
+   "capitalPos": {
+    "x": 11.582,
+    "y": 48.1351
+   },
+   "neighbors": [
+    "DE-BW",
+    "DE-HE",
+    "DE-SN",
+    "DE-TH"
+   ]
   },
   {
    "id": "DE-HB",
-   "capitalId": "cap_DE-HB"
+   "capitalId": "cap_DE-HB",
+   "capitalPos": {
+    "x": 8.8017,
+    "y": 53.0793
+   },
+   "neighbors": [
+    "DE-NI"
+   ]
   },
   {
    "id": "DE-HE",
-   "capitalId": "cap_DE-HE"
+   "capitalId": "cap_DE-HE",
+   "capitalPos": {
+    "x": 8.2398,
+    "y": 50.0782
+   },
+   "neighbors": [
+    "DE-BW",
+    "DE-BY",
+    "DE-NI",
+    "DE-NW",
+    "DE-RP",
+    "DE-TH"
+   ]
   },
   {
    "id": "DE-HH",
-   "capitalId": "cap_DE-HH"
+   "capitalId": "cap_DE-HH",
+   "capitalPos": {
+    "x": 9.9937,
+    "y": 53.5511
+   },
+   "neighbors": [
+    "DE-NI",
+    "DE-SH"
+   ]
   },
   {
    "id": "DE-MV",
-   "capitalId": "cap_DE-MV"
+   "capitalId": "cap_DE-MV",
+   "capitalPos": {
+    "x": 11.4012,
+    "y": 53.6355
+   },
+   "neighbors": [
+    "DE-BB",
+    "DE-NI",
+    "DE-SH"
+   ]
   },
   {
    "id": "DE-NI",
-   "capitalId": "cap_DE-NI"
+   "capitalId": "cap_DE-NI",
+   "capitalPos": {
+    "x": 9.732,
+    "y": 52.3759
+   },
+   "neighbors": [
+    "DE-BB",
+    "DE-HB",
+    "DE-HE",
+    "DE-HH",
+    "DE-MV",
+    "DE-NW",
+    "DE-SH",
+    "DE-ST",
+    "DE-TH"
+   ]
   },
   {
    "id": "DE-NW",
-   "capitalId": "cap_DE-NW"
+   "capitalId": "cap_DE-NW",
+   "capitalPos": {
+    "x": 6.7735,
+    "y": 51.2277
+   },
+   "neighbors": [
+    "DE-HE",
+    "DE-NI",
+    "DE-RP"
+   ]
   },
   {
    "id": "DE-RP",
-   "capitalId": "cap_DE-RP"
+   "capitalId": "cap_DE-RP",
+   "capitalPos": {
+    "x": 8.2473,
+    "y": 49.9929
+   },
+   "neighbors": [
+    "DE-BW",
+    "DE-HE",
+    "DE-NW",
+    "DE-SL"
+   ]
   },
   {
    "id": "DE-SH",
-   "capitalId": "cap_DE-SH"
+   "capitalId": "cap_DE-SH",
+   "capitalPos": {
+    "x": 10.1228,
+    "y": 54.3233
+   },
+   "neighbors": [
+    "DE-HH",
+    "DE-MV",
+    "DE-NI"
+   ]
   },
   {
    "id": "DE-SL",
-   "capitalId": "cap_DE-SL"
+   "capitalId": "cap_DE-SL",
+   "capitalPos": {
+    "x": 6.9969,
+    "y": 49.2402
+   },
+   "neighbors": [
+    "DE-RP"
+   ]
   },
   {
    "id": "DE-SN",
-   "capitalId": "cap_DE-SN"
+   "capitalId": "cap_DE-SN",
+   "capitalPos": {
+    "x": 13.7373,
+    "y": 51.0504
+   },
+   "neighbors": [
+    "DE-BB",
+    "DE-BY",
+    "DE-ST",
+    "DE-TH"
+   ]
   },
   {
    "id": "DE-ST",
-   "capitalId": "cap_DE-ST"
+   "capitalId": "cap_DE-ST",
+   "capitalPos": {
+    "x": 11.6276,
+    "y": 52.1205
+   },
+   "neighbors": [
+    "DE-BB",
+    "DE-NI",
+    "DE-SN",
+    "DE-TH"
+   ]
   },
   {
    "id": "DE-TH",
-   "capitalId": "cap_DE-TH"
+   "capitalId": "cap_DE-TH",
+   "capitalPos": {
+    "x": 11.0299,
+    "y": 50.9848
+   },
+   "neighbors": [
+    "DE-BY",
+    "DE-HE",
+    "DE-NI",
+    "DE-SN",
+    "DE-ST"
+   ]
   }
  ]
 }

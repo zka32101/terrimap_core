@@ -3,6 +3,7 @@
 使い方: convert_us.py <ne10.geojson> <out packs/us>"""
 import json, sys, pathlib, math
 sys.path.insert(0, str(pathlib.Path(__file__).parent))
+import pack_extras
 src, out = sys.argv[1], pathlib.Path(sys.argv[2])
 rad = math.radians
 
@@ -37,6 +38,8 @@ def dp(pts, tol):
         if d > best: best, bi = d, i
     return [pts[0], pts[-1]] if best <= tol else dp(pts[:bi+1], tol)[:-1] + dp(pts[bi:], tol)
 
+# 州都の位置(緯度, 経度)。市の中心の位置(一般に知られた公共の事実)。
+CAP_LL = {'US-AL':(32.3770,-86.3000),'US-AK':(58.3019,-134.4197),'US-AZ':(33.4484,-112.0740),'US-AR':(34.7465,-92.2896),'US-CA':(38.5816,-121.4944),'US-CO':(39.7392,-104.9903),'US-CT':(41.7637,-72.6851),'US-DE':(39.1582,-75.5244),'US-DC':(38.9072,-77.0369),'US-FL':(30.4383,-84.2807),'US-GA':(33.7490,-84.3880),'US-HI':(21.3069,-157.8583),'US-ID':(43.6150,-116.2023),'US-IL':(39.7817,-89.6501),'US-IN':(39.7684,-86.1581),'US-IA':(41.5868,-93.6250),'US-KS':(39.0473,-95.6752),'US-KY':(38.2009,-84.8733),'US-LA':(30.4515,-91.1871),'US-ME':(44.3106,-69.7795),'US-MD':(38.9784,-76.4922),'US-MA':(42.3601,-71.0589),'US-MI':(42.7325,-84.5555),'US-MN':(44.9537,-93.0900),'US-MS':(32.2988,-90.1848),'US-MO':(38.5767,-92.1735),'US-MT':(46.5891,-112.0391),'US-NE':(40.8136,-96.7026),'US-NV':(39.1638,-119.7674),'US-NH':(43.2081,-71.5376),'US-NJ':(40.2171,-74.7429),'US-NM':(35.6870,-105.9378),'US-NY':(42.6526,-73.7562),'US-NC':(35.7796,-78.6382),'US-ND':(46.8083,-100.7837),'US-OH':(39.9612,-82.9988),'US-OK':(35.4676,-97.5164),'US-OR':(44.9429,-123.0351),'US-PA':(40.2732,-76.8867),'US-RI':(41.8240,-71.4128),'US-SC':(34.0007,-81.0348),'US-SD':(44.3683,-100.3510),'US-TN':(36.1627,-86.7816),'US-TX':(30.2672,-97.7431),'US-UT':(40.7608,-111.8910),'US-VT':(44.2601,-72.5754),'US-VA':(37.5407,-77.4360),'US-WA':(47.0379,-122.9007),'US-WV':(38.3498,-81.6326),'US-WI':(43.0731,-89.4012),'US-WY':(41.1400,-104.8202)}
 CAP = {'AL':('Alabama','Montgomery'),'AK':('Alaska','Juneau'),'AZ':('Arizona','Phoenix'),'AR':('Arkansas','Little Rock'),'CA':('California','Sacramento'),'CO':('Colorado','Denver'),'CT':('Connecticut','Hartford'),'DE':('Delaware','Dover'),'DC':('District of Columbia','Washington, D.C.'),'FL':('Florida','Tallahassee'),'GA':('Georgia','Atlanta'),'HI':('Hawaii','Honolulu'),'ID':('Idaho','Boise'),'IL':('Illinois','Springfield'),'IN':('Indiana','Indianapolis'),'IA':('Iowa','Des Moines'),'KS':('Kansas','Topeka'),'KY':('Kentucky','Frankfort'),'LA':('Louisiana','Baton Rouge'),'ME':('Maine','Augusta'),'MD':('Maryland','Annapolis'),'MA':('Massachusetts','Boston'),'MI':('Michigan','Lansing'),'MN':('Minnesota','Saint Paul'),'MS':('Mississippi','Jackson'),'MO':('Missouri','Jefferson City'),'MT':('Montana','Helena'),'NE':('Nebraska','Lincoln'),'NV':('Nevada','Carson City'),'NH':('New Hampshire','Concord'),'NJ':('New Jersey','Trenton'),'NM':('New Mexico','Santa Fe'),'NY':('New York','Albany'),'NC':('North Carolina','Raleigh'),'ND':('North Dakota','Bismarck'),'OH':('Ohio','Columbus'),'OK':('Oklahoma','Oklahoma City'),'OR':('Oregon','Salem'),'PA':('Pennsylvania','Harrisburg'),'RI':('Rhode Island','Providence'),'SC':('South Carolina','Columbia'),'SD':('South Dakota','Pierre'),'TN':('Tennessee','Nashville'),'TX':('Texas','Austin'),'UT':('Utah','Salt Lake City'),'VT':('Vermont','Montpelier'),'VA':('Virginia','Richmond'),'WA':('Washington','Olympia'),'WV':('West Virginia','Charleston'),'WI':('Wisconsin','Madison'),'WY':('Wyoming','Cheyenne')}
 g = json.load(open(src)); raw = {}
 for f in g['features']:
@@ -64,7 +67,16 @@ for rid in sorted(raw):
     feats.append({"type":"Feature","properties":{"id":rid},"geometry":{"type":"MultiPolygon","coordinates":polys}})
 (out/'geo.geojson').write_text(json.dumps({"type":"FeatureCollection","features":feats},separators=(',',':')))
 ids = [f['properties']['id'] for f in feats]
-(out/'regions.json').write_text(json.dumps({"regions":[{"id":i,"capitalId":"cap_"+i} for i in ids]},indent=1))
+polys = {f['properties']['id']: f['geometry']['coordinates'] for f in feats}
+NB = pack_extras.neighbors(polys, tol=3.0, min_len=6.0)
+regs = []
+for i in ids:
+    lat, lng = CAP_LL[i]
+    px, py = place(i, lng, lat)
+    x, y, moved = pack_extras.snap_inside(round((px-x0)*k, 2), round((py-y0)*k, 2), polys[i])
+    if moved: print("州都の位置を形の内側へ寄せた:", i)
+    regs.append({"id":i,"capitalId":"cap_"+i,"capitalPos":{"x":round(x,2),"y":round(y,2)},"neighbors":NB[i]})
+(out/'regions.json').write_text(json.dumps({"regions":regs},indent=1))
 (out/'strings/en.json').write_text(json.dumps({"regions":{i:CAP[i[3:]][0] for i in ids},"capitals":{"cap_"+i:CAP[i[3:]][1] for i in ids}},ensure_ascii=False,indent=1))
 (out/'pack.json').write_text(json.dumps({
  "packId":"us","version":"0.1.0","country":"US","regionKind":"state","languages":["en"],"defaultLanguage":"en",

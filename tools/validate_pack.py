@@ -25,6 +25,33 @@ for f in geo.get("features", []):
             for x, y in ring:
                 if not planar and not (-180 <= x <= 180 and -90 <= y <= 90): err.append(f"{f['properties']['id']}: 座標範囲外"); break
     if n > MAXV: err.append(f"{f['properties']['id']}: 頂点数超過 {n}")
+# 州都の位置(capitalPos)と隣接(neighbors)。どちらも任意だが、1つでもあれば全地域に必要。
+def _in_ring(x, y, ring):
+    inside = False
+    for (x1, y1), (x2, y2) in zip(ring, ring[1:]):
+        if (y1 > y) != (y2 > y) and x < x1 + (y - y1) / (y2 - y1) * (x2 - x1): inside = not inside
+    return inside
+_polys = {f["properties"]["id"]: [poly[0] for poly in f["geometry"]["coordinates"]] for f in geo.get("features", [])}
+_regs = reg.get("regions", [])
+_np = sum(1 for r in _regs if r.get("capitalPos") is not None); _nn = sum(1 for r in _regs if r.get("neighbors") is not None)
+if _np not in (0, len(_regs)): err.append(f"capitalPos: 全地域に必要({len(_regs)}件中{_np}件)")
+if _nn not in (0, len(_regs)): err.append(f"neighbors: 全地域に必要({len(_regs)}件中{_nn}件)")
+_nb = {}
+for r in _regs:
+    rid = r["id"]; cp = r.get("capitalPos")
+    if cp is not None:
+        if not (isinstance(cp, dict) and isinstance(cp.get("x"), (int, float)) and isinstance(cp.get("y"), (int, float))): err.append(f"{rid}: capitalPos は {{x, y}}")
+        elif not any(_in_ring(cp["x"], cp["y"], ring) for ring in _polys.get(rid, [])): err.append(f"{rid}: 州都の位置が州の形の外")
+    n = r.get("neighbors")
+    if n is not None:
+        if len(set(n)) != len(n): err.append(f"{rid}: neighbors に重複")
+        for o in n:
+            if o == rid: err.append(f"{rid}: neighbors に自分自身")
+            if o not in ids: err.append(f"{rid}: neighbors の未知の地域 {o}")
+        _nb[rid] = set(n)
+for a, st in _nb.items():
+    for b in st:
+        if b in _nb and a not in _nb[b]: err.append(f"隣接が非対称: {a}→{b} だけ")
 caps = {r.get("capitalId") for r in reg.get("regions", []) if r.get("capitalId")}
 for lang in pack.get("languages", []):
     try: s = json.loads((p/f"strings/{lang}.json").read_text())

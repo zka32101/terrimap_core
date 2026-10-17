@@ -67,6 +67,8 @@ class PackValidator {
       if (n > maxVerticesPerRegion) err.add('$id: 頂点数超過 $n');
     }
 
+    err.addAll(_validateGeometryExtras(regions, geo));
+
     final caps = {for (final r in regions) if ((r as Map)['capitalId'] != null) r['capitalId'] as String};
     for (final lang in (pack['languages'] as List?) ?? const []) {
       final src = stringsJsonByLang[lang];
@@ -83,6 +85,59 @@ class PackValidator {
       if (cm.isNotEmpty) err.add('$lang: 首都名の欠落 ${cm.length}件');
     }
     if (profileJson != null) err.addAll(_validateProfile(profileJson, idSet));
+    return err;
+  }
+
+  /// 州都の位置(capitalPos)と隣接(neighbors)の検証。どちらも任意だが、1つでもあれば全地域に必要。
+  static List<String> _validateGeometryExtras(List regions, Map geo) {
+    final err = <String>[];
+    final polys = <String, List>{
+      for (final f in (geo['features'] as List))
+        (f['properties'] as Map)['id'] as String: [for (final poly in (f['geometry']['coordinates'] as List)) (poly as List)[0] as List]
+    };
+    bool inRing(double x, double y, List ring) {
+      var inside = false;
+      for (var i = 0; i < ring.length - 1; i++) {
+        final x1 = (ring[i][0] as num).toDouble(), y1 = (ring[i][1] as num).toDouble();
+        final x2 = (ring[i + 1][0] as num).toDouble(), y2 = (ring[i + 1][1] as num).toDouble();
+        if ((y1 > y) != (y2 > y) && x < x1 + (y - y1) / (y2 - y1) * (x2 - x1)) inside = !inside;
+      }
+      return inside;
+    }
+
+    final withPos = regions.where((r) => (r as Map)['capitalPos'] != null).length;
+    final withNb = regions.where((r) => (r as Map)['neighbors'] != null).length;
+    if (withPos != 0 && withPos != regions.length) err.add('capitalPos: 全地域に必要(${regions.length}件中$withPos件)');
+    if (withNb != 0 && withNb != regions.length) err.add('neighbors: 全地域に必要(${regions.length}件中$withNb件)');
+    final ids = {for (final r in regions) (r as Map)['id'] as String};
+    final nb = <String, Set<String>>{};
+    for (final r in regions) {
+      final id = (r as Map)['id'] as String;
+      final cp = r['capitalPos'];
+      if (cp != null) {
+        final x = cp is Map ? cp['x'] : null, y = cp is Map ? cp['y'] : null;
+        if (x is! num || y is! num) {
+          err.add('$id: capitalPos は {x, y}');
+        } else if (!(polys[id] ?? const []).any((ring) => inRing(x.toDouble(), y.toDouble(), ring as List))) {
+          err.add('$id: 州都の位置が州の形の外');
+        }
+      }
+      final n = r['neighbors'];
+      if (n != null) {
+        final list = (n is List ? n : const []).map((e) => e.toString()).toList();
+        if (list.toSet().length != list.length) err.add('$id: neighbors に重複');
+        for (final o in list) {
+          if (o == id) err.add('$id: neighbors に自分自身');
+          if (!ids.contains(o)) err.add('$id: neighbors の未知の地域 $o');
+        }
+        nb[id] = list.toSet();
+      }
+    }
+    nb.forEach((a, set) {
+      for (final b in set) {
+        if (nb.containsKey(b) && !nb[b]!.contains(a)) err.add('隣接が非対称: $a→$b だけ');
+      }
+    });
     return err;
   }
 
