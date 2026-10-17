@@ -25,7 +25,7 @@
 - Apple / Google Play のアイコン規定(安全領域など)を提出前に確認
 - ストア内の類似アイコンとの見分けは未確認
 - Canvaでの仕上げ(文字入れ・ロゴ化)は、Canvaコネクターの再接続待ち
-- 生成スクリプトは会話内のPython(PIL)。リポジトリには未保存
+- 生成スクリプト: `tools/make_icon.py <de|us> <出力.png>`（Pillow。packs の実データから基本版を決定的に生成。TD版は未対応）
 
 ## 生成物(会話内で送付済み)
 terrimap_de_1024.png / terrimap_us_1024.png(基本版)、terrimap_de_td_1024.png / terrimap_us_td_1024.png(TD版)、preview.png / preview_td.png
