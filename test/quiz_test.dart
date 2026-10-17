@@ -13,6 +13,7 @@ RegionPack de() {
 
 void main() {
   silhouetteTests();
+  reviewTests();
   test('Rng: Pythonリファレンスと一致', () {
     final g = Rng(12345);
     expect([for (var i = 0; i < 5; i++) g.nextInt(1000)], [904, 523, 393, 292, 857]);
@@ -33,6 +34,38 @@ void main() {
   test('デイリー共有テキスト', () {
     expect(DailyChallenge.shareText('X', '2026-10-17', [true, false, true, true, false]),
         'X 2026-10-17 3/5\n🟩🟥🟩🟩🟥');
+  });
+}
+
+void reviewTests() {
+  test('復習: weights省略時は従来と同じ出題', () {
+    final a = QuizEngine(de(), seed: 3).generate(count: 8, types: QuestionType.values);
+    final b = QuizEngine(de(), seed: 3).generate(count: 8, types: QuestionType.values, weights: null);
+    expect([for (final q in a) q.targetId], [for (final q in b) q.targetId]);
+  });
+  test('復習: 重み付きでも同seedで同じ・重複なし', () {
+    final ids = de().regions.map((r) => r.id);
+    final w = reviewWeights(ids, mastered: {'DE-BY'}, misses: {'DE-HH': 3});
+    final a = QuizEngine(de(), seed: 5).generate(count: 16, types: [QuestionType.nameFromMap], weights: w);
+    final b = QuizEngine(de(), seed: 5).generate(count: 16, types: [QuestionType.nameFromMap], weights: w);
+    expect([for (final q in a) q.targetId], [for (final q in b) q.targetId]);
+    expect({for (final q in a) q.targetId}.length, 16);
+  });
+  test('復習: ミスの多い地域が先頭に出やすく、習得済みは出にくい', () {
+    final ids = de().regions.map((r) => r.id).toList();
+    final w = reviewWeights(ids, mastered: {'DE-BY'}, misses: {'DE-HH': 4});
+    var hhFirst = 0, byFirst = 0;
+    for (var seed = 0; seed < 300; seed++) {
+      final f = QuizEngine(de(), seed: seed).generate(count: 1, types: [QuestionType.nameFromMap], weights: w).first.targetId;
+      if (f == 'DE-HH') hhFirst++;
+      if (f == 'DE-BY') byFirst++;
+    }
+    expect(hhFirst, greaterThan(300 * 0.25)); // 一様なら約6%
+    expect(byFirst, lessThan(300 * 0.03)); // 一様なら約6%
+  });
+  test('reviewWeights: 値の範囲', () {
+    final w = reviewWeights(['a', 'b', 'c', 'd'], mastered: {'b', 'c'}, misses: {'a': 9, 'c': 1});
+    expect(w, {'a': 9.0, 'b': 0.25, 'c': 0.5, 'd': 1.0});
   });
 }
 

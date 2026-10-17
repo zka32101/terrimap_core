@@ -9,6 +9,8 @@ class Rng {
     t = (t ^ ((t ^ (t >> 7)) * (t | 61))) & 0xFFFFFFFF;
     return (t ^ (t >> 14)) & 0xFFFFFFFF;
   }
+  /// 0 < x <= 1（重み付き抽選用。既存の nextInt の系列は変えない）
+  double nextDouble() => (_next() + 1) / 4294967296.0;
   /// 0 <= n < max
   int nextInt(int max) => _next() % max;
   List<T> shuffled<T>(Iterable<T> src) {
