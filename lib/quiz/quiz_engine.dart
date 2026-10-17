@@ -1,7 +1,14 @@
 import '../pack/region_pack.dart';
 import 'rng.dart';
 
-enum QuestionType { locateOnMap, nameFromMap, capitalFromName, nameFromCapital }
+enum QuestionType {
+  locateOnMap,
+  nameFromMap,
+  capitalFromName,
+  nameFromCapital,
+  /// 形当て: 対象地域だけの輪郭を見せて、名称を4択で答える。
+  silhouette,
+}
 
 class Question {
   final QuestionType type;
