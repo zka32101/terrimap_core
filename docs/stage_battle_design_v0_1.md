@@ -312,7 +312,7 @@ final replay = engine.toReplay(s);                          // 操作の記録�
 | M0.5 ✅ | パックの追加データ（`capitalPos`・`neighbors`・`coast`）と、変換スクリプト・検証（Dart・Python） | DE16・US51 で、州都が州の形の中にあり、隣接が対称 |
 | M1 ✅ | `Stage`・`StageGenerator`（州の形の切り抜き・拠点＝州都・入口＝隣の州・進路・設置枠・ウェーブ・季節・種別）・テスト・**全州の盤面の一覧画像** | DE16・US51 で生成のテストが通る。盤面の形・大きさが州ごとに違い、一覧画像で目視できる |
 | M2 ✅ | `BattleEngine`（敵1種・施設2種）＋画面なしのテスト | ドイツ1州（バイエルン）で、固定の配置の勝敗が再現できる |
-| M3a ✅ / M3b | 敵4種・施設6種・能力・行動・撃ち方・経済・ボス・難易度3種・スキル | `profile` の全項目がバトルに効く |
+| M3a ✅ / M3b ✅ | 敵4種・施設6種・能力・行動・撃ち方・経済・ボス・難易度3種・スキル | `profile` の全項目がバトルに効く |
 | M3.5 | 天候・季節・限定施設・ハードの施設への攻撃（§6.2・§6.4〜6.6） | 各効果をテストで確認 |
 | M3.6 | クイズ連動（§6.12） | 正解・不正解・オフの3通りをテストで確認 |
 | M4 | 自動対戦（ボット）とバランス結果のレポート | ドイツ・米国の勝率の比較が出る |
@@ -335,3 +335,7 @@ final replay = engine.toReplay(s);                          // 操作の記録�
 ### M3a で実装したこと
 
 敵の能力（shield・regen・swarm・flying・disrupt）と行動（heal_aura・ranged_disable・sabotage）、撃ち方（pierce・slow・burn・chain）、クリティカル（決定的ハッシュ・約15%・2倍）、アップグレード・撤去、ボスのスキル（speedBurst・hpRegen・summon・stunFacility、8秒間隔）。残り（M3b）: 難易度の細部、スキル選択、chain の挙動テスト。
+
+### M3b で実装したこと
+
+スキル選択: `skillChoices(state)`（準備中だけ。seed と波の番号から決まる3つ。`repair` は hard だけ）と `chooseSkill(state, id)`。種類は `waveAtkBonus`（威力+25%）・`waveRangeBonus`（射程+1）・`waveCoinBonus`（撃破コイン+20%）・`waveAtkSpeedBonus`（攻撃速度+15%）・`slow`（敵の速さ×0.8）・`weatherBlock`（無効化の残り回数+1。天候は M3.5）・`repair`（停止・妨害を直す。施設HPの回復は M3.5）。効果は次の波だけで、波が終わると外れる。難易度の細部（波数・開始コイン・拠点HP・敵のHPと速さ・到達の被害）と chain の挙動をテストで確認。
