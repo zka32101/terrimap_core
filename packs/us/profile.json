@@ -11,7 +11,7 @@
   "healer": 0.1
  },
  "economy": {
-  "startCoins": 1.2,
+  "startCoins": 1.0,
   "income": 1.0,
   "facilityCost": 1.0
  },

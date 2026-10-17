@@ -51,7 +51,12 @@ void main() {
     final engine = BattleEngine(stage, profile: de.profile);
     final slot = Weather.schedule(seed: stage.seed, wave: 1, type: 'blizzard', season: stage.season, difficulty: stage.difficulty).first;
 
-    BattleState wave1() => engine.startWave(engine.start()).state;
+    // 波が早く終わらないよう、動かない敵を1体置く
+    Enemy stuck() => Enemy(id: 'stuck', kind: 'normal', pathIndex: 0, hp: 999999, maxHp: 999999, speed: 0, progress: 0, isBoss: false, armor: 0, breachDamage: 1);
+    BattleState wave1() {
+      final w = engine.startWave(engine.start()).state;
+      return w.copyWith(enemies: [stuck()]);
+    }
 
     test('予告→開始→終了の順にイベントが出る', () {
       final r = engine.advance(wave1(), slot.end + 1);

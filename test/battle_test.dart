@@ -165,7 +165,7 @@ void main() {
       final n = engine.makeEnemy(w, 0), s = engine.makeEnemy(w, 1);
       expect(s.speed / n.speed, closeTo(1.8 * de.profile!.enemyOf('speedy').speed / de.profile!.enemyOf('normal').speed, 1e-9));
       final hard = BattleEngine(StageGenerator(de).generate('DE-BY', Difficulty.hard), profile: de.profile);
-      expect(hard.makeEnemy(w, 0).speed / n.speed, closeTo(1.15, 1e-9));
+      expect(hard.makeEnemy(w, 0).speed / n.speed, closeTo(difficultyParams[Difficulty.hard]!.speedMultiplier, 1e-9));
     });
 
     test('施設: 国の攻撃アクションの威力・間隔・撃ち方と、地域のボーナスが反映される', () {
