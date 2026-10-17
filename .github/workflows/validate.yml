@@ -8,3 +8,5 @@ jobs:
       - name: Validate every pack
         run: |
           for d in packs/*/; do python3 -I tools/validate_pack.py "$d"; done
+      - name: Check UI strings (i18n)
+        run: python3 -I tools/i18n_check.py check

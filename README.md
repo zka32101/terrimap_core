@@ -3,7 +3,8 @@ Terrimap シリーズの共通エンジン(地図表示・タップ、出題、�
 
 - `lib/` — pack / map / quiz / progress / daily(Dart。`flutter analyze` クリーン、`flutter test` 190件通過を確認済み)
 - `packs/de`, `packs/us` — 国別データ(Natural Earth、パブリックドメイン)
-- `tools/` — `convert_de.py` `convert_us.py`(変換)、`validate_pack.py`(検証)
+- `i18n/` — 画面の文言（多言語。`battle.<言語>.json`、手順は `i18n/README.md`）
+- `tools/` — `i18n_check.py`(文言の検査・翻訳の取り込み) `convert_de.py` `convert_us.py`(変換)、`validate_pack.py`(検証)
 - `test/` — 単体テスト
 
 ## 注意

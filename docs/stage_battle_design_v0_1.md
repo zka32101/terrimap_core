@@ -391,3 +391,9 @@ final replay = engine.toReplay(s);                          // 操作の記録�
 - `BattleSession`（`lib/battle_ui/battle_session.dart`）: 画面とエンジンの間の操作役。速度（1倍・2倍）、一時停止、選択マス、直近のイベント、設置・強化・撤去・修理（クイズ連動つき）・限定施設・波の開始・スキル選択。時間はフレームから `tick(秒)` で渡す。
 - `BattleView`（`lib/battle_ui/battle_view.dart`）: 盤面（海・陸・進路・設置枠・入口・拠点・施設・敵・耐久バー・選択と射程）を描き、マスのタップを返す。季節で地面の色が変わる。
 - アプリ側（M5 のもう半分）: HUD（波・拠点HP・コイン）、施設の選択欄、スキル選択のクイズ、結果の表示、文言。
+
+### 多言語対応（M5 と同時）
+
+- 画面の文言は `i18n/battle.<言語>.json`（キー→文言）。原本は英語。足りない言語・キーは英語で表示（`UiStrings`）。コアのパッケージに同梱し、ドイツ・米国・（のちに日本）のアプリで共有する。
+- 翻訳は Google翻訳（ローカルのセッション）で行う前提。`tools/i18n_check.py` の `missing`（翻訳用に足りない文言を出す）→ 訳す → `merge`（`{name}` などの崩れを検査して取り込む）→ `check`。手順は `i18n/README.md`。
+- 地域名・州都名は従来どおり `packs/<国>/strings/<言語>.json`（`pack.json` の `languages` に言語を足す）。
