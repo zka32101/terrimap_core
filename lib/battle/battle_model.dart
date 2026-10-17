@@ -166,7 +166,9 @@ class BattleState {
   final int tickCount; // 進めた刻みの数（クリティカルの決定的な乱数に使う）
   final int summoned; // ボスが呼んだ敵の数（id用）
   final String? skill; // 次（または今）の波で効くスキル（波が終わると外れる）
-  final int weatherBlocks; // 天候の無効化の残り回数（M3.5で天候が使う）
+  final int weatherBlocks; // 天候の無効化の残り回数（次に起きる天候を1回防ぐ）
+  final double waveStart; // 現在の波が始まった時刻（天候の予定の基準）
+  final List<String> blockedWeather; // 防いだ天候（'波:番号'）
   const BattleState({
     required this.phase,
     required this.wave,
@@ -184,6 +186,8 @@ class BattleState {
     this.summoned = 0,
     this.skill,
     this.weatherBlocks = 0,
+    this.waveStart = 0,
+    this.blockedWeather = const [],
   });
 
   BattleState copyWith({
@@ -204,6 +208,8 @@ class BattleState {
     String? skill,
     bool clearSkill = false,
     int? weatherBlocks,
+    double? waveStart,
+    List<String>? blockedWeather,
   }) =>
       BattleState(
         phase: phase ?? this.phase,
@@ -222,6 +228,8 @@ class BattleState {
         summoned: summoned ?? this.summoned,
         skill: clearSkill ? null : (skill ?? this.skill),
         weatherBlocks: weatherBlocks ?? this.weatherBlocks,
+        waveStart: waveStart ?? this.waveStart,
+        blockedWeather: blockedWeather ?? this.blockedWeather,
       );
 
   bool get isOver => phase == BattlePhase.victory || phase == BattlePhase.defeat;
@@ -232,7 +240,7 @@ class BattleState {
       'fac${facilities.length} en${enemies.length}';
 }
 
-enum BattleEventType { waveStart, spawn, hit, kill, breach, waveClear, victory, defeat, bossSkill, facilityDisabled, facilitySabotaged }
+enum BattleEventType { waveStart, spawn, hit, kill, breach, waveClear, victory, defeat, bossSkill, facilityDisabled, facilitySabotaged, weatherWarning, weatherStart, weatherEnd, weatherBlocked }
 
 /// 画面・効果音が購読するイベント。使わない項目は null。
 class BattleEvent {
@@ -242,7 +250,7 @@ class BattleEvent {
   final int? value; // hit=ダメージ、kill=得たコイン、breach=拠点への被害、waveStart/waveClear=波の番号
   final bool isBoss;
   final bool crit; // hit: クリティカル
-  final String? detail; // bossSkill: スキル名
+  final String? detail; // bossSkill: スキル名、weather*: 天候の種類
   const BattleEvent(this.type, {this.enemyId, this.facilityPos, this.value, this.isBoss = false, this.crit = false, this.detail});
   @override
   String toString() => '${type.name}${enemyId != null ? ' $enemyId' : ''}${value != null ? ' $value' : ''}';

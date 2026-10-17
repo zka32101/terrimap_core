@@ -5,6 +5,7 @@ import 'package:terrimap_core/battle/battle_engine.dart';
 import 'package:terrimap_core/battle/difficulty.dart';
 import 'package:terrimap_core/battle/grid.dart';
 import 'package:terrimap_core/battle/stage.dart';
+import 'package:terrimap_core/battle/weather.dart';
 import 'package:terrimap_core/battle/stage_generator.dart';
 import 'package:terrimap_core/pack/region_pack.dart';
 
@@ -173,7 +174,8 @@ void main() {
         final fs = engine.facilityStats(f);
         final act = de.profile!.attackActions[t.name];
         final bonus = de.profile!.traitOf('DE-BY').facilityBonus[t.name] ?? 1.0;
-        expect(fs.damage, (facilityBase[t]!.damage * (act?.damage ?? 1.0) * bonus).round().clamp(1, 1 << 30), reason: t.name);
+        final season = Weather.seasons[stage.season]!.typeDamage[t] ?? 1.0;
+        expect(fs.damage, (facilityBase[t]!.damage * (act?.damage ?? 1.0) * bonus * season).round().clamp(1, 1 << 30), reason: t.name);
         expect(fs.action, act?.action ?? 'single', reason: t.name);
         expect(fs.cooldown, closeTo((1 / facilityBase[t]!.attackSpeed) * (act?.cooldown ?? 1.0), 1e-9), reason: t.name);
       }
