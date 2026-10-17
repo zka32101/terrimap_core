@@ -1,6 +1,8 @@
 import 'dart:math' as math;
 
 import '../pack/country_profile.dart';
+import '../pack/region_pack.dart';
+import '../quiz/quiz_engine.dart';
 import '../quiz/rng.dart';
 import 'battle_model.dart';
 import 'difficulty.dart';
@@ -19,7 +21,18 @@ export 'battle_model.dart';
 class BattleEngine {
   final Stage stage;
   final CountryProfile? profile;
-  BattleEngine(this.stage, {this.profile});
+  /// クイズ連動（設計書 §6.12）に使う pack。省略するとクイズ連動は使えない。
+  final RegionPack? pack;
+
+  /// クイズ連動のオン/オフ（設定）。オフなら、スキルは3つから選べ、修理はコインだけ。
+  final bool quizAssist;
+  BattleEngine(this.stage, {this.profile, this.pack, this.quizAssist = true});
+
+  /// クイズ連動が有効か。
+  bool get assistEnabled => pack != null && quizAssist;
+
+  /// 答える制限時間（秒）。hard だけ10秒で、ほかは時間制限なし（null）。時間切れは不正解として扱う（判定は画面側）。
+  double? get assistTimeLimit => stage.difficulty == Difficulty.hard ? 10 : null;
 
   /// 固定の時間刻み。画面のフレームレートに依存しないよう、[advance] はこの刻みで進める。
   static const step = 1 / 30;
@@ -175,9 +188,48 @@ class BattleEngine {
     return [for (final k in keyed.take(skillChoiceCount)) k.$1];
   }
 
+  /// クイズ連動の問題。ステージの州と隣の州から1問（seed・波・用途・位置で決まる）。クイズ連動が無効なら null。
+  /// [forRepair] が null ならスキル選択用、施設の位置なら修理用。
+  Question? assistQuestion(BattleState s, {GridPos? forRepair}) {
+    if (!assistEnabled || s.isOver) return null;
+    final region = pack!.regions.where((r) => r.id == stage.regionId);
+    if (region.isEmpty) return null;
+    final pool = {stage.regionId, ...region.first.neighbors};
+    final seed = fnv1a('${stage.seed}|assist|${forRepair == null ? 'skill' : 'repair'}|${s.wave}|${forRepair?.col},${forRepair?.row}');
+    final qs = QuizEngine(pack!, seed: seed).generate(
+      count: 1,
+      types: const [QuestionType.nameFromMap, QuestionType.capitalFromName, QuestionType.nameFromCapital, QuestionType.silhouette],
+      pool: pool,
+    );
+    return qs.isEmpty ? null : qs.first;
+  }
+
+  /// スキル選択のクイズの結果。正解なら3つから選べるようになり、不正解なら3つのうち1つが決まる。
+  /// クイズ連動が無効なら何も変えない（そのまま選べる）。
+  BattleState resolveSkillQuiz(BattleState s, {required bool correct}) {
+    final choices = skillChoices(s);
+    if (!assistEnabled || choices.isEmpty) return s;
+    if (correct) return s.copyWith(skillUnlocked: true);
+    final id = choices[fnv1a('${stage.seed}|autoskill|${s.wave + 1}') % choices.length];
+    return _applySkill(s, id);
+  }
+
+  /// 修理のクイズの結果。正解なら無料、不正解ならコインを払って修理する（できなければ null）。
+  BattleState? repairByQuiz(BattleState s, GridPos pos, {required bool correct}) {
+    final f = s.facilities[pos];
+    if (s.isOver || f == null || repairCostOf(f) == null) return null;
+    if (!assistEnabled || !correct) return repair(s, pos);
+    return s.copyWith(facilities: {...s.facilities, pos: f.copyWith(hp: maxHpOf(f))});
+  }
+
   /// スキルを選ぶ。候補にない・選択済みなら null。repair は選んだ時点で停止・妨害を直す。
   BattleState? chooseSkill(BattleState s, String id) {
     if (!skillChoices(s).contains(id)) return null;
+    if (assistEnabled && !s.skillUnlocked) return null; // クイズに正解してから
+    return _applySkill(s, id);
+  }
+
+  BattleState _applySkill(BattleState s, String id) {
     switch (id) {
       case 'repair':
         return s.copyWith(skill: id, facilities: {
