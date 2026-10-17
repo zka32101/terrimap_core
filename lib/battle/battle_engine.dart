@@ -13,7 +13,7 @@ export 'battle_model.dart';
 /// 同じステージ・同じ操作なら同じ結果になる。
 /// 入っているもの: 敵の移動・能力（shield・regen・swarm・flying・disrupt）・行動（heal_aura・ranged_disable・sabotage）・ボスのスキル、
 /// 施設の攻撃（single・splash・chain・pierce・slow・burn）・クリティカル・アップグレード・撤去、経済、勝敗。
-/// 天候・季節・限定施設、ハードの施設への攻撃、スキル選択、クイズ連動は M3b 以降。
+/// スキル選択（skillChoices・chooseSkill）も入っている。天候・季節・限定施設、ハードの施設への攻撃、クイズ連動は M3.5 以降。
 class BattleEngine {
   final Stage stage;
   final CountryProfile? profile;
@@ -39,6 +39,11 @@ class BattleEngine {
   static const bossSkillInterval = 8.0, bossHasteSeconds = 3.0, bossHasteFactor = 1.8, bossHealRatio = 0.10;
   static const bossSummonCount = 2, bossSummonHp = 0.5;
   static const upgradeCostRatio = 0.75, refundRatio = 0.6;
+  // スキル（波の合間に3つから1つ選ぶ。効果は次の波だけ）
+  static const waveSkills = ['waveAtkBonus', 'waveRangeBonus', 'waveCoinBonus', 'waveAtkSpeedBonus', 'slow', 'weatherBlock'];
+  static const hardOnlySkills = ['repair'];
+  static const skillChoiceCount = 3;
+  static const skillAtkBonus = 1.25, skillRangeBonus = 1.0, skillCoinBonus = 1.2, skillAtkSpeedBonus = 1.15, skillSlowFactor = 0.8;
   static const bossSkills = ['speedBurst', 'hpRegen', 'summon', 'stunFacility'];
 
   DifficultyParams get _params => difficultyParams[stage.difficulty]!;
@@ -93,6 +98,30 @@ class BattleEngine {
     if (s.isOver || f == null) return null;
     final next = {...s.facilities}..remove(pos);
     return s.copyWith(coins: s.coins + (f.invested * refundRatio).round(), facilities: next);
+  }
+
+  /// 次の波のスキルの候補（準備中で、まだ選んでいないときだけ）。seed と波の番号から決まる3つ。repair は hard だけ。
+  List<String> skillChoices(BattleState s) {
+    if (s.phase != BattlePhase.prep || s.skill != null) return const [];
+    final pool = [...waveSkills, if (stage.difficulty == Difficulty.hard) ...hardOnlySkills];
+    final next = s.wave + 1;
+    final keyed = [for (final id in pool) (id, fnv1a('${stage.seed}|skill|$next|$id'))]..sort((a, b) => a.$2.compareTo(b.$2));
+    return [for (final k in keyed.take(skillChoiceCount)) k.$1];
+  }
+
+  /// スキルを選ぶ。候補にない・選択済みなら null。repair は選んだ時点で停止・妨害を直す。
+  BattleState? chooseSkill(BattleState s, String id) {
+    if (!skillChoices(s).contains(id)) return null;
+    switch (id) {
+      case 'repair':
+        return s.copyWith(skill: id, facilities: {
+          for (final e in s.facilities.entries) e.key: e.value.copyWith(disabledUntil: 0, sabotagedUntil: 0),
+        });
+      case 'weatherBlock':
+        return s.copyWith(skill: id, weatherBlocks: s.weatherBlocks + 1);
+      default:
+        return s.copyWith(skill: id);
+    }
   }
 
   /// 準備を飛ばして、次の波を始める（準備中だけ）。
@@ -159,9 +188,9 @@ class BattleEngine {
     );
   }
 
-  int _killReward(Enemy e, int wave) {
+  int _killReward(Enemy e, int wave, String? skill) {
     final base = e.isBoss ? 60 + wave * 5 : 12 + wave * 3;
-    return math.max(1, (base * _params.rewardMultiplier * (profile?.income ?? 1.0)).round());
+    return math.max(1, (base * _params.rewardMultiplier * (profile?.income ?? 1.0) * (skill == 'waveCoinBonus' ? skillCoinBonus : 1.0)).round());
   }
 
   /// クリティカルか。seed・刻み・施設・敵から決まる（状態を持たない決定的な乱数）。
@@ -318,6 +347,7 @@ class BattleEngine {
       if (m.hp <= 0) continue;
       var v = m.e.speed;
       if (m.slowUntil > now) v *= m.slowFactor;
+      if (st.skill == 'slow') v *= skillSlowFactor;
       if (m.hasteUntil > now) v *= bossHasteFactor;
       m.progress += v * dt;
     }
@@ -333,7 +363,7 @@ class BattleEngine {
         }
         final fs = facilityStats(f);
         // disrupt: 近くに妨害する敵がいると、射程が縮む
-        var range = fs.range;
+        var range = fs.range + (st.skill == 'waveRangeBonus' ? skillRangeBonus : 0);
         for (final m in ms) {
           if (m.hp <= 0 || m.e.ability != 'disrupt') continue;
           final q = m.pos(stage.paths[m.e.pathIndex]);
@@ -355,7 +385,8 @@ class BattleEngine {
           }
         }
         if (target != null) {
-          final power = f.sabotagedUntil > now ? (fs.damage * sabotageRatio).round() : fs.damage;
+          final base = f.sabotagedUntil > now ? (fs.damage * sabotageRatio).round() : fs.damage;
+          final power = st.skill == 'waveAtkBonus' ? (base * skillAtkBonus).round() : base;
           final crit = isCrit(st.tickCount, pos, target.e.id);
           final raw = math.max(1, (power * (crit ? critMultiplier : 1.0)).round());
           int hit(_M m, int amount, {bool c = false, double armorIgnore = 0}) {
@@ -407,7 +438,7 @@ class BattleEngine {
               target.burnUntil = now + burnSeconds;
               target.burnDps = math.max(1, (raw * burnRatio).round());
           }
-          cd = fs.cooldown;
+          cd = st.skill == 'waveAtkSpeedBonus' ? fs.cooldown / skillAtkSpeedBonus : fs.cooldown;
         } else {
           cd = 0; // 撃てる敵がいなければ、準備完了のまま待つ
         }
@@ -420,7 +451,7 @@ class BattleEngine {
     final alive = <_M>[];
     for (final m in ms) {
       if (m.hp <= 0) {
-        final reward = _killReward(m.e, st.wave);
+        final reward = _killReward(m.e, st.wave, st.skill);
         coins += reward;
         score += m.e.isBoss ? 200 : 50;
         events.add(BattleEvent(BattleEventType.kill, enemyId: m.e.id, value: reward, isBoss: m.e.isBoss));
@@ -458,7 +489,7 @@ class BattleEngine {
         events.add(const BattleEvent(BattleEventType.victory));
         return (state: st.copyWith(phase: BattlePhase.victory), events: events);
       }
-      return (state: st.copyWith(phase: BattlePhase.prep, prepTimer: _params.waveBreakSeconds, spawned: 0, spawnAcc: 0), events: events);
+      return (state: st.copyWith(phase: BattlePhase.prep, prepTimer: _params.waveBreakSeconds, spawned: 0, spawnAcc: 0, clearSkill: true), events: events);
     }
     return (state: st, events: events);
   }

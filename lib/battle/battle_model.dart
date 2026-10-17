@@ -165,6 +165,8 @@ class BattleState {
   final double time; // 経過秒（バトル全体）
   final int tickCount; // 進めた刻みの数（クリティカルの決定的な乱数に使う）
   final int summoned; // ボスが呼んだ敵の数（id用）
+  final String? skill; // 次（または今）の波で効くスキル（波が終わると外れる）
+  final int weatherBlocks; // 天候の無効化の残り回数（M3.5で天候が使う）
   const BattleState({
     required this.phase,
     required this.wave,
@@ -180,6 +182,8 @@ class BattleState {
     required this.time,
     this.tickCount = 0,
     this.summoned = 0,
+    this.skill,
+    this.weatherBlocks = 0,
   });
 
   BattleState copyWith({
@@ -197,6 +201,9 @@ class BattleState {
     double? time,
     int? tickCount,
     int? summoned,
+    String? skill,
+    bool clearSkill = false,
+    int? weatherBlocks,
   }) =>
       BattleState(
         phase: phase ?? this.phase,
@@ -213,6 +220,8 @@ class BattleState {
         time: time ?? this.time,
         tickCount: tickCount ?? this.tickCount,
         summoned: summoned ?? this.summoned,
+        skill: clearSkill ? null : (skill ?? this.skill),
+        weatherBlocks: weatherBlocks ?? this.weatherBlocks,
       );
 
   bool get isOver => phase == BattlePhase.victory || phase == BattlePhase.defeat;
