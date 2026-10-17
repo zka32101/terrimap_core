@@ -15,3 +15,4 @@ Terrimap シリーズの共通エンジン(地図表示・タップ、出題、�
 - `region_core_min_spec_v0_2.md` — エンジン最小仕様(旧パッケージ名 region_core = 現 terrimap_core)
 - `de_app_handoff_v0_1.md` — ドイツ版アプリ引き渡し
 - `progress_M0-M4_2026-10-17.md` — 進捗メモ
+- `terrimap_icon_design_v0_1.md` — シリーズアイコン共通設計
