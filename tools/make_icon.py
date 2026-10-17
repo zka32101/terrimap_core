@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Terrimap シリーズのアイコン(基本版)を packs の実データから生成する。設計: docs/terrimap_icon_design_v0_1.md
 
-使い方: tools/make_icon.py <de|us> <出力.png> [--size 1024]
+使い方: tools/make_icon.py <de|us> <出力.png> [--size 1024] [--td]
+  --td: タワーディフェンス版(塔・射程円・敵の進路と敵を足す。試作。設計書の「タワーディフェンス版」)
 依存: Pillow(`pip install pillow`)。結果は決定的(同じ入力なら同じ画像)。
 """
 import argparse, json, math, pathlib, sys
@@ -9,6 +10,14 @@ from PIL import Image, ImageDraw
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 ORANGE = (244, 163, 0)
+RED = (214, 48, 49)
+TOWER = (38, 40, 52)
+
+# タワーディフェンス版の配置(画像に対する0..1の比率)。塗る地域を塔と進路で隠さない位置にする。
+TD = {
+    "de": dict(tower=(0.40, 0.46), path=[(0.80, 0.20), (0.66, 0.28), (0.58, 0.36), (0.50, 0.42), (0.44, 0.45)], enemies=[0.15, 0.45, 0.75]),
+    "us": dict(tower=(0.50, 0.42), path=[(0.84, 0.24), (0.74, 0.30), (0.66, 0.36), (0.58, 0.40), (0.54, 0.42)], enemies=[0.15, 0.45, 0.75]),
+}
 
 # 国ごとの差分(設計書の表)。fit は「地図の長い辺が画像の何割を占めるか」。
 CONFIG = {
@@ -24,7 +33,58 @@ def project(pack, lng, lat):
     return (lng * math.cos(p.get("refLat", 36.0) * math.pi / 180), -lat)
 
 
-def render(country, size=1024):
+def draw_td(img, country):
+    """塔・射程円・敵の進路(赤い点線)・敵(赤い丸)を重ねる。"""
+    S = img.size[0]
+    cfg = TD[country]
+    px = lambda p: (p[0] * S, p[1] * S)
+    # 射程円(半透明)
+    cx, cy = px(cfg["tower"])
+    r = 0.12 * S
+    ov = Image.new("RGBA", img.size, (0, 0, 0, 0))
+    od = ImageDraw.Draw(ov)
+    od.ellipse([cx - r, cy - r, cx + r, cy + r], fill=(255, 255, 255, 70), outline=(255, 255, 255, 190), width=max(3, round(S * 0.005)))
+    img.paste(Image.alpha_composite(img.convert("RGBA"), ov).convert("RGB"))
+    d = ImageDraw.Draw(img)
+    # 進路(点線)
+    pts = [px(p) for p in cfg["path"]]
+    seg = []
+    for a, b in zip(pts, pts[1:]):
+        n = max(1, int(math.dist(a, b) / (0.03 * S)))
+        for i in range(n):
+            t0, t1 = i / n, (i + 0.55) / n
+            seg.append(((a[0] + (b[0] - a[0]) * t0, a[1] + (b[1] - a[1]) * t0), (a[0] + (b[0] - a[0]) * t1, a[1] + (b[1] - a[1]) * t1)))
+    for a, b in seg:
+        d.line([a, b], fill=RED, width=max(4, round(S * 0.008)))
+    # 敵(進路上の赤い丸。白い縁つき)
+    total = sum(math.dist(a, b) for a, b in zip(pts, pts[1:]))
+    for frac in cfg["enemies"]:
+        want, acc = frac * total, 0.0
+        for a, b in zip(pts, pts[1:]):
+            L = math.dist(a, b)
+            if acc + L >= want:
+                t = (want - acc) / L
+                ex, ey = a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t
+                er = 0.025 * S
+                d.ellipse([ex - er - 4, ey - er - 4, ex + er + 4, ey + er + 4], fill=(255, 255, 255))
+                d.ellipse([ex - er, ey - er, ex + er, ey + er], fill=RED)
+                break
+            acc += L
+    # 塔(城塔: 胸壁3つ・橙の扉)
+    w, h = 0.07 * S, 0.11 * S
+    left, top = cx - w / 2, cy - h / 2
+    d.rectangle([left - 4, top - 4, left + w + 4, top + h + 4], fill=(255, 255, 255))
+    d.rectangle([left, top + h * 0.18, left + w, top + h], fill=TOWER)
+    mw = w / 5
+    for i in range(3):  # 胸壁
+        x0 = left + i * 2 * mw
+        d.rectangle([x0, top, x0 + mw, top + h * 0.18 + 1], fill=TOWER)
+    dw, dh = w * 0.34, h * 0.36
+    d.rectangle([cx - dw / 2, top + h - dh, cx + dw / 2, top + h], fill=ORANGE)
+    d.pieslice([cx - dw / 2, top + h - dh - dw / 2, cx + dw / 2, top + h - dh + dw / 2], 180, 360, fill=ORANGE)
+
+
+def render(country, size=1024, td=False):
     cfg = CONFIG[country]
     pack = json.loads((ROOT / "packs" / country / "pack.json").read_text())
     geo = json.loads((ROOT / "packs" / country / "geo.geojson").read_text())
@@ -59,6 +119,8 @@ def render(country, size=1024):
         for r in rings:
             pts = [tf(p) for p in r]
             d.line(pts + [pts[0]], fill=cfg["bg"], width=line, joint="curve")
+    if td:
+        draw_td(img, country)
     return img.resize((size, size), Image.LANCZOS)
 
 
@@ -67,8 +129,9 @@ def main():
     ap.add_argument("country", choices=sorted(CONFIG))
     ap.add_argument("out")
     ap.add_argument("--size", type=int, default=1024)
+    ap.add_argument("--td", action="store_true", help="タワーディフェンス版(試作)")
     a = ap.parse_args()
-    render(a.country, a.size).save(a.out)
+    render(a.country, a.size, td=a.td).save(a.out)
     print(f"wrote {a.out}")
 
 
