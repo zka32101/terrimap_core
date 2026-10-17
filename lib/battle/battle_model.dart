@@ -45,9 +45,13 @@ class Facility {
   final int invested; // 置く・強化に使ったコインの合計（撤去の払い戻しの基準）
   final double disabledUntil; // この時刻まで停止（敵の ranged_disable・ボスの stunFacility）
   final double sabotagedUntil; // この時刻まで威力が半分（敵の sabotage）
+  final int hp; // 耐久（hard だけ。0 は耐久なし）
+  final String? exclusive; // 限定施設の id（通常の施設は null）
   const Facility(this.type, this.pos,
-      {this.level = 1, this.cooldown = 0, this.invested = 0, this.disabledUntil = 0, this.sabotagedUntil = 0});
-  Facility copyWith({int? level, double? cooldown, int? invested, double? disabledUntil, double? sabotagedUntil}) => Facility(type, pos,
+      {this.level = 1, this.cooldown = 0, this.invested = 0, this.disabledUntil = 0, this.sabotagedUntil = 0, this.hp = 0, this.exclusive});
+  Facility copyWith({int? level, double? cooldown, int? invested, double? disabledUntil, double? sabotagedUntil, int? hp}) => Facility(type, pos,
+      exclusive: exclusive,
+      hp: hp ?? this.hp,
       level: level ?? this.level,
       cooldown: cooldown ?? this.cooldown,
       invested: invested ?? this.invested,
@@ -78,6 +82,7 @@ class Enemy {
   final double hasteUntil; // ボスの speedBurst
   final double regenCd; // regen の次の回復までの秒
   final double actionCd; // 行動・ボスのスキルの次の発動までの秒
+  final double attackCd; // 施設への攻撃（hard）の次までの秒
   const Enemy({
     required this.id,
     required this.kind,
@@ -101,6 +106,7 @@ class Enemy {
     this.hasteUntil = 0,
     this.regenCd = 0,
     this.actionCd = 0,
+    this.attackCd = 0,
   });
 
   Enemy copyWith({
@@ -117,6 +123,7 @@ class Enemy {
     double? hasteUntil,
     double? regenCd,
     double? actionCd,
+    double? attackCd,
   }) =>
       Enemy(
         id: id ?? this.id, kind: kind, pathIndex: pathIndex, hp: hp ?? this.hp, maxHp: maxHp ?? this.maxHp, speed: speed,
@@ -125,6 +132,7 @@ class Enemy {
         shielded: shielded ?? this.shielded, slowUntil: slowUntil ?? this.slowUntil, slowFactor: slowFactor ?? this.slowFactor,
         burnUntil: burnUntil ?? this.burnUntil, burnDps: burnDps ?? this.burnDps, burnAcc: burnAcc ?? this.burnAcc,
         hasteUntil: hasteUntil ?? this.hasteUntil, regenCd: regenCd ?? this.regenCd, actionCd: actionCd ?? this.actionCd,
+        attackCd: attackCd ?? this.attackCd,
       );
 
   bool get flying => ability == 'flying';
@@ -240,7 +248,7 @@ class BattleState {
       'fac${facilities.length} en${enemies.length}';
 }
 
-enum BattleEventType { waveStart, spawn, hit, kill, breach, waveClear, victory, defeat, bossSkill, facilityDisabled, facilitySabotaged, weatherWarning, weatherStart, weatherEnd, weatherBlocked }
+enum BattleEventType { waveStart, spawn, hit, kill, breach, waveClear, victory, defeat, bossSkill, facilityDisabled, facilitySabotaged, weatherWarning, weatherStart, weatherEnd, weatherBlocked, facilityDamaged, facilityDestroyed, baseHeal }
 
 /// 画面・効果音が購読するイベント。使わない項目は null。
 class BattleEvent {

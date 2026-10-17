@@ -4,6 +4,7 @@ import '../pack/country_profile.dart';
 import '../quiz/rng.dart';
 import 'battle_model.dart';
 import 'difficulty.dart';
+import 'exclusive.dart';
 import 'grid.dart';
 import 'stage.dart';
 import 'weather.dart';
@@ -14,7 +15,7 @@ export 'battle_model.dart';
 /// 同じステージ・同じ操作なら同じ結果になる。
 /// 入っているもの: 敵の移動・能力（shield・regen・swarm・flying・disrupt）・行動（heal_aura・ranged_disable・sabotage）・ボスのスキル、
 /// 施設の攻撃（single・splash・chain・pierce・slow・burn）・クリティカル・アップグレード・撤去、経済、勝敗。
-/// スキル選択（skillChoices・chooseSkill）、天候（予告→開始→終了）と季節も入っている。限定施設、ハードの施設への攻撃、クイズ連動は M3.5b 以降。
+/// 限定施設（placeExclusive）、hard の施設の耐久・敵の攻撃・修理（repair）、スキル選択（skillChoices・chooseSkill）、天候（予告→開始→終了）と季節も入っている。クイズ連動は M3.6 以降。
 class BattleEngine {
   final Stage stage;
   final CountryProfile? profile;
@@ -45,6 +46,19 @@ class BattleEngine {
   static const hardOnlySkills = ['repair'];
   static const skillChoiceCount = 3;
   static const skillAtkBonus = 1.25, skillRangeBonus = 1.0, skillCoinBonus = 1.2, skillAtkSpeedBonus = 1.15, skillSlowFactor = 0.8;
+  // hard: 施設の耐久と、敵の施設への攻撃（設計書 §6.2）
+  static const facilityHpFactor = 1.5, castleHpFactor = 1.5, exclusiveHpFactor = 2.0; // 施設HP = 1波の基礎HP × 係数 × レベル
+  static const enemyAttackRatio = 0.12, enemyAttackInterval = 1.5, enemyAttackRange = 1.0, enemyRangedAttackRange = 2.0; // 攻撃力 = 波の基礎HP × 比率 × 種類の倍率
+  static const bossAttackFactor = 1.5, bossAoeRadius = 1.5;
+  static const protectRatio = 0.7, protectRadius = 1.5; // 城・象徴が周囲の施設を守る（受ける被害 ×0.7）
+  static const shrineHealRatio = 0.04, shrineHealInterval = 2.0, shrineHealRadius = 1.5;
+  static const destroyRefundRatio = 0.5, repairCostRatio = 0.5;
+  // 限定施設
+  static const coreRadius = 1.5, coreBoost = 1.15;
+  static const portRadius = 2.5, portSlow = 0.7;
+  static const resourceCoin = 1.15;
+  static const breweryRadius = 2.0, breweryDamageRatio = 0.06; // 1秒ごとに、その波の基礎HPの6%
+  static const symbolHealInterval = 10.0;
   static const bossSkills = ['speedBurst', 'hpRegen', 'summon', 'stunFacility'];
 
   SeasonEffect get _season => Weather.seasons[stage.season]!;
@@ -83,16 +97,65 @@ class BattleEngine {
     if (s.isOver || !stage.slots.contains(pos) || s.facilities.containsKey(pos)) return null;
     final cost = costOf(type);
     if (s.coins < cost) return null;
-    return s.copyWith(coins: s.coins - cost, facilities: {...s.facilities, pos: Facility(type, pos, invested: cost)});
+    final f = Facility(type, pos, invested: cost);
+    return s.copyWith(coins: s.coins - cost, facilities: {...s.facilities, pos: f.copyWith(hp: maxHpOf(f))});
+  }
+
+  /// この地域の限定施設を置く。置けなければ null（地域に限定施設がない・すでに1つある・設置枠でない・コイン不足）。
+  BattleState? placeExclusive(BattleState s, GridPos pos) {
+    final id = stage.exclusiveFacility;
+    final kind = exclusiveKinds[id];
+    if (id == null || kind == null || s.isOver || !stage.slots.contains(pos) || s.facilities.containsKey(pos)) return null;
+    if (s.facilities.values.any((f) => f.exclusive != null)) return null;
+    final cost = exclusiveCostOf();
+    if (cost == null || s.coins < cost) return null;
+    final f = Facility(FacilityType.castle, pos, invested: cost, exclusive: id);
+    return s.copyWith(coins: s.coins - cost, facilities: {...s.facilities, pos: f.copyWith(hp: maxHpOf(f))});
+  }
+
+  /// 限定施設の値段（地域に限定施設がなければ null）。
+  int? exclusiveCostOf() {
+    final kind = exclusiveKinds[stage.exclusiveFacility];
+    if (kind == null) return null;
+    return math.max(1, (exclusiveSpecs[kind]!.cost * (profile?.facilityCost ?? 1.0)).round());
+  }
+
+  /// 施設の最大耐久。hard 以外は 0（壊れない）。
+  int maxHpOf(Facility f) {
+    if (stage.difficulty != Difficulty.hard) return 0;
+    final base = stage.waves.first.baseHp * facilityHpFactor * f.level;
+    final k = f.exclusive != null ? exclusiveHpFactor : (f.type == FacilityType.castle ? castleHpFactor : 1.0);
+    return math.max(1, (base * k).round());
+  }
+
+  /// 修理の値段（不足分の割合 × 使ったコイン × 0.5）。耐久がない・満タンなら null。
+  int? repairCostOf(Facility f) {
+    final max = maxHpOf(f);
+    if (max == 0 || f.hp >= max) return null;
+    return math.max(1, ((max - f.hp) / max * f.invested * repairCostRatio).ceil());
+  }
+
+  /// 施設を修理する（満タンまで）。できなければ null。
+  BattleState? repair(BattleState s, GridPos pos) {
+    final f = s.facilities[pos];
+    if (s.isOver || f == null) return null;
+    final cost = repairCostOf(f);
+    if (cost == null || s.coins < cost) return null;
+    return s.copyWith(coins: s.coins - cost, facilities: {...s.facilities, pos: f.copyWith(hp: maxHpOf(f))});
   }
 
   /// 施設を強化する（最大レベル3）。できなければ null。
   BattleState? upgrade(BattleState s, GridPos pos) {
     final f = s.facilities[pos];
-    if (s.isOver || f == null) return null;
+    if (s.isOver || f == null || f.exclusive != null) return null;
     final cost = upgradeCostOf(f);
     if (cost == null || s.coins < cost) return null;
-    return s.copyWith(coins: s.coins - cost, facilities: {...s.facilities, pos: f.copyWith(level: f.level + 1, invested: f.invested + cost)});
+    return s.copyWith(coins: s.coins - cost, facilities: {...s.facilities, pos: _upgraded(f, cost)});
+  }
+
+  Facility _upgraded(Facility f, int cost) {
+    final g = f.copyWith(level: f.level + 1, invested: f.invested + cost);
+    return g.copyWith(hp: maxHpOf(g));
   }
 
   /// 施設を撤去する。使ったコインの一部が戻る。なければ null。
@@ -118,7 +181,7 @@ class BattleEngine {
     switch (id) {
       case 'repair':
         return s.copyWith(skill: id, facilities: {
-          for (final e in s.facilities.entries) e.key: e.value.copyWith(disabledUntil: 0, sabotagedUntil: 0),
+          for (final e in s.facilities.entries) e.key: e.value.copyWith(disabledUntil: 0, sabotagedUntil: 0, hp: maxHpOf(e.value)),
         });
       case 'weatherBlock':
         return s.copyWith(skill: id, weatherBlocks: s.weatherBlocks + 1);
@@ -138,6 +201,8 @@ class BattleEngine {
 
   /// 施設の実効の性能（国の攻撃アクション・地域のボーナスを適用）。
   ({int damage, double range, double cooldown, String action}) facilityStats(Facility f) {
+    final ex = f.exclusive == null ? null : exclusiveSpecs[exclusiveKinds[f.exclusive]];
+    if (ex != null) return (damage: ex.damage, range: ex.range + (f.level - 1) * 0.2, cooldown: 1 / ex.attackSpeed, action: ex.action);
     final base = facilityBase[f.type]!;
     final act = profile?.attackActions[f.type.name];
     final bonus = profile?.traitOf(stage.regionId).facilityBonus[f.type.name] ?? 1.0;
@@ -192,9 +257,9 @@ class BattleEngine {
     );
   }
 
-  int _killReward(Enemy e, int wave, String? skill) {
+  int _killReward(Enemy e, int wave, String? skill, [double mult = 1.0]) {
     final base = e.isBoss ? 60 + wave * 5 : 12 + wave * 3;
-    return math.max(1, (base * _params.rewardMultiplier * (profile?.income ?? 1.0) * (skill == 'waveCoinBonus' ? skillCoinBonus : 1.0) * _season.coin).round());
+    return math.max(1, (base * _params.rewardMultiplier * (profile?.income ?? 1.0) * (skill == 'waveCoinBonus' ? skillCoinBonus : 1.0) * _season.coin * mult).round());
   }
 
   /// クリティカルか。seed・刻み・施設・敵から決まる（状態を持たない決定的な乱数）。
@@ -307,6 +372,37 @@ class BattleEngine {
       if (crossed(sl.end)) events.add(BattleEvent(BattleEventType.weatherEnd, detail: sl.type, value: st.wave));
     }
 
+    // 施設の耐久（hard）。城・象徴の近くでは被害が減り、壊れた施設は半額が戻る
+    var refund = 0, baseBonus = 0;
+    final hard = stage.difficulty == Difficulty.hard;
+    bool guarded(GridPos pos) {
+      for (final q in order) {
+        if (q == pos) continue;
+        final g = facilities[q]!;
+        final guard = g.exclusive != null ? exclusiveKinds[g.exclusive] == ExclusiveKind.symbol : g.type == FacilityType.castle;
+        if (guard && _dist(q.col.toDouble(), q.row.toDouble(), pos.col.toDouble(), pos.row.toDouble()) <= protectRadius) return true;
+      }
+      return false;
+    }
+
+    void damageFacility(GridPos pos, int amount) {
+      final f = facilities[pos];
+      if (f == null || maxHpOf(f) == 0) return;
+      final dmg = guarded(pos) ? math.max(1, (amount * protectRatio).round()) : amount;
+      final left = f.hp - dmg;
+      if (left <= 0) {
+        facilities.remove(pos);
+        order.remove(pos);
+        refund += (f.invested * destroyRefundRatio).round();
+        events.add(BattleEvent(BattleEventType.facilityDestroyed, facilityPos: pos, value: dmg));
+      } else {
+        facilities[pos] = f.copyWith(hp: left);
+        events.add(BattleEvent(BattleEventType.facilityDamaged, facilityPos: pos, value: dmg));
+      }
+    }
+
+    bool every(double sec) => (now / sec).floor() != ((now - dt) / sec).floor();
+
     // 2. 敵の行動・ボスのスキル・regen
     final added = <_M>[];
     if (fire) {
@@ -314,6 +410,46 @@ class BattleEngine {
       for (final m in ms) {
         if (m.hp > 0) m.hp -= dmg;
       }
+      if (hard) {
+        for (final pos in [...order]) {
+          damageFacility(pos, dmg);
+        }
+      }
+    }
+    if (hard && every(shrineHealInterval)) {
+      for (final pos in order) {
+        final h = facilities[pos]!;
+        if (h.exclusive != null || h.type != FacilityType.shrine) continue;
+        for (final q in order) {
+          final f = facilities[q]!;
+          final max = maxHpOf(f);
+          if (q == pos || max == 0 || f.hp >= max) continue;
+          if (_dist(q.col.toDouble(), q.row.toDouble(), pos.col.toDouble(), pos.row.toDouble()) <= shrineHealRadius) {
+            facilities[q] = f.copyWith(hp: math.min(max, f.hp + math.max(1, (max * shrineHealRatio).round())));
+          }
+        }
+      }
+    }
+    ExclusiveKind? kindAt(GridPos p) {
+      final id = facilities[p]?.exclusive;
+      return id == null ? null : exclusiveKinds[id];
+    }
+
+    final exFacilities = [for (final pos in order) if (kindAt(pos) != null) pos];
+    if (every(1.0)) {
+      for (final pos in exFacilities) {
+        if (kindAt(pos) != ExclusiveKind.brewery) continue;
+        final dmg = math.max(1, (w.baseHp * breweryDamageRatio).round());
+        for (final m in ms) {
+          if (m.hp <= 0) continue;
+          final q = m.pos(stage.paths[m.e.pathIndex]);
+          if (_dist(q.x, q.y, pos.col.toDouble(), pos.row.toDouble()) <= breweryRadius) m.hp -= dmg;
+        }
+      }
+    }
+    if (every(symbolHealInterval) && exFacilities.any((p) => kindAt(p) == ExclusiveKind.symbol) && st.baseHp < stage.baseHp) {
+      baseBonus = 1;
+      events.add(const BattleEvent(BattleEventType.baseHeal, value: 1));
     }
     for (final m in ms) {
       if (m.hp <= 0) continue;
@@ -388,9 +524,33 @@ class BattleEngine {
     }
 
     // 4. 移動（鈍足・ボスの加速）
+    final ports = [for (final p in exFacilities) if (kindAt(p) == ExclusiveKind.port) p];
     for (final m in ms) {
       if (m.hp <= 0) continue;
+      final here = m.pos(stage.paths[m.e.pathIndex]);
+      // hard: 施設が射程にいると足を止めて攻撃する（足速型は走り抜ける）
+      if (hard && m.e.kind != 'speedy' && order.isNotEmpty) {
+        final reach = m.e.action == 'ranged_disable' ? enemyRangedAttackRange : enemyAttackRange;
+        final target = _nearestFacility(facilities, order, here, reach);
+        if (target != null) {
+          m.attackCd -= dt;
+          if (m.attackCd <= 0) {
+            m.attackCd = enemyAttackInterval;
+            final mult = m.e.isBoss ? bossAttackFactor : (m.e.kind == 'armored' ? 2.0 : (m.e.kind == 'healer' ? 0.5 : 1.0));
+            final amount = math.max(1, (w.baseHp * enemyAttackRatio * mult).round());
+            if (m.e.isBoss) {
+              for (final q in [...order]) {
+                if (_dist(q.col.toDouble(), q.row.toDouble(), target.col.toDouble(), target.row.toDouble()) <= bossAoeRadius) damageFacility(q, amount);
+              }
+            } else {
+              damageFacility(target, amount);
+            }
+          }
+          continue;
+        }
+      }
       var v = m.e.speed;
+      if (ports.any((p) => _dist(here.x, here.y, p.col.toDouble(), p.row.toDouble()) <= portRadius)) v *= portSlow;
       if (m.slowUntil > now) v *= m.slowFactor;
       if (st.skill == 'slow') v *= skillSlowFactor;
       v *= we.enemySpeed;
@@ -400,7 +560,9 @@ class BattleEngine {
 
     // 5. 施設の攻撃（位置の順。決定的）
     for (final pos in order) {
-      var f = facilities[pos]!;
+      final cur = facilities[pos];
+      if (cur == null) continue;
+      final f = cur;
       var cd = f.cooldown - dt;
       if (cd <= 0) {
         if (f.disabledUntil > now) {
@@ -408,6 +570,12 @@ class BattleEngine {
           continue;
         }
         final fs = facilityStats(f);
+        if (fs.damage == 0) {
+          facilities[pos] = f.copyWith(cooldown: 0);
+          continue;
+        }
+        final boosted = f.exclusive == null &&
+            exFacilities.any((p) => kindAt(p) == ExclusiveKind.core && _dist(p.col.toDouble(), p.row.toDouble(), pos.col.toDouble(), pos.row.toDouble()) <= coreRadius);
         // disrupt: 近くに妨害する敵がいると、射程が縮む
         var range = math.max(0.5, fs.range + we.rangeDelta + (st.skill == 'waveRangeBonus' ? skillRangeBonus : 0));
         for (final m in ms) {
@@ -432,7 +600,7 @@ class BattleEngine {
         }
         if (target != null) {
           final base = f.sabotagedUntil > now ? (fs.damage * sabotageRatio).round() : fs.damage;
-          final power = (base * (st.skill == 'waveAtkBonus' ? skillAtkBonus : 1.0) * we.damage * (we.typeDamage[f.type] ?? 1.0)).round();
+          final power = (base * (boosted ? coreBoost : 1.0) * (st.skill == 'waveAtkBonus' ? skillAtkBonus : 1.0) * we.damage * (we.typeDamage[f.type] ?? 1.0)).round();
           final crit = isCrit(st.tickCount, pos, target.e.id);
           final raw = math.max(1, (power * (crit ? critMultiplier : 1.0)).round());
           int hit(_M m, int amount, {bool c = false, double armorIgnore = 0}) {
@@ -484,7 +652,7 @@ class BattleEngine {
               target.burnUntil = now + burnSeconds;
               target.burnDps = math.max(1, (raw * burnRatio * we.burnRatio).round());
           }
-          cd = (st.skill == 'waveAtkSpeedBonus' ? fs.cooldown / skillAtkSpeedBonus : fs.cooldown) * we.cooldown;
+          cd = (st.skill == 'waveAtkSpeedBonus' ? fs.cooldown / skillAtkSpeedBonus : fs.cooldown) * we.cooldown / (boosted ? coreBoost : 1.0);
         } else {
           cd = 0; // 撃てる敵がいなければ、準備完了のまま待つ
         }
@@ -493,11 +661,12 @@ class BattleEngine {
     }
 
     // 6. 撃破（コイン・スコア）
-    var coins = st.coins, score = st.score;
+    var coins = st.coins + refund, score = st.score;
+    final resMul = exFacilities.any((p) => kindAt(p) == ExclusiveKind.resource) ? resourceCoin : 1.0;
     final alive = <_M>[];
     for (final m in ms) {
       if (m.hp <= 0) {
-        final reward = _killReward(m.e, st.wave, st.skill);
+        final reward = _killReward(m.e, st.wave, st.skill, resMul);
         coins += reward;
         score += m.e.isBoss ? 200 : 50;
         events.add(BattleEvent(BattleEventType.kill, enemyId: m.e.id, value: reward, isBoss: m.e.isBoss));
@@ -507,7 +676,7 @@ class BattleEngine {
     }
 
     // 7. 拠点への到達
-    var baseHp = st.baseHp, mistakes = st.mistakes;
+    var baseHp = math.min(stage.baseHp, st.baseHp + baseBonus), mistakes = st.mistakes;
     final remain = <Enemy>[];
     for (final m in alive) {
       if (m.progress >= m.e.reach(stage.paths[m.e.pathIndex])) {
@@ -572,7 +741,7 @@ class BattleEngine {
 class _M {
   final Enemy e;
   int hp;
-  double progress, slowUntil, slowFactor, burnUntil, burnAcc, hasteUntil, regenCd, actionCd;
+  double progress, slowUntil, slowFactor, burnUntil, burnAcc, hasteUntil, regenCd, actionCd, attackCd;
   int burnDps;
   bool shielded;
   _M(this.e)
@@ -585,6 +754,7 @@ class _M {
         hasteUntil = e.hasteUntil,
         regenCd = e.regenCd,
         actionCd = e.actionCd,
+        attackCd = e.attackCd,
         burnDps = e.burnDps,
         shielded = e.shielded;
 
@@ -592,5 +762,5 @@ class _M {
 
   Enemy toEnemy() => e.copyWith(
         hp: hp, progress: progress, shielded: shielded, slowUntil: slowUntil, slowFactor: slowFactor, burnUntil: burnUntil,
-        burnDps: burnDps, burnAcc: burnAcc, hasteUntil: hasteUntil, regenCd: regenCd, actionCd: actionCd);
+        burnDps: burnDps, burnAcc: burnAcc, hasteUntil: hasteUntil, regenCd: regenCd, actionCd: actionCd, attackCd: attackCd);
 }
