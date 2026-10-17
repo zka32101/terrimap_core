@@ -4,3 +4,4 @@ build/
 pubspec.lock
 e2e/out/
 .server_pid
+.idea/
