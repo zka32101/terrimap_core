@@ -15,8 +15,8 @@ TOWER = (38, 40, 52)
 
 # タワーディフェンス版の配置(画像に対する0..1の比率)。塗る地域を塔と進路で隠さない位置にする。
 TD = {
-    "de": dict(tower=(0.40, 0.46), path=[(0.80, 0.20), (0.66, 0.28), (0.58, 0.36), (0.50, 0.42), (0.44, 0.45)], enemies=[0.15, 0.45, 0.75]),
-    "us": dict(tower=(0.50, 0.42), path=[(0.84, 0.24), (0.74, 0.30), (0.66, 0.36), (0.58, 0.40), (0.54, 0.42)], enemies=[0.15, 0.45, 0.75]),
+    "de": dict(tower=(0.36, 0.44), path=[(0.80, 0.20), (0.66, 0.26), (0.56, 0.32), (0.48, 0.38), (0.42, 0.42)], enemies=[0.15, 0.45, 0.75]),
+    "us": dict(tower=(0.46, 0.38), path=[(0.84, 0.20), (0.74, 0.24), (0.66, 0.28), (0.58, 0.32), (0.53, 0.35)], enemies=[0.15, 0.45, 0.75]),
 }
 
 # 国ごとの差分(設計書の表)。fit は「地図の長い辺が画像の何割を占めるか」。
@@ -40,7 +40,7 @@ def draw_td(img, country):
     px = lambda p: (p[0] * S, p[1] * S)
     # 射程円(半透明)
     cx, cy = px(cfg["tower"])
-    r = 0.12 * S
+    r = 0.15 * S
     ov = Image.new("RGBA", img.size, (0, 0, 0, 0))
     od = ImageDraw.Draw(ov)
     od.ellipse([cx - r, cy - r, cx + r, cy + r], fill=(255, 255, 255, 70), outline=(255, 255, 255, 190), width=max(3, round(S * 0.005)))
@@ -65,15 +65,16 @@ def draw_td(img, country):
             if acc + L >= want:
                 t = (want - acc) / L
                 ex, ey = a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t
-                er = 0.025 * S
+                er = 0.028 * S
                 d.ellipse([ex - er - 4, ey - er - 4, ex + er + 4, ey + er + 4], fill=(255, 255, 255))
                 d.ellipse([ex - er, ey - er, ex + er, ey + er], fill=RED)
                 break
             acc += L
     # 塔(城塔: 胸壁3つ・橙の扉)
-    w, h = 0.07 * S, 0.11 * S
+    w, h = 0.15 * S, 0.24 * S  # 塔は大きく(アイコンの縮小表示でも一目で分かるように)
     left, top = cx - w / 2, cy - h / 2
-    d.rectangle([left - 4, top - 4, left + w + 4, top + h + 4], fill=(255, 255, 255))
+    ow = max(8, round(S * 0.009))
+    d.rectangle([left - ow, top - ow, left + w + ow, top + h + ow], fill=(255, 255, 255))
     d.rectangle([left, top + h * 0.18, left + w, top + h], fill=TOWER)
     mw = w / 5
     for i in range(3):  # 胸壁
