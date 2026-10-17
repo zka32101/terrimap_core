@@ -4,25 +4,160 @@
   "ja": "広大・多様な物量型。足の速い敵が多く進路も長い。地域ごとの天候の荒れに備える。",
   "en": "Vast and varied. Fast enemies on long paths; prepare for regional extreme weather."
  },
- "enemyMix": {"normal": 0.40, "speedy": 0.30, "armored": 0.20, "healer": 0.10},
- "economy": {"startCoins": 1.2, "income": 1.0, "facilityCost": 1.0},
+ "enemyMix": {
+  "normal": 0.4,
+  "speedy": 0.3,
+  "armored": 0.2,
+  "healer": 0.1
+ },
+ "economy": {
+  "startCoins": 1.2,
+  "income": 1.0,
+  "facilityCost": 1.0
+ },
  "pathLength": "long",
  "signature": {
   "id": "weather_extremes",
   "note": "地域ごとに天候イベント(竜巻・ハリケーン・猛吹雪)が起きる。施設の射程や敵の速さが一時的に変わる。"
  },
  "regions": {
-  "US-TX": {"terrain": "agriculture", "tags": ["energy", "ranch"], "facilityBonus": {"mine": 1.2}},
-  "US-CA": {"terrain": "mixed", "tags": ["tech", "farming"], "facilityBonus": {"factory": 1.2}},
-  "US-NY": {"terrain": "urban", "tags": ["finance", "city"], "facilityBonus": {"castle": 1.2}},
-  "US-IA": {"terrain": "agriculture", "tags": ["farming"], "facilityBonus": {"farm": 1.2}},
-  "US-CO": {"terrain": "mountain", "tags": ["rockies"]},
-  "US-HI": {"terrain": "sea", "tags": ["island"], "facilityBonus": {"fishery": 1.2}},
-  "US-FL": {"terrain": "sea", "tags": ["coast"], "weatherEvent": "hurricane"},
-  "US-LA": {"terrain": "sea", "tags": ["coast"], "weatherEvent": "hurricane"},
-  "US-OK": {"terrain": "agriculture", "tags": ["plains"], "weatherEvent": "tornado"},
-  "US-KS": {"terrain": "agriculture", "tags": ["plains"], "weatherEvent": "tornado"},
-  "US-ND": {"terrain": "agriculture", "tags": ["plains"], "weatherEvent": "blizzard"},
-  "US-MN": {"terrain": "mixed", "tags": ["lakes"], "weatherEvent": "blizzard"}
+  "US-TX": {
+   "terrain": "agriculture",
+   "tags": [
+    "energy",
+    "ranch"
+   ],
+   "facilityBonus": {
+    "mine": 1.2
+   }
+  },
+  "US-CA": {
+   "terrain": "mixed",
+   "tags": [
+    "tech",
+    "farming"
+   ],
+   "facilityBonus": {
+    "factory": 1.2
+   }
+  },
+  "US-NY": {
+   "terrain": "urban",
+   "tags": [
+    "finance",
+    "city"
+   ],
+   "facilityBonus": {
+    "castle": 1.2
+   }
+  },
+  "US-IA": {
+   "terrain": "agriculture",
+   "tags": [
+    "farming"
+   ],
+   "facilityBonus": {
+    "farm": 1.2
+   }
+  },
+  "US-CO": {
+   "terrain": "mountain",
+   "tags": [
+    "rockies"
+   ]
+  },
+  "US-HI": {
+   "terrain": "sea",
+   "tags": [
+    "island"
+   ],
+   "facilityBonus": {
+    "fishery": 1.2
+   }
+  },
+  "US-FL": {
+   "terrain": "sea",
+   "tags": [
+    "coast"
+   ],
+   "weatherEvent": "hurricane"
+  },
+  "US-LA": {
+   "terrain": "sea",
+   "tags": [
+    "coast"
+   ],
+   "weatherEvent": "hurricane"
+  },
+  "US-OK": {
+   "terrain": "agriculture",
+   "tags": [
+    "plains"
+   ],
+   "weatherEvent": "tornado"
+  },
+  "US-KS": {
+   "terrain": "agriculture",
+   "tags": [
+    "plains"
+   ],
+   "weatherEvent": "tornado"
+  },
+  "US-ND": {
+   "terrain": "agriculture",
+   "tags": [
+    "plains"
+   ],
+   "weatherEvent": "blizzard"
+  },
+  "US-MN": {
+   "terrain": "mixed",
+   "tags": [
+    "lakes"
+   ],
+   "weatherEvent": "blizzard"
+  }
+ },
+ "enemies": {
+  "normal": {
+   "baseDamage": 1.2
+  },
+  "speedy": {
+   "speed": 1.2,
+   "ability": "swarm"
+  },
+  "armored": {
+   "hp": 1.0,
+   "action": "ranged_disable"
+  },
+  "healer": {
+   "ability": "regen"
+  }
+ },
+ "attackActions": {
+  "factory": {
+   "action": "splash",
+   "damage": 1.0,
+   "range": 1.1,
+   "cooldown": 0.9
+  },
+  "mine": {
+   "action": "burn",
+   "damage": 1.0,
+   "range": 1.0,
+   "cooldown": 1.0
+  },
+  "castle": {
+   "action": "single",
+   "damage": 1.2,
+   "range": 1.2,
+   "cooldown": 1.0
+  },
+  "farm": {
+   "action": "slow",
+   "damage": 0.8,
+   "range": 1.2,
+   "cooldown": 1.0
+  }
  }
 }

@@ -55,6 +55,25 @@ if prof_path.exists():
             if not isinstance(v, (int, float)) or not (0.5 <= v <= 2.0): err.append(f"profile.json: economy.{k} は0.5〜2.0")
         if prof.get("pathLength") not in ("short", "medium", "long"): err.append("profile.json: pathLength は short/medium/long")
         if not (prof.get("signature") or {}).get("id"): err.append("profile.json: signature.id が空")
+        ABIL = {"none", "shield", "regen", "swarm", "flying", "disrupt"}
+        EACT = {"none", "heal_aura", "ranged_disable", "sabotage"}
+        FACS = {"farm", "fishery", "factory", "mine", "castle", "shrine"}
+        FACT = {"single", "splash", "chain", "pierce", "slow", "burn"}
+        for kind, t in (prof.get("enemies") or {}).items():
+            if kind not in ENEMIES: err.append(f"profile.json: enemies の未知の敵 {kind}")
+            for k in ("hp", "speed", "baseDamage"):
+                v = t.get(k)
+                if v is not None and (not isinstance(v, (int, float)) or not (0.5 <= v <= 2.0)): err.append(f"profile.json: enemies.{kind}.{k} は0.5〜2.0")
+            a = t.get("armor")
+            if a is not None and (not isinstance(a, int) or not (0 <= a <= 3)): err.append(f"profile.json: enemies.{kind}.armor は0〜3の整数")
+            if t.get("ability") is not None and t["ability"] not in ABIL: err.append(f"profile.json: enemies.{kind}.ability が不正")
+            if t.get("action") is not None and t["action"] not in EACT: err.append(f"profile.json: enemies.{kind}.action が不正")
+        for fac, t in (prof.get("attackActions") or {}).items():
+            if fac not in FACS: err.append(f"profile.json: attackActions の未知の施設 {fac}")
+            if t.get("action") not in FACT: err.append(f"profile.json: attackActions.{fac}.action が不正")
+            for k in ("damage", "range", "cooldown"):
+                v = t.get(k)
+                if v is not None and (not isinstance(v, (int, float)) or not (0.5 <= v <= 2.0)): err.append(f"profile.json: attackActions.{fac}.{k} は0.5〜2.0")
         for rid, t in (prof.get("regions") or {}).items():
             if rid not in set(ids): err.append(f"profile.json: 未知の地域 {rid}")
             if t.get("terrain") is not None and t["terrain"] not in TERRAINS: err.append(f"profile.json: {rid} の terrain が不正")

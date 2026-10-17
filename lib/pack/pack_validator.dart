@@ -127,6 +127,36 @@ class PackValidator {
     final sig = m['signature'];
     if (sig is! Map || ((sig['id'] ?? '') as Object).toString().isEmpty) err.add('profile.json: signature.id が空');
 
+    final enemies = m['enemies'];
+    if (enemies is Map) {
+      enemies.forEach((kind, t) {
+        if (!CountryProfile.enemyKinds.contains(kind)) err.add('profile.json: enemies の未知の敵 $kind');
+        if (t is! Map) return;
+        for (final k in ['hp', 'speed', 'baseDamage']) {
+          final v = t[k];
+          if (v != null && (v is! num || v < 0.5 || v > 2.0)) err.add('profile.json: enemies.$kind.$k は0.5〜2.0');
+        }
+        final armor = t['armor'];
+        if (armor != null && (armor is! int || armor < 0 || armor > 3)) err.add('profile.json: enemies.$kind.armor は0〜3の整数');
+        final ab = t['ability'];
+        if (ab != null && !CountryProfile.enemyAbilities.contains(ab)) err.add('profile.json: enemies.$kind.ability が不正 $ab');
+        final ac = t['action'];
+        if (ac != null && !CountryProfile.enemyActions.contains(ac)) err.add('profile.json: enemies.$kind.action が不正 $ac');
+      });
+    }
+    final actions = m['attackActions'];
+    if (actions is Map) {
+      actions.forEach((fac, t) {
+        if (!CountryProfile.facilityTypes.contains(fac)) err.add('profile.json: attackActions の未知の施設 $fac');
+        if (t is! Map) return;
+        if (!CountryProfile.facilityActions.contains(t['action'])) err.add('profile.json: attackActions.$fac.action が不正 ${t['action']}');
+        for (final k in ['damage', 'range', 'cooldown']) {
+          final v = t[k];
+          if (v != null && (v is! num || v < 0.5 || v > 2.0)) err.add('profile.json: attackActions.$fac.$k は0.5〜2.0');
+        }
+      });
+    }
+
     final regs = m['regions'];
     if (regs is Map) {
       regs.forEach((id, t) {
