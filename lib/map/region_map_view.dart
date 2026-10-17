@@ -12,16 +12,62 @@ class RegionMapView extends StatefulWidget {
   final RegionColor colorOf;
   final ValueChanged<String>? onTap;
   final double minTapRadius; // 論理px
+  /// 拡大・縮小・元に戻すボタンを右下に出す(ピンチ操作に気づきにくい人・極小地域向け)。
+  final bool showZoomControls;
   const RegionMapView({
     super.key, required this.pack, required this.colorOf,
-    this.onTap, this.minTapRadius = 18,
+    this.onTap, this.minTapRadius = 18, this.showZoomControls = false,
   });
   @override
   State<RegionMapView> createState() => _State();
 }
 
 class _State extends State<RegionMapView> {
+  static const _minScale = 1.0, _maxScale = 12.0;
   final _tc = TransformationController();
+
+  Offset _focus = Offset.zero; // 地図の中身の中心(地図は上寄せで描かれるため、画面中央ではなくこちらを基準に拡大する)
+
+  /// 地図の中心を基準に倍率を[factor]倍する(1〜12倍の範囲に収める)。
+  void _zoomBy(double factor) {
+    final cur = _tc.value.getMaxScaleOnAxis();
+    final next = (cur * factor).clamp(_minScale, _maxScale);
+    if (next == cur) return;
+    final f = next / cur;
+    final c = _focus;
+    _tc.value = Matrix4.translationValues(c.dx, c.dy, 0) *
+        Matrix4.diagonal3Values(f, f, 1) *
+        Matrix4.translationValues(-c.dx, -c.dy, 0) *
+        _tc.value;
+    if (next == _minScale) _tc.value = Matrix4.identity();
+  }
+
+  Widget _zoomControls() => Positioned(
+        right: 8,
+        bottom: 8,
+        child: Column(mainAxisSize: MainAxisSize.min, children: [
+          for (final (key, icon, tip, act) in <(String, IconData, String, VoidCallback)>[
+            ('zoom_in', Icons.add, 'Zoom in', () => _zoomBy(2)),
+            ('zoom_out', Icons.remove, 'Zoom out', () => _zoomBy(0.5)),
+            ('zoom_reset', Icons.fit_screen, 'Reset zoom', () => _tc.value = Matrix4.identity()),
+          ])
+            Padding(
+              padding: const EdgeInsets.only(top: 4),
+              child: Material(
+                color: Colors.white.withValues(alpha: 0.9),
+                shape: const CircleBorder(side: BorderSide(color: Color(0xFFB0BEC5))),
+                child: IconButton(
+                  key: Key(key),
+                  icon: Icon(icon),
+                  tooltip: tip,
+                  visualDensity: VisualDensity.compact,
+                  onPressed: act,
+                ),
+              ),
+            ),
+        ]),
+      );
+
   @override
   void dispose() { _tc.dispose(); super.dispose(); }
 
@@ -32,8 +78,9 @@ class _State extends State<RegionMapView> {
         : EquirectCos.fromRefLat(widget.pack.refLat);
     return LayoutBuilder(builder: (_, c) {
       final geo = RegionGeometry(widget.pack, proj, c.biggest);
-      return InteractiveViewer(
-        transformationController: _tc, maxScale: 12, minScale: 1,
+      _focus = geo.paths.values.map((p) => p.getBounds()).reduce((a, b) => a.expandToInclude(b)).center;
+      final viewer = InteractiveViewer(
+        transformationController: _tc, maxScale: _maxScale, minScale: _minScale,
         child: GestureDetector(
           onTapUp: (d) {
             final scale = _tc.value.getMaxScaleOnAxis();
@@ -43,6 +90,8 @@ class _State extends State<RegionMapView> {
           child: CustomPaint(size: c.biggest, painter: _Painter(geo, widget.colorOf)),
         ),
       );
+      if (!widget.showZoomControls) return viewer;
+      return Stack(children: [Positioned.fill(child: viewer), _zoomControls()]);
     });
   }
 }
