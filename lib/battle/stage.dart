@@ -106,6 +106,14 @@ class Stage {
     this.exclusiveFacility,
   });
 
+  /// 季節だけを変えた複製（天候・季節の効果の確認用）。
+  Stage withSeason(Season s) => Stage(
+        id: id, packId: packId, regionId: regionId, difficulty: difficulty, kind: kind, seed: seed, cols: cols, rows: rows,
+        originX: originX, originY: originY, cellW: cellW, cellH: cellH, land: land, base: base, entrances: entrances,
+        paths: paths, slots: slots, waves: waves, baseHp: baseHp, season: s, terrain: terrain, weatherEvent: weatherEvent,
+        backdrop: backdrop, exclusiveFacility: exclusiveFacility,
+      );
+
   bool isLand(int col, int row) => land.contains(GridPos(col, row));
 
   Map<String, dynamic> toJson() => {

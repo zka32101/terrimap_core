@@ -6,6 +6,7 @@ import 'battle_model.dart';
 import 'difficulty.dart';
 import 'grid.dart';
 import 'stage.dart';
+import 'weather.dart';
 
 export 'battle_model.dart';
 
@@ -13,7 +14,7 @@ export 'battle_model.dart';
 /// 同じステージ・同じ操作なら同じ結果になる。
 /// 入っているもの: 敵の移動・能力（shield・regen・swarm・flying・disrupt）・行動（heal_aura・ranged_disable・sabotage）・ボスのスキル、
 /// 施設の攻撃（single・splash・chain・pierce・slow・burn）・クリティカル・アップグレード・撤去、経済、勝敗。
-/// スキル選択（skillChoices・chooseSkill）も入っている。天候・季節・限定施設、ハードの施設への攻撃、クイズ連動は M3.5 以降。
+/// スキル選択（skillChoices・chooseSkill）、天候（予告→開始→終了）と季節も入っている。限定施設、ハードの施設への攻撃、クイズ連動は M3.5b 以降。
 class BattleEngine {
   final Stage stage;
   final CountryProfile? profile;
@@ -45,6 +46,8 @@ class BattleEngine {
   static const skillChoiceCount = 3;
   static const skillAtkBonus = 1.25, skillRangeBonus = 1.0, skillCoinBonus = 1.2, skillAtkSpeedBonus = 1.15, skillSlowFactor = 0.8;
   static const bossSkills = ['speedBurst', 'hpRegen', 'summon', 'stunFacility'];
+
+  SeasonEffect get _season => Weather.seasons[stage.season]!;
 
   DifficultyParams get _params => difficultyParams[stage.difficulty]!;
 
@@ -138,11 +141,11 @@ class BattleEngine {
     final base = facilityBase[f.type]!;
     final act = profile?.attackActions[f.type.name];
     final bonus = profile?.traitOf(stage.regionId).facilityBonus[f.type.name] ?? 1.0;
-    final dmg = base.damage * f.level * (act?.damage ?? 1.0) * bonus;
+    final dmg = base.damage * f.level * (act?.damage ?? 1.0) * bonus * (_season.typeDamage[f.type] ?? 1.0);
     return (
       damage: math.max(1, dmg.round()),
       range: (base.range + (f.level - 1) * 0.2) * (act?.range ?? 1.0),
-      cooldown: (1 / base.attackSpeed) * (act?.cooldown ?? 1.0),
+      cooldown: (1 / base.attackSpeed) * (act?.cooldown ?? 1.0) * (_season.typeCooldown[f.type] ?? 1.0),
       action: act?.action ?? 'single',
     );
   }
@@ -157,7 +160,8 @@ class BattleEngine {
     final action = isBoss ? 'none' : (t?.action ?? 'none');
     var hp = isBoss ? (w.baseHp * 2.5).round() : (w.baseHp * b.hpMult * (t?.hp ?? 1.0)).round();
     if (ability == 'swarm') hp = (hp * swarmHp).round();
-    final speed = b.speedMult * (isBoss ? 0.6 : 1.2) * (t?.speed ?? 1.0) * _params.speedMultiplier;
+    if (!isBoss && kind == 'normal') hp = (hp * _season.normalHp).round();
+    final speed = b.speedMult * (isBoss ? 0.6 : 1.2) * (t?.speed ?? 1.0) * _params.speedMultiplier * _season.enemySpeed * (kind == 'speedy' ? _season.speedySpeed : 1.0);
     // 拠点への被害: 既存の規則（easyは常に1。ボス・装甲は重い）× 国の倍率
     final heavy = _params.heavyBreach;
     final base = !heavy ? 1 : (isBoss ? (stage.difficulty == Difficulty.hard ? 3 : 2) : (kind == 'armored' ? 2 : 1));
@@ -190,7 +194,7 @@ class BattleEngine {
 
   int _killReward(Enemy e, int wave, String? skill) {
     final base = e.isBoss ? 60 + wave * 5 : 12 + wave * 3;
-    return math.max(1, (base * _params.rewardMultiplier * (profile?.income ?? 1.0) * (skill == 'waveCoinBonus' ? skillCoinBonus : 1.0)).round());
+    return math.max(1, (base * _params.rewardMultiplier * (profile?.income ?? 1.0) * (skill == 'waveCoinBonus' ? skillCoinBonus : 1.0) * _season.coin).round());
   }
 
   /// クリティカルか。seed・刻み・施設・敵から決まる（状態を持たない決定的な乱数）。
@@ -268,8 +272,49 @@ class BattleEngine {
     final order = facilities.keys.toList()..sort();
     var summoned = st.summoned;
 
+    // 天候（予定は seed・波の番号から決まる。予告→開始→終了。防いだ天候は起きない）
+    var weatherBlocks = st.weatherBlocks;
+    final blocked = [...st.blockedWeather];
+    var we = WeatherEffect.none;
+    final slots = Weather.schedule(
+        seed: stage.seed, wave: st.wave, type: stage.weatherEvent, season: stage.season, difficulty: stage.difficulty);
+    final rel = now - st.waveStart, prev = rel - dt;
+    var fire = false; // wildfire: 1秒をまたいだ
+    for (final sl in slots) {
+      final key = sl.key(st.wave);
+      bool crossed(double t) => prev < t && rel >= t;
+      if (crossed(sl.start - Weather.warningSeconds)) events.add(BattleEvent(BattleEventType.weatherWarning, detail: sl.type, value: st.wave));
+      if (crossed(sl.start)) {
+        if (weatherBlocks > 0) {
+          weatherBlocks--;
+          blocked.add(key);
+          events.add(BattleEvent(BattleEventType.weatherBlocked, detail: sl.type, value: st.wave));
+        } else {
+          events.add(BattleEvent(BattleEventType.weatherStart, detail: sl.type, value: st.wave));
+          if ((sl.type == 'tornado' || sl.type == 'earthquake') && order.isNotEmpty) {
+            final pos = order[fnv1a('${stage.seed}|weather|${st.wave}|${sl.index}|f') % order.length];
+            final secs = sl.type == 'earthquake' ? disableSeconds : sl.duration;
+            facilities[pos] = facilities[pos]!.copyWith(disabledUntil: now + secs);
+            events.add(BattleEvent(BattleEventType.facilityDisabled, facilityPos: pos, detail: sl.type));
+          }
+        }
+      }
+      if (blocked.contains(key)) continue;
+      if (rel >= sl.start && rel < sl.end) {
+        we = Weather.effects[sl.type]!;
+        if (sl.type == 'wildfire' && rel.floor() != prev.floor()) fire = true;
+      }
+      if (crossed(sl.end)) events.add(BattleEvent(BattleEventType.weatherEnd, detail: sl.type, value: st.wave));
+    }
+
     // 2. 敵の行動・ボスのスキル・regen
     final added = <_M>[];
+    if (fire) {
+      final dmg = math.max(1, (w.baseHp * Weather.wildfireDamageRatio).round());
+      for (final m in ms) {
+        if (m.hp > 0) m.hp -= dmg;
+      }
+    }
     for (final m in ms) {
       if (m.hp <= 0) continue;
       final path = stage.paths[m.e.pathIndex];
@@ -278,7 +323,7 @@ class BattleEngine {
         m.regenCd -= dt;
         if (m.regenCd <= 0) {
           m.regenCd = regenInterval;
-          m.hp = math.min(m.e.maxHp, m.hp + math.max(1, (m.e.maxHp * regenRatio).round()));
+          m.hp = math.min(m.e.maxHp, m.hp + math.max(1, (m.e.maxHp * regenRatio * we.regen * _season.regen).round()));
         }
       }
       if (m.e.action == 'none' && m.e.bossSkill == null) continue;
@@ -348,6 +393,7 @@ class BattleEngine {
       var v = m.e.speed;
       if (m.slowUntil > now) v *= m.slowFactor;
       if (st.skill == 'slow') v *= skillSlowFactor;
+      v *= we.enemySpeed;
       if (m.hasteUntil > now) v *= bossHasteFactor;
       m.progress += v * dt;
     }
@@ -363,7 +409,7 @@ class BattleEngine {
         }
         final fs = facilityStats(f);
         // disrupt: 近くに妨害する敵がいると、射程が縮む
-        var range = fs.range + (st.skill == 'waveRangeBonus' ? skillRangeBonus : 0);
+        var range = math.max(0.5, fs.range + we.rangeDelta + (st.skill == 'waveRangeBonus' ? skillRangeBonus : 0));
         for (final m in ms) {
           if (m.hp <= 0 || m.e.ability != 'disrupt') continue;
           final q = m.pos(stage.paths[m.e.pathIndex]);
@@ -386,7 +432,7 @@ class BattleEngine {
         }
         if (target != null) {
           final base = f.sabotagedUntil > now ? (fs.damage * sabotageRatio).round() : fs.damage;
-          final power = st.skill == 'waveAtkBonus' ? (base * skillAtkBonus).round() : base;
+          final power = (base * (st.skill == 'waveAtkBonus' ? skillAtkBonus : 1.0) * we.damage * (we.typeDamage[f.type] ?? 1.0)).round();
           final crit = isCrit(st.tickCount, pos, target.e.id);
           final raw = math.max(1, (power * (crit ? critMultiplier : 1.0)).round());
           int hit(_M m, int amount, {bool c = false, double armorIgnore = 0}) {
@@ -436,9 +482,9 @@ class BattleEngine {
               target.slowFactor = slowFactor;
             case 'burn':
               target.burnUntil = now + burnSeconds;
-              target.burnDps = math.max(1, (raw * burnRatio).round());
+              target.burnDps = math.max(1, (raw * burnRatio * we.burnRatio).round());
           }
-          cd = st.skill == 'waveAtkSpeedBonus' ? fs.cooldown / skillAtkSpeedBonus : fs.cooldown;
+          cd = (st.skill == 'waveAtkSpeedBonus' ? fs.cooldown / skillAtkSpeedBonus : fs.cooldown) * we.cooldown;
         } else {
           cd = 0; // 撃てる敵がいなければ、準備完了のまま待つ
         }
@@ -476,6 +522,7 @@ class BattleEngine {
     st = st.copyWith(
       enemies: remain, facilities: facilities, coins: coins, score: score, baseHp: baseHp,
       mistakes: mistakes, spawned: spawned, spawnAcc: acc, summoned: summoned,
+      weatherBlocks: weatherBlocks, blockedWeather: blocked,
     );
 
     // 8. 勝敗・波の終わり
@@ -517,7 +564,7 @@ class BattleEngine {
   BattleState _beginWave(BattleState s, List<BattleEvent> events) {
     final n = s.wave + 1;
     events.add(BattleEvent(BattleEventType.waveStart, value: n));
-    return s.copyWith(phase: BattlePhase.wave, wave: n, spawned: 0, spawnAcc: 0, prepTimer: 0);
+    return s.copyWith(phase: BattlePhase.wave, wave: n, spawned: 0, spawnAcc: 0, prepTimer: 0, waveStart: s.time);
   }
 }
 
