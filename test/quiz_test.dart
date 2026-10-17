@@ -12,6 +12,7 @@ RegionPack de() {
 }
 
 void main() {
+  silhouetteTests();
   test('Rng: Pythonリファレンスと一致', () {
     final g = Rng(12345);
     expect([for (var i = 0; i < 5; i++) g.nextInt(1000)], [904, 523, 393, 292, 857]);
@@ -32,5 +33,18 @@ void main() {
   test('デイリー共有テキスト', () {
     expect(DailyChallenge.shareText('X', '2026-10-17', [true, false, true, true, false]),
         'X 2026-10-17 3/5\n🟩🟥🟩🟩🟥');
+  });
+}
+
+void silhouetteTests() {
+  test('形当て: 4択は重複なしで正解を含み、対象=正解', () {
+    final qs = QuizEngine(de(), seed: 3).generate(count: 20, types: [QuestionType.silhouette]);
+    expect(qs, hasLength(20));
+    for (final q in qs) {
+      expect(q.type, QuestionType.silhouette);
+      expect(q.choiceIds.toSet().length, 4);
+      expect(q.choiceIds, contains(q.correctId));
+      expect(q.correctId, q.targetId);
+    }
   });
 }
