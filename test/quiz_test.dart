@@ -4,6 +4,7 @@ import 'package:terrimap_core/pack/region_pack.dart';
 import 'package:terrimap_core/quiz/quiz_engine.dart';
 import 'package:terrimap_core/quiz/rng.dart';
 import 'package:terrimap_core/daily/daily_challenge.dart';
+import 'package:terrimap_core/quiz/difficulty.dart';
 
 RegionPack de() {
   String r(String f) => File('packs/de/$f').readAsStringSync();
@@ -14,6 +15,7 @@ RegionPack de() {
 void main() {
   silhouetteTests();
   reviewTests();
+  difficultyTests();
   test('Rng: Pythonリファレンスと一致', () {
     final g = Rng(12345);
     expect([for (var i = 0; i < 5; i++) g.nextInt(1000)], [904, 523, 393, 292, 857]);
@@ -34,6 +36,40 @@ void main() {
   test('デイリー共有テキスト', () {
     expect(DailyChallenge.shareText('X', '2026-10-17', [true, false, true, true, false]),
         'X 2026-10-17 3/5\n🟩🟥🟩🟩🟥');
+  });
+}
+
+RegionPack us() {
+  String r(String f) => File('packs/us/$f').readAsStringSync();
+  return RegionPack.parse(packJson: r('pack.json'), regionsJson: r('regions.json'),
+      geoJson: r('geo.geojson'), stringsJsonByLang: {'en': r('strings/en.json')});
+}
+
+void difficultyTests() {
+  for (final (name, pack, big, small) in [
+    ('de', de(), 'DE-BY', ['DE-HB', 'DE-HH', 'DE-BE']),
+    ('us', us(), 'US-TX', ['US-DC', 'US-RI', 'US-DE']),
+  ]) {
+    test('難易度 $name: 3分割は重ならず全地域を覆う', () {
+      final e = regionsForDifficulty(pack, Difficulty.easy);
+      final n = regionsForDifficulty(pack, Difficulty.normal);
+      final h = regionsForDifficulty(pack, Difficulty.hard);
+      expect(e.intersection(n), isEmpty);
+      expect(n.intersection(h), isEmpty);
+      expect(e.intersection(h), isEmpty);
+      expect({...e, ...n, ...h}, pack.regions.map((r) => r.id).toSet());
+      expect([e.length, n.length, h.length].every((x) => x > 0), isTrue);
+    });
+    test('難易度 $name: 大きい地域はeasy・小さい地域はhard', () {
+      expect(regionsForDifficulty(pack, Difficulty.easy), contains(big));
+      expect(regionsForDifficulty(pack, Difficulty.hard), containsAll(small));
+    });
+  }
+  test('難易度: poolに渡すと対象の形だけ出る（選択肢は全地域）', () {
+    final pool = regionsForDifficulty(de(), Difficulty.hard);
+    final qs = QuizEngine(de(), seed: 2).generate(count: 12, types: [QuestionType.silhouette], pool: pool);
+    expect(qs.every((q) => pool.contains(q.targetId)), isTrue);
+    expect(qs.every((q) => q.choiceIds.length == 4), isTrue);
   });
 }
 
