@@ -1,0 +1,26 @@
+name: terrimap_demo
+description: "terrimap_core の地図(RegionMapView)をブラウザで動かして Playwright で確認するためのデモ。アプリではない。"
+publish_to: "none"
+version: 0.0.1
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  terrimap_core:
+    path: ..
+  web: ^1.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - packs/de/pack.json
+    - packs/de/regions.json
+    - packs/de/geo.geojson
+    - packs/de/strings/en.json
+    - packs/us/pack.json
+    - packs/us/regions.json
+    - packs/us/geo.geojson
+    - packs/us/strings/en.json

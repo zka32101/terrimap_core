@@ -14,9 +14,11 @@ class RegionMapView extends StatefulWidget {
   final double minTapRadius; // 論理px
   /// 拡大・縮小・元に戻すボタンを右下に出す(ピンチ操作に気づきにくい人・極小地域向け)。
   final bool showZoomControls;
+  /// 拡大・移動の状態を外から読む/操作するためのコントローラ(省略時は内部で持つ)。
+  final TransformationController? controller;
   const RegionMapView({
     super.key, required this.pack, required this.colorOf,
-    this.onTap, this.minTapRadius = 18, this.showZoomControls = false,
+    this.onTap, this.minTapRadius = 18, this.showZoomControls = false, this.controller,
   });
   @override
   State<RegionMapView> createState() => _State();
@@ -24,7 +26,8 @@ class RegionMapView extends StatefulWidget {
 
 class _State extends State<RegionMapView> {
   static const _minScale = 1.0, _maxScale = 12.0;
-  final _tc = TransformationController();
+  final _ownTc = TransformationController();
+  TransformationController get _tc => widget.controller ?? _ownTc;
 
   Offset _focus = Offset.zero; // 地図の中身の中心(地図は上寄せで描かれるため、画面中央ではなくこちらを基準に拡大する)
 
@@ -69,7 +72,7 @@ class _State extends State<RegionMapView> {
       );
 
   @override
-  void dispose() { _tc.dispose(); super.dispose(); }
+  void dispose() { _ownTc.dispose(); super.dispose(); }
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +90,7 @@ class _State extends State<RegionMapView> {
             final id = geo.hit(d.localPosition, widget.minTapRadius / scale);
             if (id != null) widget.onTap?.call(id);
           },
-          child: CustomPaint(size: c.biggest, painter: _Painter(geo, widget.colorOf)),
+          child: CustomPaint(size: c.biggest, painter: _Painter(geo, widget.colorOf, _tc)),
         ),
       );
       if (!widget.showZoomControls) return viewer;
@@ -97,12 +100,14 @@ class _State extends State<RegionMapView> {
 }
 
 class _Painter extends CustomPainter {
-  final RegionGeometry geo; final RegionColor colorOf;
-  _Painter(this.geo, this.colorOf);
+  final RegionGeometry geo; final RegionColor colorOf; final TransformationController tc;
+  _Painter(this.geo, this.colorOf, this.tc) : super(repaint: tc);
   @override
   void paint(Canvas canvas, Size size) {
     final fill = Paint()..style = PaintingStyle.fill;
-    final line = Paint()..style = PaintingStyle.stroke..strokeWidth = 0.6..color = const Color(0xFF455A64);
+    // 境界線は拡大しても細いまま(拡大率で割る)
+    final scale = tc.value.getMaxScaleOnAxis();
+    final line = Paint()..style = PaintingStyle.stroke..strokeWidth = 0.6 / scale..color = const Color(0xFF455A64);
     // 大きい地域から先に描く(小さい地域が下に隠れないように)
     final order = geo.paths.keys.toList()..sort((a, b) => geo.area[b]!.compareTo(geo.area[a]!));
     for (final id in order) {
