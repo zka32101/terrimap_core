@@ -25,7 +25,7 @@
 - Apple / Google Play のアイコン規定(安全領域など)を提出前に確認
 - ストア内の類似アイコンとの見分けは未確認
 - Canvaでの仕上げ(文字入れ・ロゴ化)は、Canvaコネクターの再接続待ち
-- 生成スクリプト: `tools/make_icon.py <de|us> <出力.png>`（Pillow。packs の実データから基本版を決定的に生成。`--td` でタワーディフェンス版（試作: 塔・射程円・赤い点線の進路・敵）も生成）
+- 生成スクリプト: `tools/make_icon.py <de|us> <出力.png>`（Pillow。packs の実データから基本版を決定的に生成。`--label` で左下に国の略称バッジ（DE/US。下辺に国旗色の帯: DE=黒・赤・金、US=赤・白・青）、`--td` でタワーディフェンス版（試作: 塔・射程円・赤い点線の進路・敵）も生成）
 
 ## 生成物(会話内で送付済み)
 terrimap_de_1024.png / terrimap_us_1024.png(基本版)、terrimap_de_td_1024.png / terrimap_us_td_1024.png(TD版)、preview.png / preview_td.png

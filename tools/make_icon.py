@@ -3,6 +3,7 @@
 
 使い方: tools/make_icon.py <de|us> <出力.png> [--size 1024] [--td]
   --td: タワーディフェンス版(塔・射程円・敵の進路と敵を足す。試作。設計書の「タワーディフェンス版」)
+  --label: 左下に国の略称バッジ(DE/US)。バッジの下辺に国旗色の帯を入れる
 依存: Pillow(`pip install pillow`)。結果は決定的(同じ入力なら同じ画像)。
 """
 import argparse, json, math, pathlib, sys
@@ -12,6 +13,17 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 ORANGE = (244, 163, 0)
 RED = (214, 48, 49)
 TOWER = (38, 40, 52)
+
+# 国の略称バッジ。帯は国旗の色(DE=黒・赤・金、US=赤・白・青)。文字は背景色と同じ濃色。
+LABEL = {
+    "de": dict(text="DE", bar=[(0, 0, 0), (221, 0, 0), (255, 206, 0)]),
+    "us": dict(text="US", bar=[(178, 34, 52), (255, 255, 255), (60, 59, 110)]),
+}
+FONTS = [
+    "/usr/share/fonts/opentype/inter/InterDisplay-Bold.otf",
+    "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
+    "/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf",
+]
 
 # タワーディフェンス版の配置(画像に対する0..1の比率)。塗る地域を塔と進路で隠さない位置にする。
 TD = {
@@ -85,7 +97,41 @@ def draw_td(img, country):
     d.pieslice([cx - dw / 2, top + h - dh - dw / 2, cx + dw / 2, top + h - dh + dw / 2], 180, 360, fill=ORANGE)
 
 
-def render(country, size=1024, td=False):
+def draw_label(img, country):
+    """左下に角丸の白いバッジ。国の略称と、下辺に国旗色の帯。"""
+    from PIL import ImageFont
+    S = img.size[0]
+    cfg = LABEL[country]
+    font = None
+    for path in FONTS:
+        try:
+            font = ImageFont.truetype(path, int(S * 0.13))
+            break
+        except OSError:
+            continue
+    if font is None:
+        font = ImageFont.load_default()
+    d = ImageDraw.Draw(img)
+    b = d.textbbox((0, 0), cfg["text"], font=font)
+    tw, th = b[2] - b[0], b[3] - b[1]
+    pad, bar = int(S * 0.03), int(S * 0.022)
+    x0 = int(S * 0.05)
+    y1 = int(S * 0.95)
+    box = [x0, y1 - (th + 2 * pad + bar), x0 + tw + 2 * pad, y1]
+    d.rounded_rectangle(box, int(S * 0.035), fill=(255, 255, 255))
+    d.text((x0 + pad - b[0], box[1] + pad - b[1]), cfg["text"], font=font, fill=CONFIG[country]["bg"])
+    # 国旗色の帯(角丸バッジの下辺に沿わせ、はみ出す部分は白で塗り戻して丸みを残す)
+    n = len(cfg["bar"])
+    x_start, x_end = box[0] + int(S * 0.012), box[2] - int(S * 0.012)
+    seg = (x_end - x_start) / n
+    by0, by1 = box[3] - bar - int(S * 0.012), box[3] - int(S * 0.012)
+    for i, c in enumerate(cfg["bar"]):
+        d.rectangle([x_start + i * seg, by0, x_start + (i + 1) * seg, by1], fill=c)
+    if cfg["bar"][1] == (255, 255, 255):  # 白い帯は薄い枠線で見えるように
+        d.rectangle([x_start, by0, x_end, by1], outline=(190, 190, 200), width=max(2, int(S * 0.002)))
+
+
+def render(country, size=1024, td=False, label=False):
     cfg = CONFIG[country]
     pack = json.loads((ROOT / "packs" / country / "pack.json").read_text())
     geo = json.loads((ROOT / "packs" / country / "geo.geojson").read_text())
@@ -122,6 +168,8 @@ def render(country, size=1024, td=False):
             d.line(pts + [pts[0]], fill=cfg["bg"], width=line, joint="curve")
     if td:
         draw_td(img, country)
+    if label:
+        draw_label(img, country)
     return img.resize((size, size), Image.LANCZOS)
 
 
@@ -131,8 +179,9 @@ def main():
     ap.add_argument("out")
     ap.add_argument("--size", type=int, default=1024)
     ap.add_argument("--td", action="store_true", help="タワーディフェンス版(試作)")
+    ap.add_argument("--label", action="store_true", help="左下に国の略称バッジ(国旗色の帯つき)")
     a = ap.parse_args()
-    render(a.country, a.size, td=a.td).save(a.out)
+    render(a.country, a.size, td=a.td, label=a.label).save(a.out)
     print(f"wrote {a.out}")
 
 
