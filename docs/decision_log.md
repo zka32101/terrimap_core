@@ -93,3 +93,11 @@
 - 州都が形の外になったのは US-MD（アナポリスは湾に面し、ポリゴンは水域を含まない）だけ。形の内側へ寄せた。
 - 隣接の確認: 米国51州を、既知の隣接数と照合し、一致しないのは**湖の上の境界**の3州だけ（MI-IL・MI-MN。ポリゴンが五大湖の水域を共有するため隣とする。実際にも水上の州境がある）。ドイツは全州一致（ベルリン＝ブランデンブルクのみ）。フォー・コーナーズ（AZ-CO、NM-UT）は点で接するだけなので隣としない。
 - 目視用に、州都と隣接を地図に重ねた画像を `docs/concepts/capitals_de.png`・`capitals_us.png` に置いた（`tools/make_capital_check.py`）。
+
+## 2026-10-17 M1 ステージ生成（実装）
+- `lib/battle/`（画面に依存しない純粋な計算）: `Difficulty`・`DifficultyParams`（既存の3難易度の値）、`GridPos`・`Season`・`StageKind`、`Stage`・`StageEntrance`・`StageWave`、`StageGenerator`。同じ入力（パック・地域・難易度・種別）は同じステージ（seed は `fnv1a('<packId>|<regionId>|<難易度>|<種別>')`）。
+- `quiz/difficulty.dart` の `Difficulty` は `battle/difficulty.dart` と共通（形当ての出題の API は変えない）。
+- 盤面は州の形で切り抜く（本土1つ。最大の連結成分）。拠点＝州都にいちばん近い陸地マス。入口＝隣の州との境界（隣がなければ海）。hardは入口最大3。季節は天候から決める（なければ seed）。波の敵の種類は、国の構成×州の偏り×入口の隣の州の偏り（0.5乗）で選ぶ。
+- 地方決戦・エクストラ（`StageKind.regional` / `extra`）は M7（呼ぶと `UnimplementedError`）。
+- テスト16件追加（全地域×3難易度で不変条件・決定的・盤面が州ごとに違う・入口は隣の州・季節・hardの入口・敵の構成）。目視用の一覧画像: `docs/concepts/stages_de_normal.png`・`stages_us_normal.png`・`stages_us_hard.png`。
+- 制約: ミシガン上半島のように、海峡で切れる土地は盤面に入らない（設計書「M1 で実装して分かったこと」）。
