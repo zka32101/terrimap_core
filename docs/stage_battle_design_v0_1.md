@@ -314,7 +314,7 @@ final replay = engine.toReplay(s);                          // 操作の記録�
 | M2 ✅ | `BattleEngine`（敵1種・施設2種）＋画面なしのテスト | ドイツ1州（バイエルン）で、固定の配置の勝敗が再現できる |
 | M3a ✅ / M3b ✅ | 敵4種・施設6種・能力・行動・撃ち方・経済・ボス・難易度3種・スキル | `profile` の全項目がバトルに効く |
 | M3.5a ✅ / M3.5b ✅ | 天候・季節・限定施設・ハードの施設への攻撃（§6.2・§6.4〜6.6） | 各効果をテストで確認 |
-| M3.6 | クイズ連動（§6.12） | 正解・不正解・オフの3通りをテストで確認 |
+| M3.6 ✅ | クイズ連動（§6.12） | 正解・不正解・オフの3通りをテストで確認 |
 | M4 | 自動対戦（ボット）とバランス結果のレポート | ドイツ・米国の勝率の比較が出る |
 | M5 | ドイツ版アプリに、最小のバトル画面（1州から） | 実際に遊んで手触りを確認 |
 | M6 | 国の目玉（`federal_specialties`・`weather_extremes`） | 目玉が勝率と体験に出る |
@@ -354,3 +354,12 @@ final replay = engine.toReplay(s);                          // 操作の記録�
 - **修理**: `repairCostOf`（不足の割合×使ったコイン×0.5）と `repair`。修理スキルは全施設を満タンにして停止・妨害も直す。
 - **限定施設**: `placeExclusive`（1ステージに1つ）。原型6種（`exclusive.dart`）: core（周囲+15%）・port（近くの敵×0.7）・resource（撃破コイン+15%）・brewery（範囲の敵に毎秒 基礎HPの6%）・symbol（拠点HPを10秒ごとに1回復、周囲を守る）・space（射程4.5の貫通）。強化は不可、撤去は可。
 - 値は暫定。M4 の自動対戦で調整する。
+
+### M3.6 で実装したこと
+
+`BattleEngine(stage, profile:, pack:, quizAssist:)`。`pack` を渡し、`quizAssist`（既定オン）が真のときだけ有効（`assistEnabled`）。
+- `assistQuestion(state, {forRepair})`: ステージの州と隣の州から1問（地図から州名・州都から州名・州名から州都・形当て）。seed・波・用途・位置で決定的。
+- スキル選択: `resolveSkillQuiz(state, correct:)`。正解→`skillUnlocked`（3つから `chooseSkill` で選べる）、不正解→3つのうち1つが自動で決まる。有効時はクイズ前の `chooseSkill` は null。オフなら従来どおり3つから選べる。
+- 修理: `repairByQuiz(state, pos, correct:)`。正解は無料、不正解（またはオフ）はコインで修理。
+- 制限時間: `assistTimeLimit`（hard は10秒、ほかは無制限）。時間切れは不正解として扱う（時間の計測は画面側）。
+- 未実装: 「この州と接しているのは？」の問題（問題の種類の追加は M5 の画面と合わせる）。
