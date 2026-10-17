@@ -33,3 +33,9 @@
 - `reviewWeights(regionIds, mastered:, misses:)`: 未習得でミスが多いほど重く（1〜9）、習得済みは軽い（0.25〜1）。数値は仮。
 - 重み付き抽選は Efraimidis–Spirakis 法（重複なし・決定的）。`Rng.nextDouble` を追加（`nextInt` の系列は不変）。
 - 次: 連続記録（ストリーク）→ 難易度別シルエット出題。
+
+## 2026-10-17 連続記録（コア）
+- `DailyStreak`（current / best / lastDate）。日付は DailyChallenge と同じ UTC の yyyy-MM-dd。
+- 同日の再記録・過去日付は変えない。1日空いたら 1 に戻り、最長は残す。表示用は `currentOn(today)`（昨日まで継続中なら表示、2日以上空いたら0）。
+- 保存は `toJson`/`fromJson` をアプリ側が行う。`ProgressStore` のインターフェースは変えない（既存実装を壊さない）。
+- 端末の日付改ざん・タイムゾーン差による不公平は未対策（UTC基準で統一）。
