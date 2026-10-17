@@ -101,3 +101,10 @@
 - 地方決戦・エクストラ（`StageKind.regional` / `extra`）は M7（呼ぶと `UnimplementedError`）。
 - テスト16件追加（全地域×3難易度で不変条件・決定的・盤面が州ごとに違う・入口は隣の州・季節・hardの入口・敵の構成）。目視用の一覧画像: `docs/concepts/stages_de_normal.png`・`stages_us_normal.png`・`stages_us_hard.png`。
 - 制約: ミシガン上半島のように、海峡で切れる土地は盤面に入らない（設計書「M1 で実装して分かったこと」）。
+
+## 2026-10-17 M2 バトル計算（実装）
+- `lib/battle/battle_engine.dart`・`battle_model.dart`: `BattleEngine(stage, profile)` の `start`・`place`・`startWave`・`tick`・`advance`・`runToEnd`・`facilityStats`・`makeEnemy`・`costOf`。状態は不変（`copyWith`）、乱数なし、固定の刻み 1/30 秒、イベントを返す（出現・命中・撃破・到達・波の開始と終わり・勝利・敗北）。
+- 初期値は地理パズル王の既存の値（施設6種の費用・威力・射程・攻撃速度、敵4種のHP・速さ・装甲、報酬、拠点への被害、開始コイン）。国の特性（`profile.json`）は、敵・施設・経済の倍率として反映。
+- 範囲攻撃（splash）は暫定: 半径1マス、巻き込んだ敵へ60%。
+- 未実装・未調整は設計書「M2 で実装して分かったこと」。バランスは M4 の自動対戦で調整する。
+- テスト17件追加（開始・設置・敗北・勝利・決定的・刻みの粗さ・波の進行・国の特性の反映・装甲・範囲攻撃・間隔・射程・全地域で動く）。
