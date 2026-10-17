@@ -1,10 +1,11 @@
 import 'dart:ui' show Size;
+import '../battle/difficulty.dart';
 import '../map/projection.dart';
 import '../map/region_geometry.dart';
 import '../pack/region_pack.dart';
 
-/// 形当ての難易度。描画面積の大きい地域ほど形が覚えやすい前提で、面積順に3分割する。
-enum Difficulty { easy, normal, hard }
+// 難易度の enum は battle/difficulty.dart と共通（形当ての出題と、バトルの難易度）。
+export '../battle/difficulty.dart' show Difficulty;
 
 /// 描画面積の降順に並べた地域id（同面積はid順）。パックの投影で測る。
 /// 注意: 米国のアラスカ・ハワイは地図上のインセット（縮小表示）の面積で測る。
