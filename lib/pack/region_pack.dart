@@ -6,7 +6,11 @@ class Region {
   final String id;
   final String? capitalId;
   final List<List<List<double>>> polygons; // [ポリゴン][点][lng,lat] 外周のみ
-  const Region(this.id, this.capitalId, this.polygons);
+  /// 州都の位置 [x, y](polygons と同じ座標系)。パックにない場合は null。州の形の内側にあることを検証で保証する。
+  final List<double>? capitalPos;
+  /// 隣り合う地域の id(昇順)。ポリゴンの共有する境界から求めたもの(湖の上の境界も含む)。対称。
+  final List<String> neighbors;
+  const Region(this.id, this.capitalId, this.polygons, {this.capitalPos, this.neighbors = const []});
 }
 
 class RegionPack {
@@ -39,7 +43,11 @@ class RegionPack {
         for (final poly in (f['geometry']['coordinates'] as List))
           [for (final pt in (poly[0] as List)) [(pt[0] as num).toDouble(), (pt[1] as num).toDouble()]]
       ];
-      regions.add(Region(id, meta[id]?['capitalId'] as String?, polys));
+      final m = meta[id];
+      final cp = m?['capitalPos'] as Map?;
+      regions.add(Region(id, m?['capitalId'] as String?, polys,
+          capitalPos: cp == null ? null : [(cp['x'] as num).toDouble(), (cp['y'] as num).toDouble()],
+          neighbors: [for (final n in (m?['neighbors'] as List? ?? const [])) n as String]));
     }
     final strings = {
       for (final e in stringsJsonByLang.entries)

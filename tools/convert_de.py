@@ -2,6 +2,8 @@
 """Natural Earth 10m admin-1 (パブリックドメイン) → region_core pack(de)。
 使い方: convert_de.py <ne_10m_admin_1_states_provinces.geojson> <out packs/de>"""
 import json, sys, pathlib, math
+sys.path.insert(0, str(pathlib.Path(__file__).parent))
+import pack_extras
 src, out = sys.argv[1], pathlib.Path(sys.argv[2])
 TOL = 0.01  # 度。Douglas-Peucker
 
@@ -22,6 +24,13 @@ def ring(r):
     s = dp(r + [r[0]], TOL)
     return s if len(s) >= 4 else r + [r[0]]
 
+# 州都の位置(緯度, 経度)。市の中心の位置(一般に知られた公共の事実)。
+CAP_LL = {
+ 'DE-BW': (48.7758, 9.1829), 'DE-BY': (48.1351, 11.5820), 'DE-BE': (52.5200, 13.4050), 'DE-BB': (52.3906, 13.0645),
+ 'DE-HB': (53.0793, 8.8017), 'DE-HH': (53.5511, 9.9937), 'DE-HE': (50.0782, 8.2398), 'DE-MV': (53.6355, 11.4012),
+ 'DE-NI': (52.3759, 9.7320), 'DE-NW': (51.2277, 6.7735), 'DE-RP': (49.9929, 8.2473), 'DE-SL': (49.2402, 6.9969),
+ 'DE-SN': (51.0504, 13.7373), 'DE-ST': (52.1205, 11.6276), 'DE-SH': (54.3233, 10.1228), 'DE-TH': (50.9848, 11.0299),
+}
 # id: (en, de, capital_en, capital_de)
 M = {
  'DE-BW': ('Baden-Württemberg', 'Baden-Württemberg', 'Stuttgart', 'Stuttgart'),
@@ -55,7 +64,15 @@ assert len(feats) == 16
 feats.sort(key=lambda f: f['properties']['id'])
 (out/'geo.geojson').write_text(json.dumps({"type": "FeatureCollection", "features": feats}, ensure_ascii=False, separators=(',', ':')))
 ids = [f['properties']['id'] for f in feats]
-(out/'regions.json').write_text(json.dumps({"regions": [{"id": i, "capitalId": "cap_" + i} for i in ids]}, ensure_ascii=False, indent=1))
+polys = {f['properties']['id']: f['geometry']['coordinates'] for f in feats}
+NB = pack_extras.neighbors(polys, tol=0.03, min_len=0.04)
+regs = []
+for i in ids:
+    lat, lng = CAP_LL[i]
+    x, y, moved = pack_extras.snap_inside(lng, lat, polys[i])
+    if moved: print("州都の位置を形の内側へ寄せた:", i)
+    regs.append({"id": i, "capitalId": "cap_" + i, "capitalPos": {"x": round(x, 4), "y": round(y, 4)}, "neighbors": NB[i]})
+(out/'regions.json').write_text(json.dumps({"regions": regs}, ensure_ascii=False, indent=1))
 for k, lang in ((0, 'en'), (1, 'de')):
     (out/f'strings/{lang}.json').write_text(json.dumps({
       "regions": {i: M[i][k] for i in ids}, "capitals": {"cap_" + i: M[i][2 + k] for i in ids}}, ensure_ascii=False, indent=1))

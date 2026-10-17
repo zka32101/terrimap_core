@@ -1,7 +1,7 @@
 # terrimap_core
 Terrimap シリーズの共通エンジン(地図表示・タップ、出題、進捗、デイリー、packローダー)。
 
-- `lib/` — pack / map / quiz / progress / daily(Dart。`flutter analyze` クリーン、`flutter test` 64件通過を確認済み)
+- `lib/` — pack / map / quiz / progress / daily(Dart。`flutter analyze` クリーン、`flutter test` 76件通過を確認済み)
 - `packs/de`, `packs/us` — 国別データ(Natural Earth、パブリックドメイン)
 - `tools/` — `convert_de.py` `convert_us.py`(変換)、`validate_pack.py`(検証)
 - `test/` — 単体テスト
