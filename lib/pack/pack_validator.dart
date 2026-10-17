@@ -157,6 +157,37 @@ class PackValidator {
       });
     }
 
+    // 背景(theme.backdrops): 配色は#RRGGBBを3色以上
+    final backdrops = <String>{};
+    final theme = m['theme'];
+    if (theme is Map && theme['backdrops'] is Map) {
+      (theme['backdrops'] as Map).forEach((id, b) {
+        backdrops.add('$id');
+        final pal = b is Map ? b['palette'] : null;
+        final hex = RegExp(r'^#[0-9A-Fa-f]{6}$');
+        if (pal is! List || pal.length < 3 || pal.any((c) => c is! String || !hex.hasMatch(c))) {
+          err.add('profile.json: theme.backdrops.$id の palette は#RRGGBBを3色以上');
+        }
+      });
+    }
+    // 施設・敵の見た目(skin と、英語を含む名前)
+    void skins(String key, Set<String> allowed, String label) {
+      final v = m[key];
+      if (v is! Map) return;
+      v.forEach((k, t) {
+        if (!allowed.contains(k)) err.add('profile.json: $key の未知の$label $k');
+        if (t is! Map || ((t['skin'] ?? '') as Object).toString().isEmpty) {
+          err.add('profile.json: $key.$k の skin が空');
+        }
+        final name = t is Map ? t['name'] : null;
+        if (name is! Map || ((name['en'] ?? '') as Object).toString().isEmpty) {
+          err.add('profile.json: $key.$k の name に英語がない');
+        }
+      });
+    }
+    skins('facilities', CountryProfile.facilityTypes, '施設');
+    skins('enemySkins', CountryProfile.enemyKinds, '敵');
+
     final regs = m['regions'];
     if (regs is Map) {
       regs.forEach((id, t) {
@@ -166,9 +197,23 @@ class PackValidator {
         if (terrain != null && !CountryProfile.terrains.contains(terrain)) {
           err.add('profile.json: $id の terrain が不正 $terrain');
         }
+        final we = t['weatherEvent'];
+        if (we != null && !CountryProfile.weatherEvents.contains(we)) err.add('profile.json: $id の weatherEvent が不正 $we');
+        final bd = t['backdrop'];
+        if (bd != null && !backdrops.contains(bd)) err.add('profile.json: $id の backdrop $bd が theme.backdrops にない');
+        final ex = t['exclusiveFacility'];
+        if (ex != null && (ex is! String || ex.isEmpty)) err.add('profile.json: $id の exclusiveFacility が空');
+        final bias = t['enemyBias'];
+        if (bias is Map) {
+          bias.forEach((k, v) {
+            if (!CountryProfile.enemyKinds.contains(k)) err.add('profile.json: $id の enemyBias の未知の敵 $k');
+            if (v is! num || v < 0.5 || v > 2.0) err.add('profile.json: $id の enemyBias.$k は0.5〜2.0');
+          });
+        }
         final fb = t['facilityBonus'];
         if (fb is Map) {
           fb.forEach((k, v) {
+            if (!CountryProfile.facilityTypes.contains(k)) err.add('profile.json: $id の facilityBonus の未知の施設 $k');
             if (v is! num || v < 1.0 || v > 2.0) err.add('profile.json: $id の facilityBonus.$k は1.0〜2.0');
           });
         }

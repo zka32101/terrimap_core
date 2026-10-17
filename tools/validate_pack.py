@@ -74,7 +74,28 @@ if prof_path.exists():
             for k in ("damage", "range", "cooldown"):
                 v = t.get(k)
                 if v is not None and (not isinstance(v, (int, float)) or not (0.5 <= v <= 2.0)): err.append(f"profile.json: attackActions.{fac}.{k} は0.5〜2.0")
+        import re
+        WEATHER = {"hurricane", "tornado", "blizzard", "heatwave", "wildfire", "flood", "earthquake", "storm"}
+        backdrops = set()
+        for bid, b in ((prof.get("theme") or {}).get("backdrops") or {}).items():
+            backdrops.add(bid)
+            pal = (b or {}).get("palette")
+            if not isinstance(pal, list) or len(pal) < 3 or any(not isinstance(c, str) or not re.fullmatch(r"#[0-9A-Fa-f]{6}", c) for c in pal):
+                err.append(f"profile.json: theme.backdrops.{bid} の palette は#RRGGBBを3色以上")
+        for key, allowed, label in (("facilities", FACS, "施設"), ("enemySkins", ENEMIES, "敵")):
+            for k, t in (prof.get(key) or {}).items():
+                if k not in allowed: err.append(f"profile.json: {key} の未知の{label} {k}")
+                if not (t or {}).get("skin"): err.append(f"profile.json: {key}.{k} の skin が空")
+                if not ((t or {}).get("name") or {}).get("en"): err.append(f"profile.json: {key}.{k} の name に英語がない")
         for rid, t in (prof.get("regions") or {}).items():
+            if t.get("weatherEvent") is not None and t["weatherEvent"] not in WEATHER: err.append(f"profile.json: {rid} の weatherEvent が不正")
+            if t.get("backdrop") is not None and t["backdrop"] not in backdrops: err.append(f"profile.json: {rid} の backdrop が theme.backdrops にない")
+            if t.get("exclusiveFacility") is not None and not t["exclusiveFacility"]: err.append(f"profile.json: {rid} の exclusiveFacility が空")
+            for k, v in (t.get("enemyBias") or {}).items():
+                if k not in ENEMIES: err.append(f"profile.json: {rid} の enemyBias の未知の敵 {k}")
+                if not isinstance(v, (int, float)) or not (0.5 <= v <= 2.0): err.append(f"profile.json: {rid} の enemyBias.{k} は0.5〜2.0")
+            for k in (t.get("facilityBonus") or {}):
+                if k not in FACS: err.append(f"profile.json: {rid} の facilityBonus の未知の施設 {k}")
             if rid not in set(ids): err.append(f"profile.json: 未知の地域 {rid}")
             if t.get("terrain") is not None and t["terrain"] not in TERRAINS: err.append(f"profile.json: {rid} の terrain が不正")
             for k, v in (t.get("facilityBonus") or {}).items():

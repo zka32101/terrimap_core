@@ -1,7 +1,7 @@
 # terrimap_core
 Terrimap シリーズの共通エンジン(地図表示・タップ、出題、進捗、デイリー、packローダー)。
 
-- `lib/` — pack / map / quiz / progress / daily(Dart。`flutter analyze` クリーン、`flutter test` 39件通過を確認済み)
+- `lib/` — pack / map / quiz / progress / daily(Dart。`flutter analyze` クリーン、`flutter test` 46件通過を確認済み)
 - `packs/de`, `packs/us` — 国別データ(Natural Earth、パブリックドメイン)
 - `tools/` — `convert_de.py` `convert_us.py`(変換)、`validate_pack.py`(検証)
 - `test/` — 単体テスト
@@ -16,3 +16,8 @@ Terrimap シリーズの共通エンジン(地図表示・タップ、出題、�
 - `de_app_handoff_v0_1.md` — ドイツ版アプリ引き渡し
 - `progress_M0-M4_2026-10-17.md` — 進捗メモ
 - `terrimap_icon_design_v0_1.md` — シリーズアイコン共通設計
+
+## 設計・記録
+- 決定事項の記録: `docs/decision_log.md`
+- 国ごとの特性・戦い方・見た目: `docs/country_profile_v0_1.md`
+- アイコン: `docs/terrimap_icon_design_v0_1.md`

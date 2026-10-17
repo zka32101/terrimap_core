@@ -21,82 +21,34 @@
   "note": "州ごとに得意分野(施設の強化)を持つ。隣り合う州の得意分野がそろうと追加ボーナス。"
  },
  "regions": {
-  "DE-BY": {
-   "terrain": "mountain",
-   "tags": [
-    "industry",
-    "alps"
-   ],
-   "facilityBonus": {
-    "factory": 1.2
-   }
-  },
   "DE-BW": {
    "terrain": "mixed",
    "tags": [
-    "industry"
+    "industry",
+    "automotive",
+    "forest"
    ],
    "facilityBonus": {
     "factory": 1.2
-   }
+   },
+   "backdrop": "black_forest",
+   "exclusiveFacility": "automotive_works"
   },
-  "DE-NW": {
-   "terrain": "urban",
+  "DE-BY": {
+   "terrain": "mountain",
    "tags": [
+    "alps",
     "industry",
-    "mining"
+    "beer"
    ],
    "facilityBonus": {
-    "mine": 1.2
-   }
-  },
-  "DE-NI": {
-   "terrain": "agriculture",
-   "tags": [
-    "farming",
-    "wind"
-   ],
-   "facilityBonus": {
-    "farm": 1.2
-   }
-  },
-  "DE-SH": {
-   "terrain": "sea",
-   "tags": [
-    "coast",
-    "wind"
-   ],
-   "facilityBonus": {
-    "fishery": 1.15
-   }
-  },
-  "DE-MV": {
-   "terrain": "sea",
-   "tags": [
-    "coast"
-   ],
-   "facilityBonus": {
-    "fishery": 1.15
-   }
-  },
-  "DE-HH": {
-   "terrain": "sea",
-   "tags": [
-    "port",
-    "city_state"
-   ],
-   "facilityBonus": {
-    "fishery": 1.2
-   }
-  },
-  "DE-HB": {
-   "terrain": "sea",
-   "tags": [
-    "port",
-    "city_state"
-   ],
-   "facilityBonus": {
-    "fishery": 1.2
+    "factory": 1.2
+   },
+   "weatherEvent": "blizzard",
+   "backdrop": "alps",
+   "exclusiveFacility": "brewery",
+   "enemyBias": {
+    "speedy": 0.8
    }
   },
   "DE-BE": {
@@ -107,7 +59,181 @@
    ],
    "facilityBonus": {
     "castle": 1.2
+   },
+   "backdrop": "city",
+   "exclusiveFacility": "parliament"
+  },
+  "DE-BB": {
+   "terrain": "agriculture",
+   "tags": [
+    "lakes",
+    "forest",
+    "surrounds_berlin"
+   ],
+   "facilityBonus": {
+    "farm": 1.1
+   },
+   "backdrop": "lakes"
+  },
+  "DE-HB": {
+   "terrain": "sea",
+   "tags": [
+    "port",
+    "city_state"
+   ],
+   "facilityBonus": {
+    "fishery": 1.2
+   },
+   "weatherEvent": "storm",
+   "backdrop": "port",
+   "exclusiveFacility": "seaport",
+   "enemyBias": {
+    "armored": 1.3
    }
+  },
+  "DE-HH": {
+   "terrain": "sea",
+   "tags": [
+    "port",
+    "city_state"
+   ],
+   "facilityBonus": {
+    "fishery": 1.2
+   },
+   "weatherEvent": "storm",
+   "backdrop": "port",
+   "exclusiveFacility": "container_port",
+   "enemyBias": {
+    "armored": 1.3
+   }
+  },
+  "DE-HE": {
+   "terrain": "mixed",
+   "tags": [
+    "finance",
+    "airport"
+   ],
+   "facilityBonus": {
+    "castle": 1.15
+   },
+   "backdrop": "city",
+   "exclusiveFacility": "stock_exchange"
+  },
+  "DE-MV": {
+   "terrain": "sea",
+   "tags": [
+    "coast",
+    "lakes",
+    "tourism"
+   ],
+   "facilityBonus": {
+    "fishery": 1.2
+   },
+   "weatherEvent": "storm",
+   "backdrop": "north_coast"
+  },
+  "DE-NI": {
+   "terrain": "agriculture",
+   "tags": [
+    "farming",
+    "wind",
+    "coast",
+    "automotive"
+   ],
+   "facilityBonus": {
+    "farm": 1.2
+   },
+   "weatherEvent": "storm",
+   "backdrop": "farmland"
+  },
+  "DE-NW": {
+   "terrain": "urban",
+   "tags": [
+    "industry",
+    "mining",
+    "most_populous"
+   ],
+   "facilityBonus": {
+    "mine": 1.2,
+    "factory": 1.1
+   },
+   "backdrop": "industry",
+   "exclusiveFacility": "ruhr_works",
+   "enemyBias": {
+    "armored": 1.2
+   }
+  },
+  "DE-RP": {
+   "terrain": "mixed",
+   "tags": [
+    "wine",
+    "rhine"
+   ],
+   "facilityBonus": {
+    "farm": 1.15
+   },
+   "backdrop": "vineyard",
+   "exclusiveFacility": "winery"
+  },
+  "DE-SL": {
+   "terrain": "urban",
+   "tags": [
+    "steel",
+    "coal",
+    "small"
+   ],
+   "facilityBonus": {
+    "mine": 1.15
+   },
+   "backdrop": "industry"
+  },
+  "DE-SN": {
+   "terrain": "mountain",
+   "tags": [
+    "ore_mountains",
+    "culture"
+   ],
+   "facilityBonus": {
+    "mine": 1.15
+   },
+   "backdrop": "castle_hills",
+   "exclusiveFacility": "porcelain_works"
+  },
+  "DE-ST": {
+   "terrain": "agriculture",
+   "tags": [
+    "farming",
+    "chemicals"
+   ],
+   "facilityBonus": {
+    "farm": 1.2
+   },
+   "backdrop": "farmland"
+  },
+  "DE-SH": {
+   "terrain": "sea",
+   "tags": [
+    "coast",
+    "wind",
+    "fishing"
+   ],
+   "facilityBonus": {
+    "fishery": 1.15
+   },
+   "weatherEvent": "storm",
+   "backdrop": "north_coast"
+  },
+  "DE-TH": {
+   "terrain": "mountain",
+   "tags": [
+    "forest",
+    "castles"
+   ],
+   "facilityBonus": {
+    "castle": 1.15
+   },
+   "backdrop": "castle_hills",
+   "exclusiveFacility": "wartburg"
   }
  },
  "enemies": {
@@ -150,6 +276,174 @@
    "damage": 0.9,
    "range": 1.1,
    "cooldown": 1.0
+  }
+ },
+ "theme": {
+  "backdrops": {
+   "alps": {
+    "palette": [
+     "#DDE8F0",
+     "#6C8EAD",
+     "#3E5C76"
+    ],
+    "note": "アルプスの山と雪"
+   },
+   "black_forest": {
+    "palette": [
+     "#2F5D3A",
+     "#7FA66B",
+     "#C8D8B0"
+    ],
+    "note": "深い森と丘"
+   },
+   "north_coast": {
+    "palette": [
+     "#CFE3EA",
+     "#5B8FA8",
+     "#2E5E78"
+    ],
+    "note": "北海・バルト海の海岸と風車"
+   },
+   "port": {
+    "palette": [
+     "#B8C4CC",
+     "#4A6572",
+     "#2B3A42"
+    ],
+    "note": "港とコンテナ"
+   },
+   "city": {
+    "palette": [
+     "#D9D9E3",
+     "#7A7A93",
+     "#44445A"
+    ],
+    "note": "都市のスカイライン"
+   },
+   "vineyard": {
+    "palette": [
+     "#E3E8B8",
+     "#9BB05A",
+     "#5E7A34"
+    ],
+    "note": "川沿いのぶどう畑"
+   },
+   "farmland": {
+    "palette": [
+     "#EFE6B5",
+     "#C9B458",
+     "#7E8C3A"
+    ],
+    "note": "麦畑と風力発電"
+   },
+   "industry": {
+    "palette": [
+     "#C9C3BD",
+     "#7C6F64",
+     "#3C3530"
+    ],
+    "note": "工場と炭鉱の街"
+   },
+   "lakes": {
+    "palette": [
+     "#D5E8E0",
+     "#5FA08A",
+     "#2F6B58"
+    ],
+    "note": "湖と森"
+   },
+   "castle_hills": {
+    "palette": [
+     "#E5DCC8",
+     "#9A8664",
+     "#5A4A32"
+    ],
+    "note": "丘の上の城"
+   }
+  }
+ },
+ "facilities": {
+  "farm": {
+   "skin": "farm_windmill",
+   "name": {
+    "ja": "農場と風車",
+    "en": "Farm & Windmill",
+    "de": "Hof mit Windrad"
+   }
+  },
+  "fishery": {
+   "skin": "harbor_cutter",
+   "name": {
+    "ja": "港の漁船",
+    "en": "Harbor Cutter",
+    "de": "Hafenkutter"
+   }
+  },
+  "factory": {
+   "skin": "automotive_plant",
+   "name": {
+    "ja": "自動車工場",
+    "en": "Automotive Plant",
+    "de": "Autowerk"
+   }
+  },
+  "mine": {
+   "skin": "coal_mine",
+   "name": {
+    "ja": "炭鉱",
+    "en": "Coal Mine",
+    "de": "Zeche"
+   }
+  },
+  "castle": {
+   "skin": "hilltop_castle",
+   "name": {
+    "ja": "丘の城",
+    "en": "Hilltop Castle",
+    "de": "Burg"
+   }
+  },
+  "shrine": {
+   "skin": "chapel",
+   "name": {
+    "ja": "聖堂",
+    "en": "Chapel",
+    "de": "Kapelle"
+   }
+  }
+ },
+ "enemySkins": {
+  "normal": {
+   "skin": "rust_sprite",
+   "name": {
+    "ja": "さび妖精",
+    "en": "Rust Sprite",
+    "de": "Rostgeist"
+   }
+  },
+  "speedy": {
+   "skin": "dash_gremlin",
+   "name": {
+    "ja": "疾走グレムリン",
+    "en": "Dash Gremlin",
+    "de": "Flitzer-Kobold"
+   }
+  },
+  "armored": {
+   "skin": "iron_golem",
+   "name": {
+    "ja": "鉄のゴーレム",
+    "en": "Iron Golem",
+    "de": "Eisen-Golem"
+   }
+  },
+  "healer": {
+   "skin": "forest_sprite",
+   "name": {
+    "ja": "森の精",
+    "en": "Forest Sprite",
+    "de": "Waldgeist"
+   }
   }
  }
 }

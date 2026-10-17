@@ -1,5 +1,6 @@
-# 国ごとの特性・戦い方 土台 v0.2(2026-10-17)
+# 国ごとの特性・戦い方 土台 v0.3(2026-10-17)
 v0.2: 敵の特性・攻撃性能と、施設の攻撃アクションを国ごとに変えられるようにした
+v0.3: 背景・施設・敵の見た目を国ごとに変えられるようにし、ドイツ16州・米国51州の全地域に特性を書いた(決定事項は `decision_log.md`)
 
 ## 目的
 国ごとに「地図の形」だけでなく「戦い方の手触り」を変える。コアは**データの形と検証**だけを持ち、敵・施設・天候の実際の処理は、各ゲーム(タワーディフェンスは地理パズル王側)が `profile.json` を読んで実装する。
@@ -17,7 +18,19 @@ v0.2: 敵の特性・攻撃性能と、施設の攻撃アクションを国ご�
 | signature | 国の目玉の仕組み(`id` をゲームが解釈) | id が空でない |
 | enemies | 敵の種類→この国での特性(下の「敵の特性」)。書かれていない敵は標準 | 敵の種類は normal/speedy/armored/healer |
 | attackActions | 施設の種類→この国での攻撃アクション(下の「攻撃アクション」)。書かれていない施設は標準 | 施設は farm/fishery/factory/mine/castle/shrine |
-| regions | 地域id→ terrain / tags / facilityBonus / weatherEvent | 地域idは実在、terrain は sea/mountain/urban/agriculture/mixed(日本の既存の地形分類と同じ)、facilityBonus は1.0〜2.0 |
+| theme | `backdrops`: 背景の種類id→配色(#RRGGBBを3色: 地面・アクセント・空)と一言説明 | 配色は3色以上 |
+| facilities | 施設の種類→この国での見た目(`skin`)と名前(言語→名称。英語は必須) | 施設は farm/fishery/factory/mine/castle/shrine |
+| enemySkins | 敵の種類→この国での見た目(`skin`)と名前(同上) | 敵の種類は normal/speedy/armored/healer |
+| regions | 地域id→ terrain / tags / facilityBonus / weatherEvent / backdrop / exclusiveFacility / enemyBias | 地域idは実在、terrain は sea/mountain/urban/agriculture/mixed(日本の既存の地形分類と同じ)、facilityBonus は1.0〜2.0 |
+
+## 見た目の国別化(背景・施設・敵)
+- 背景: 国ごとに `theme.backdrops` に背景の種類(例: ドイツ=alps・port・vineyard…、米国=desert・plains・bayou…)を定義し、地域の `backdrop` が参照する。絵の素材はゲーム側が id で引く(コアは配色と id だけを持つ)
+- 施設: 同じ施設の種類でも、国ごとに見た目と名前を変える(例: 鉱業=ドイツは炭鉱「Zeche」、米国は油井「Oil Derrick」。神社の枠=ドイツは聖堂、米国は町の教会)
+- 敵: 同じ敵の種類でも、国ごとに見た目と名前を変える(例: 装甲型=ドイツは鉄のゴーレム、米国は岩のゴーレム)。戦争や特定の歴史を連想させる意匠は使わず、ファンタジーの存在にする
+- 地域: `exclusiveFacility`(その地域だけの限定施設のid。日本の限定施設と同じ考え方)、`enemyBias`(敵の種類→出現の重みの倍率 0.5〜2.0。例: 港の州は装甲型が増える)
+
+## 全地域の特性
+ドイツ16州・米国51州の全地域に、地形・特徴タグ・背景を書いた(漏れ・余りはテストで検出)。施設ボーナス・天候イベント・限定施設・敵の偏りは、特徴のある地域だけに書く。天候イベントは hurricane/tornado/blizzard/heatwave/wildfire/flood/earthquake/storm(災害も含む)。特性は一般的なイメージに基づく簡易な設定で、事実の根拠は未検証(ゲーム内の説明文にする前に確認する)。
 
 ## 敵の特性(`enemies`)
 敵の種類ごとに、この国での性能・性質・行動を変える。
@@ -63,6 +76,8 @@ v0.2: 敵の特性・攻撃性能と、施設の攻撃アクションを国ご�
 - 目玉: `signature.id` で分岐。`weatherEvent` を持つ地域でだけ、天候イベントを起こす
 
 ## 未決・未確認
+- 背景・施設・敵の素材(絵)は未作成。コアは配色と id、名前だけを持つ。素材の作り方(手描き・生成・既存素材)と、ライセンス・匿名化の方針は未決
+- 限定施設の中身(効果)、背景ごとの効果の有無(見た目だけか、地形補正に使うか)は、ゲーム側で決める
 - 敵の能力・行動、施設の撃ち方の識別子は、地理パズル王の現在の実装(通常・足速・装甲・回復、施設6種)に合わせた最小の一覧。`flying` や `disrupt`、`chain`、`sabotage` などは、ゲーム側にまだない仕組みで、実装するかは未決
 - 数値の釣り合い(敵が強くなる分、施設をどれだけ強くするか)は、遊んで決める
 - 数値(敵の割合・倍率・ボーナス)は仮。遊んで調整する
