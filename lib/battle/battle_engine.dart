@@ -53,6 +53,8 @@ class BattleEngine {
   static const swarmHp = 0.6; // swarm: 1体あたりのHPの割合（1回の出現で2体）
   static const bossSkillInterval = 8.0, bossHasteSeconds = 3.0, bossHasteFactor = 1.8, bossHealRatio = 0.10;
   static const bossSummonCount = 2, bossSummonHp = 0.5;
+  // 進路の長さによる速さの補正: 短い進路は遅く、長い進路は速くして、拠点までかかる時間を近づける
+  static const lengthReference = 25.0, lengthFactorMin = 0.6, lengthFactorMax = 1.25;
   static const upgradeCostRatio = 0.75, refundRatio = 0.6;
   // スキル（波の合間に3つから1つ選ぶ。効果は次の波だけ）
   static const waveSkills = ['waveAtkBonus', 'waveRangeBonus', 'waveCoinBonus', 'waveAtkSpeedBonus', 'slow', 'weatherBlock'];
@@ -61,7 +63,7 @@ class BattleEngine {
   static const skillAtkBonus = 1.25, skillRangeBonus = 1.0, skillCoinBonus = 1.2, skillAtkSpeedBonus = 1.15, skillSlowFactor = 0.8;
   // hard: 施設の耐久と、敵の施設への攻撃（設計書 §6.2）
   static const facilityHpFactor = 1.5, castleHpFactor = 1.5, exclusiveHpFactor = 2.0; // 施設HP = 1波の基礎HP × 係数 × レベル
-  static const enemyAttackRatio = 0.12, enemyAttackInterval = 1.5, enemyAttackRange = 1.0, enemyRangedAttackRange = 2.0; // 攻撃力 = 波の基礎HP × 比率 × 種類の倍率
+  static const enemyAttackRatio = 0.10, enemyAttackInterval = 1.5, enemyAttackRange = 1.0, enemyRangedAttackRange = 1.3; // 攻撃力 = 波の基礎HP × 比率 × 種類の倍率
   static const bossAttackFactor = 1.5, bossAoeRadius = 1.5;
   static const protectRatio = 0.7, protectRadius = 1.5; // 城・象徴が周囲の施設を守る（受ける被害 ×0.7）
   static const shrineHealRatio = 0.04, shrineHealInterval = 2.0, shrineHealRadius = 1.5;
@@ -267,6 +269,9 @@ class BattleEngine {
     );
   }
 
+  /// 進路の長さ（マス数）による敵の速さの倍率。
+  double lengthFactor(int pathLength) => (pathLength / lengthReference).clamp(lengthFactorMin, lengthFactorMax);
+
   /// 敵の性能（難易度・国の敵の特性を適用）。[index] は波の中の何番目か（最後がボス）。
   Enemy makeEnemy(StageWave w, int index) {
     final kind = w.enemyKinds[index];
@@ -278,7 +283,7 @@ class BattleEngine {
     var hp = isBoss ? (w.baseHp * 2.5).round() : (w.baseHp * b.hpMult * (t?.hp ?? 1.0)).round();
     if (ability == 'swarm') hp = (hp * swarmHp).round();
     if (!isBoss && kind == 'normal') hp = (hp * _season.normalHp).round();
-    final speed = b.speedMult * (isBoss ? 0.6 : 1.2) * (t?.speed ?? 1.0) * _params.speedMultiplier * _season.enemySpeed * (kind == 'speedy' ? _season.speedySpeed : 1.0);
+    final speed = b.speedMult * (isBoss ? 0.6 : 1.2) * (t?.speed ?? 1.0) * _params.speedMultiplier * _season.enemySpeed * (kind == 'speedy' ? _season.speedySpeed : 1.0) * lengthFactor(stage.paths[w.entranceIndices[index % w.entranceIndices.length]].length);
     // 拠点への被害: 既存の規則（easyは常に1。ボス・装甲は重い）× 国の倍率
     final heavy = _params.heavyBreach;
     final base = !heavy ? 1 : (isBoss ? (stage.difficulty == Difficulty.hard ? 3 : 2) : (kind == 'armored' ? 2 : 1));

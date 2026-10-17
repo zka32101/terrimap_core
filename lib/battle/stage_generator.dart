@@ -72,7 +72,10 @@ class StageGenerator {
         n: [for (final p in pack.regions.firstWhere((r) => r.id == n).polygons) _project(p)]
     };
     final groups = _entranceGroups(grid, all, neighborPolys, base);
-    final chosen = _chooseGroups(groups, params.maxEntrances, rng);
+    var chosen = _chooseGroups(groups, params.maxEntrances, rng);
+    // 拠点に近すぎる入口は、進路が短すぎて遊べないので外す（ほかに入口があるときだけ）
+    final far = [for (final g in chosen) if (g.cells.any((c) => c.manhattan(base) >= _minEntranceDistance)) g];
+    if (far.isNotEmpty) chosen = far;
     if (chosen.isEmpty) throw StateError('$regionId: 入口を作れない');
 
     // 5. 進路。入口ごとに、自分自身と交差しない経路を seed つきで探す。
@@ -353,6 +356,8 @@ class StageGenerator {
 
   // ── ウェーブ・季節 ───────────────────────────────────────
 
+  static const _minEntranceDistance = 6; // 入口と拠点の最短距離（マス）
+
   List<StageWave> _waves(DifficultyParams p, RegionTrait? trait, List<StageEntrance> entrances,
       Map<String, Map<String, double>> neighborBias, int seed, Rng rng) {
     final count = (5 + p.waveAddition).clamp(1, 10);
@@ -368,7 +373,7 @@ class StageGenerator {
           final kinds = <String>[];
           for (var i = 0; i < n; i++) {
             final e = entrances[idx[i % idx.length]];
-            kinds.add(_pickKind(mix, trait?.enemyBias ?? const {}, e.neighborId == null ? const {} : neighborBias[e.neighborId] ?? const {}, wr));
+            kinds.add(_pickKind(mix, trait?.enemyBias ?? const {}, e.neighborId == null ? const {} : neighborBias[e.neighborId] ?? const {}, wr, w));
           }
           return StageWave(
             number: w,
@@ -385,11 +390,18 @@ class StageGenerator {
   }
 
   /// 敵の種類を、国の構成(enemyMix)×その州の偏り×入口の隣の州の偏り(0.5乗)を重みに選ぶ。
-  static String _pickKind(Map<String, double> mix, Map<String, double> own, Map<String, double> neighbor, Rng r) {
+  /// 敵の種類が最初に出る波。段階的に出して、序盤は通常の敵で施設を整える時間を作る。
+  static const kindUnlockWave = {'normal': 1, 'speedy': 2, 'healer': 3, 'armored': 4};
+
+  static String _pickKind(Map<String, double> mix, Map<String, double> own, Map<String, double> neighbor, Rng r, int wave) {
     final keys = (mix.keys.toList()..sort());
-    final w = [for (final k in keys) (mix[k]! * (own[k] ?? 1.0) * math.sqrt(neighbor[k] ?? 1.0))];
+    final w = [
+      for (final k in keys)
+        (wave < (kindUnlockWave[k] ?? 1) ? 0.0 : mix[k]! * (own[k] ?? 1.0) * math.sqrt(neighbor[k] ?? 1.0))
+    ];
     final total = w.fold<double>(0, (a, b) => a + b);
     var x = r.nextDouble() * total;
+    if (total <= 0) return keys.contains('normal') ? 'normal' : keys.first;
     for (var i = 0; i < keys.length; i++) {
       x -= w[i];
       if (x <= 0) return keys[i];

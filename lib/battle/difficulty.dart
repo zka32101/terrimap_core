@@ -34,6 +34,6 @@ const Map<Difficulty, DifficultyParams> difficultyParams = {
       hpMultiplier: 1.0, waveAddition: 0, scoreMultiplier: 1.0, speedMultiplier: 1.0, heartBonus: 0,
       heavyBreach: true, rewardMultiplier: 1.0, waveBreakSeconds: 6, facilitiesAttacked: false, maxEntrances: 1),
   Difficulty.hard: DifficultyParams(
-      hpMultiplier: 1.3, waveAddition: 2, scoreMultiplier: 1.5, speedMultiplier: 1.15, heartBonus: -2,
-      heavyBreach: true, rewardMultiplier: 0.9, waveBreakSeconds: 4, facilitiesAttacked: true, maxEntrances: 3),
+      hpMultiplier: 1.15, waveAddition: 2, scoreMultiplier: 1.5, speedMultiplier: 1.08, heartBonus: -2,
+      heavyBreach: true, rewardMultiplier: 1.0, waveBreakSeconds: 4, facilitiesAttacked: true, maxEntrances: 3),
 };

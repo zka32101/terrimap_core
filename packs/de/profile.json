@@ -5,13 +5,13 @@
   "en": "Steady and planned. Armored enemies are common; combine each state's specialty to defend."
  },
  "enemyMix": {
-  "normal": 0.35,
+  "normal": 0.5,
   "speedy": 0.15,
-  "armored": 0.4,
+  "armored": 0.25,
   "healer": 0.1
  },
  "economy": {
-  "startCoins": 1.0,
+  "startCoins": 1.3,
   "income": 1.1,
   "facilityCost": 1.0
  },
