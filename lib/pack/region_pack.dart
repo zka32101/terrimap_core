@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'country_profile.dart';
+
 class Region {
   final String id;
   final String? capitalId;
@@ -14,9 +16,11 @@ class RegionPack {
   final double refLat;
   final List<Region> regions;
   final Map<String, Map<String, Map<String, String>>> strings; // lang→区分→id→文字列
+  /// 国ごとの特性・戦い方(任意。profile.json がない packは null)。
+  final CountryProfile? profile;
   const RegionPack(this.packId, this.country, this.regionKind, this.attribution,
       this.languages, this.regions, this.strings,
-      {this.projectionType = 'equirect_cos', this.refLat = 36.0});
+      {this.projectionType = 'equirect_cos', this.refLat = 36.0, this.profile});
 
   /// 文字列(JSON)からpackを組み立てる。ファイル読込は呼び出し側(rootBundle等)。
   factory RegionPack.parse({
@@ -24,6 +28,7 @@ class RegionPack {
     required String regionsJson,
     required String geoJson,
     required Map<String, String> stringsJsonByLang,
+    String? profileJson,
   }) {
     final p = jsonDecode(packJson) as Map<String, dynamic>;
     final meta = {for (final r in (jsonDecode(regionsJson)['regions'] as List)) r['id'] as String: r};
@@ -44,6 +49,7 @@ class RegionPack {
     return RegionPack(p['packId'], p['country'], p['regionKind'], p['attribution'],
         List<String>.from(p['languages']), regions, strings,
         projectionType: p['projection']['type'] as String,
-        refLat: ((p['projection']['refLat'] ?? 36.0) as num).toDouble());
+        refLat: ((p['projection']['refLat'] ?? 36.0) as num).toDouble(),
+        profile: profileJson == null ? null : CountryProfile.parse(profileJson));
   }
 }
