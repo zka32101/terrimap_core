@@ -1,0 +1,22 @@
+{
+ "packId": "de",
+ "version": "0.1.0",
+ "country": "DE",
+ "regionKind": "state",
+ "languages": [
+  "en",
+  "de"
+ ],
+ "defaultLanguage": "en",
+ "projection": {
+  "type": "equirect_cos",
+  "refLat": 51.0
+ },
+ "insets": [],
+ "attribution": "Made with Natural Earth (naturalearthdata.com)",
+ "license": {
+  "name": "Public Domain (Natural Earth)",
+  "commercialConfirmed": true,
+  "internalOnly": false
+ }
+}

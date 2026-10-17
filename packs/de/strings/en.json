@@ -1,0 +1,38 @@
+{
+ "regions": {
+  "DE-BB": "Brandenburg",
+  "DE-BE": "Berlin",
+  "DE-BW": "Baden-Württemberg",
+  "DE-BY": "Bavaria",
+  "DE-HB": "Bremen",
+  "DE-HE": "Hesse",
+  "DE-HH": "Hamburg",
+  "DE-MV": "Mecklenburg-Western Pomerania",
+  "DE-NI": "Lower Saxony",
+  "DE-NW": "North Rhine-Westphalia",
+  "DE-RP": "Rhineland-Palatinate",
+  "DE-SH": "Schleswig-Holstein",
+  "DE-SL": "Saarland",
+  "DE-SN": "Saxony",
+  "DE-ST": "Saxony-Anhalt",
+  "DE-TH": "Thuringia"
+ },
+ "capitals": {
+  "cap_DE-BB": "Potsdam",
+  "cap_DE-BE": "Berlin",
+  "cap_DE-BW": "Stuttgart",
+  "cap_DE-BY": "Munich",
+  "cap_DE-HB": "Bremen",
+  "cap_DE-HE": "Wiesbaden",
+  "cap_DE-HH": "Hamburg",
+  "cap_DE-MV": "Schwerin",
+  "cap_DE-NI": "Hanover",
+  "cap_DE-NW": "Düsseldorf",
+  "cap_DE-RP": "Mainz",
+  "cap_DE-SH": "Kiel",
+  "cap_DE-SL": "Saarbrücken",
+  "cap_DE-SN": "Dresden",
+  "cap_DE-ST": "Magdeburg",
+  "cap_DE-TH": "Erfurt"
+ }
+}

@@ -1,0 +1,68 @@
+{
+ "regions": [
+  {
+   "id": "DE-BB",
+   "capitalId": "cap_DE-BB"
+  },
+  {
+   "id": "DE-BE",
+   "capitalId": "cap_DE-BE"
+  },
+  {
+   "id": "DE-BW",
+   "capitalId": "cap_DE-BW"
+  },
+  {
+   "id": "DE-BY",
+   "capitalId": "cap_DE-BY"
+  },
+  {
+   "id": "DE-HB",
+   "capitalId": "cap_DE-HB"
+  },
+  {
+   "id": "DE-HE",
+   "capitalId": "cap_DE-HE"
+  },
+  {
+   "id": "DE-HH",
+   "capitalId": "cap_DE-HH"
+  },
+  {
+   "id": "DE-MV",
+   "capitalId": "cap_DE-MV"
+  },
+  {
+   "id": "DE-NI",
+   "capitalId": "cap_DE-NI"
+  },
+  {
+   "id": "DE-NW",
+   "capitalId": "cap_DE-NW"
+  },
+  {
+   "id": "DE-RP",
+   "capitalId": "cap_DE-RP"
+  },
+  {
+   "id": "DE-SH",
+   "capitalId": "cap_DE-SH"
+  },
+  {
+   "id": "DE-SL",
+   "capitalId": "cap_DE-SL"
+  },
+  {
+   "id": "DE-SN",
+   "capitalId": "cap_DE-SN"
+  },
+  {
+   "id": "DE-ST",
+   "capitalId": "cap_DE-ST"
+  },
+  {
+   "id": "DE-TH",
+   "capitalId": "cap_DE-TH"
+  }
+ ]
+}

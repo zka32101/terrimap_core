@@ -1,0 +1,10 @@
+name: validate-packs
+on: [push, pull_request]
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate every pack
+        run: |
+          for d in packs/*/; do python3 -I tools/validate_pack.py "$d"; done

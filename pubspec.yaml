@@ -1,0 +1,12 @@
+name: terrimap_core
+description: 地域(州・県)クイズ共通基盤。packデータ駆動。
+version: 0.0.1
+publish_to: none
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+dependencies:
+  flutter:
+    sdk: flutter
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
