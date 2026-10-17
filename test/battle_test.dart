@@ -208,9 +208,11 @@ void main() {
       final expected = engine.facilityStats(f).damage;
       final r = engine.tick(scene([enemy('a', armor: 8)], {slot: f}), 1 / 30);
       final hit = r.events.firstWhere((e) => e.type == BattleEventType.hit);
-      expect(hit.value, (expected - 8).clamp(1, 1 << 30));
+      final raw = hit.crit ? expected * 2 : expected; // クリティカルは2倍（刻みと施設と敵から決まる）
+      expect(hit.value, (raw - 8).clamp(1, 1 << 30));
       final strong = engine.tick(scene([enemy('a', armor: 0)], {slot: f}), 1 / 30);
-      expect(strong.events.firstWhere((e) => e.type == BattleEventType.hit).value, expected);
+      final h2 = strong.events.firstWhere((e) => e.type == BattleEventType.hit);
+      expect(h2.value, h2.crit ? expected * 2 : expected);
     });
 
     test('範囲攻撃(splash): 近くの敵にも、割合のダメージ', () {
@@ -225,8 +227,9 @@ void main() {
       final hits = r.events.where((e) => e.type == BattleEventType.hit).toList();
       expect(hits.length, 2);
       expect(hits.first.enemyId, 'a'); // 拠点に近い方を狙う
-      expect(hits.first.value, fs.damage);
-      expect(hits.last.value, (fs.damage * BattleEngine.splashRatio).round());
+      final raw = hits.first.crit ? fs.damage * 2 : fs.damage;
+      expect(hits.first.value, raw);
+      expect(hits.last.value, (raw * BattleEngine.splashRatio).round());
     });
 
     test('撃った後は、間隔があくまで撃たない', () {

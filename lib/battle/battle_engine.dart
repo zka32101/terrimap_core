@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import '../pack/country_profile.dart';
+import '../quiz/rng.dart';
 import 'battle_model.dart';
 import 'difficulty.dart';
 import 'grid.dart';
@@ -8,9 +9,11 @@ import 'stage.dart';
 
 export 'battle_model.dart';
 
-/// バトルの計算（設計書 §6）。画面に依存しない純粋な計算で、乱数を使わないので、同じステージ・同じ操作なら同じ結果になる。
-/// M2: 敵の移動・施設の攻撃（単体・範囲）・経済・勝敗。敵の能力と行動、ほかの撃ち方、天候・季節・限定施設、
-/// ハードの施設への攻撃、スキル、クイズ連動は M3 以降。
+/// バトルの計算（設計書 §6）。画面に依存しない純粋な計算で、乱数は seed と刻みから決まる（クリティカル）ので、
+/// 同じステージ・同じ操作なら同じ結果になる。
+/// 入っているもの: 敵の移動・能力（shield・regen・swarm・flying・disrupt）・行動（heal_aura・ranged_disable・sabotage）・ボスのスキル、
+/// 施設の攻撃（single・splash・chain・pierce・slow・burn）・クリティカル・アップグレード・撤去、経済、勝敗。
+/// 天候・季節・限定施設、ハードの施設への攻撃、スキル選択、クイズ連動は M3b 以降。
 class BattleEngine {
   final Stage stage;
   final CountryProfile? profile;
@@ -19,10 +22,29 @@ class BattleEngine {
   /// 固定の時間刻み。画面のフレームレートに依存しないよう、[advance] はこの刻みで進める。
   static const step = 1 / 30;
 
-  /// 範囲攻撃（splash）の半径（マス）と、巻き込んだ敵へのダメージの割合。M2の暫定値。
-  static const splashRadius = 1.0, splashRatio = 0.6;
+  // ── 調整用の数値（暫定。M4の自動対戦で調整する）──────────────
+  static const splashRadius = 1.0, splashRatio = 0.6; // 範囲攻撃
+  static const chainRatios = [0.7, 0.5], chainRadius = 1.5; // 連鎖: 2体目・3体目への割合と、跳ねる距離
+  static const pierceArmorIgnore = 0.6; // 貫通: 装甲を無視する割合
+  static const slowFactor = 0.6, slowSeconds = 2.0; // 鈍足
+  static const burnRatio = 0.3, burnSeconds = 3.0; // 継続ダメージ: 威力の30%を毎秒、3秒
+  static const critChance = 0.15, critMultiplier = 2.0;
+  static const shieldMultiplier = 0.5; // shield: 最初の一撃
+  static const regenInterval = 2.0, regenRatio = 0.04; // regen: 2秒ごとに最大HPの4%
+  static const healAuraInterval = 3.0, healAuraRadius = 2.0, healAuraRatio = 0.05;
+  static const disableInterval = 6.0, disableRadius = 3.0, disableSeconds = 3.0; // ranged_disable
+  static const sabotageInterval = 8.0, sabotageRadius = 2.5, sabotageSeconds = 4.0, sabotageRatio = 0.5;
+  static const disruptRadius = 2.0, disruptRange = 0.7; // disrupt: 近くの施設の射程を縮める
+  static const swarmHp = 0.6; // swarm: 1体あたりのHPの割合（1回の出現で2体）
+  static const bossSkillInterval = 8.0, bossHasteSeconds = 3.0, bossHasteFactor = 1.8, bossHealRatio = 0.10;
+  static const bossSummonCount = 2, bossSummonHp = 0.5;
+  static const upgradeCostRatio = 0.75, refundRatio = 0.6;
+  static const bossSkills = ['speedBurst', 'hpRegen', 'summon', 'stunFacility'];
 
   DifficultyParams get _params => difficultyParams[stage.difficulty]!;
+
+  /// この地域のボスのスキル（地域idから決まる）。
+  String get bossSkill => bossSkills[fnv1a(stage.regionId) % bossSkills.length];
 
   // ── 開始・操作 ───────────────────────────────────────────
 
@@ -44,12 +66,33 @@ class BattleEngine {
   /// 施設の値段（国の倍率を適用）。
   int costOf(FacilityType t) => math.max(1, (facilityBase[t]!.cost * (profile?.facilityCost ?? 1.0)).round());
 
+  /// 強化の値段（現在のレベル→次のレベル）。最大レベルなら null。
+  int? upgradeCostOf(Facility f) =>
+      f.level >= maxFacilityLevel ? null : math.max(1, (costOf(f.type) * f.level * upgradeCostRatio).round());
+
   /// 施設を置く。置けなければ null（設置枠でない・すでに施設がある・コイン不足・終了後）。
   BattleState? place(BattleState s, FacilityType type, GridPos pos) {
     if (s.isOver || !stage.slots.contains(pos) || s.facilities.containsKey(pos)) return null;
     final cost = costOf(type);
     if (s.coins < cost) return null;
-    return s.copyWith(coins: s.coins - cost, facilities: {...s.facilities, pos: Facility(type, pos)});
+    return s.copyWith(coins: s.coins - cost, facilities: {...s.facilities, pos: Facility(type, pos, invested: cost)});
+  }
+
+  /// 施設を強化する（最大レベル3）。できなければ null。
+  BattleState? upgrade(BattleState s, GridPos pos) {
+    final f = s.facilities[pos];
+    if (s.isOver || f == null) return null;
+    final cost = upgradeCostOf(f);
+    if (cost == null || s.coins < cost) return null;
+    return s.copyWith(coins: s.coins - cost, facilities: {...s.facilities, pos: f.copyWith(level: f.level + 1, invested: f.invested + cost)});
+  }
+
+  /// 施設を撤去する。使ったコインの一部が戻る。なければ null。
+  BattleState? remove(BattleState s, GridPos pos) {
+    final f = s.facilities[pos];
+    if (s.isOver || f == null) return null;
+    final next = {...s.facilities}..remove(pos);
+    return s.copyWith(coins: s.coins + (f.invested * refundRatio).round(), facilities: next);
   }
 
   /// 準備を飛ばして、次の波を始める（準備中だけ）。
@@ -81,7 +124,10 @@ class BattleEngine {
     final isBoss = w.hasBoss && index == w.enemyCount - 1;
     final b = enemyBase[kind]!;
     final t = profile?.enemyOf(kind);
-    final hp = isBoss ? (w.baseHp * 2.5).round() : (w.baseHp * b.hpMult * (t?.hp ?? 1.0)).round();
+    final ability = isBoss ? 'none' : (t?.ability ?? 'none'); // ボスには能力を付けない（スキルを使う）
+    final action = isBoss ? 'none' : (t?.action ?? 'none');
+    var hp = isBoss ? (w.baseHp * 2.5).round() : (w.baseHp * b.hpMult * (t?.hp ?? 1.0)).round();
+    if (ability == 'swarm') hp = (hp * swarmHp).round();
     final speed = b.speedMult * (isBoss ? 0.6 : 1.2) * (t?.speed ?? 1.0) * _params.speedMultiplier;
     // 拠点への被害: 既存の規則（easyは常に1。ボス・装甲は重い）× 国の倍率
     final heavy = _params.heavyBreach;
@@ -97,6 +143,19 @@ class BattleEngine {
       isBoss: isBoss,
       armor: b.armor + (t?.armor ?? 0),
       breachDamage: math.max(1, (base * (t?.baseDamage ?? 1.0)).round()),
+      ability: ability,
+      action: action,
+      bossSkill: isBoss ? bossSkill : null,
+      shielded: ability == 'shield',
+      regenCd: ability == 'regen' ? regenInterval : 0,
+      actionCd: isBoss
+          ? bossSkillInterval
+          : switch (action) {
+              'heal_aura' => healAuraInterval,
+              'ranged_disable' => disableInterval,
+              'sabotage' => sabotageInterval,
+              _ => 0,
+            },
     );
   }
 
@@ -104,6 +163,10 @@ class BattleEngine {
     final base = e.isBoss ? 60 + wave * 5 : 12 + wave * 3;
     return math.max(1, (base * _params.rewardMultiplier * (profile?.income ?? 1.0)).round());
   }
+
+  /// クリティカルか。seed・刻み・施設・敵から決まる（状態を持たない決定的な乱数）。
+  bool isCrit(int tickCount, GridPos pos, String enemyId) =>
+      fnv1a('${stage.seed}|$tickCount|${pos.col},${pos.row}|$enemyId') / 4294967296.0 < critChance;
 
   // ── 進める ──────────────────────────────────────────────
 
@@ -136,11 +199,14 @@ class BattleEngine {
     return (state: st, events: events);
   }
 
-  /// 1刻み進める。順序は、出現→移動→施設の攻撃→撃破→拠点への到達→勝敗（設計書 §6.3）。
+  static double _dist(double ax, double ay, double bx, double by) => math.sqrt((ax - bx) * (ax - bx) + (ay - by) * (ay - by));
+
+  /// 1刻み進める。順序は、出現→敵の行動・ボスのスキル→継続ダメージ→移動→施設の攻撃→撃破→拠点への到達→勝敗（設計書 §6.3）。
   TickResult tick(BattleState s, double dt) {
     if (s.isOver) return (state: s, events: const []);
     final events = <BattleEvent>[];
-    var st = s.copyWith(time: s.time + dt);
+    var st = s.copyWith(time: s.time + dt, tickCount: s.tickCount + 1);
+    final now = st.time;
 
     if (st.phase == BattlePhase.prep) {
       final left = st.prepTimer - dt;
@@ -150,102 +216,238 @@ class BattleEngine {
 
     final w = stage.waves[st.wave - 1];
 
-    // 1. 出現
-    var enemies = [...st.enemies];
+    // 1. 出現（swarm は1回で2体）
+    var list = [...st.enemies];
     var spawned = st.spawned;
     var acc = st.spawnAcc + dt;
     while (spawned < w.enemyCount && acc >= w.spawnInterval) {
       acc -= w.spawnInterval;
       final e = makeEnemy(w, spawned);
-      enemies.add(e);
+      list.add(e);
       events.add(BattleEvent(BattleEventType.spawn, enemyId: e.id, isBoss: e.isBoss));
+      if (e.ability == 'swarm') {
+        final twin = e.copyWith(id: '${e.id}b');
+        list.add(twin);
+        events.add(BattleEvent(BattleEventType.spawn, enemyId: twin.id));
+      }
       spawned++;
     }
 
-    // 2. 移動
-    enemies = [for (final e in enemies) e.copyWith(progress: e.progress + e.speed * dt)];
-
-    // 3. 施設の攻撃（置いた順でなく、位置の順。決定的）
-    var coins = st.coins, score = st.score;
+    // 以降は、敵の変化を書き込める形で扱う。
+    final ms = [for (final e in list) _M(e)];
     final facilities = <GridPos, Facility>{...st.facilities};
     final order = facilities.keys.toList()..sort();
-    final hpOf = {for (final e in enemies) e.id: e.hp};
+    var summoned = st.summoned;
+
+    // 2. 敵の行動・ボスのスキル・regen
+    final added = <_M>[];
+    for (final m in ms) {
+      if (m.hp <= 0) continue;
+      final path = stage.paths[m.e.pathIndex];
+      final p = m.pos(path);
+      if (m.e.ability == 'regen') {
+        m.regenCd -= dt;
+        if (m.regenCd <= 0) {
+          m.regenCd = regenInterval;
+          m.hp = math.min(m.e.maxHp, m.hp + math.max(1, (m.e.maxHp * regenRatio).round()));
+        }
+      }
+      if (m.e.action == 'none' && m.e.bossSkill == null) continue;
+      m.actionCd -= dt;
+      if (m.actionCd > 0) continue;
+      if (m.e.bossSkill != null) {
+        m.actionCd = bossSkillInterval;
+        events.add(BattleEvent(BattleEventType.bossSkill, enemyId: m.e.id, detail: m.e.bossSkill, isBoss: true));
+        switch (m.e.bossSkill) {
+          case 'speedBurst':
+            m.hasteUntil = now + bossHasteSeconds;
+          case 'hpRegen':
+            m.hp = math.min(m.e.maxHp, m.hp + (m.e.maxHp * bossHealRatio).round());
+          case 'summon':
+            for (var k = 0; k < bossSummonCount; k++) {
+              final id = 'e${w.number}_s${summoned++}';
+              final hp = math.max(1, (w.baseHp * bossSummonHp).round());
+              final b = enemyBase['normal']!;
+              final summon = Enemy(
+                id: id, kind: 'normal', pathIndex: m.e.pathIndex, hp: hp, maxHp: hp,
+                speed: b.speedMult * 1.2 * _params.speedMultiplier, progress: m.progress, isBoss: false, armor: 0, breachDamage: 1);
+              added.add(_M(summon));
+              events.add(BattleEvent(BattleEventType.spawn, enemyId: id));
+            }
+          case 'stunFacility':
+            _disableNearest(facilities, order, p, disableRadius, now, events);
+        }
+        continue;
+      }
+      switch (m.e.action) {
+        case 'heal_aura':
+          m.actionCd = healAuraInterval;
+          for (final o in ms) {
+            if (o == m || o.hp <= 0) continue;
+            final q = o.pos(stage.paths[o.e.pathIndex]);
+            if (_dist(p.x, p.y, q.x, q.y) <= healAuraRadius) o.hp = math.min(o.e.maxHp, o.hp + math.max(1, (o.e.maxHp * healAuraRatio).round()));
+          }
+        case 'ranged_disable':
+          m.actionCd = disableInterval;
+          _disableNearest(facilities, order, p, disableRadius, now, events);
+        case 'sabotage':
+          m.actionCd = sabotageInterval;
+          final pos = _nearestFacility(facilities, order, p, sabotageRadius);
+          if (pos != null) {
+            facilities[pos] = facilities[pos]!.copyWith(sabotagedUntil: now + sabotageSeconds);
+            events.add(BattleEvent(BattleEventType.facilitySabotaged, facilityPos: pos));
+          }
+      }
+    }
+
+    ms.addAll(added);
+
+    // 3. 継続ダメージ（burn）
+    for (final m in ms) {
+      if (m.hp <= 0 || m.burnUntil <= now) continue;
+      m.burnAcc += m.burnDps * dt;
+      final whole = m.burnAcc.floor();
+      if (whole > 0) {
+        m.burnAcc -= whole;
+        m.hp -= whole;
+      }
+    }
+
+    // 4. 移動（鈍足・ボスの加速）
+    for (final m in ms) {
+      if (m.hp <= 0) continue;
+      var v = m.e.speed;
+      if (m.slowUntil > now) v *= m.slowFactor;
+      if (m.hasteUntil > now) v *= bossHasteFactor;
+      m.progress += v * dt;
+    }
+
+    // 5. 施設の攻撃（位置の順。決定的）
     for (final pos in order) {
       var f = facilities[pos]!;
       var cd = f.cooldown - dt;
       if (cd <= 0) {
+        if (f.disabledUntil > now) {
+          facilities[pos] = f.copyWith(cooldown: 0);
+          continue;
+        }
         final fs = facilityStats(f);
-        Enemy? target;
+        // disrupt: 近くに妨害する敵がいると、射程が縮む
+        var range = fs.range;
+        for (final m in ms) {
+          if (m.hp <= 0 || m.e.ability != 'disrupt') continue;
+          final q = m.pos(stage.paths[m.e.pathIndex]);
+          if (_dist(q.x, q.y, pos.col.toDouble(), pos.row.toDouble()) <= disruptRadius) {
+            range *= disruptRange;
+            break;
+          }
+        }
+        _M? target;
         ({double x, double y})? tp;
-        for (final e in enemies) {
-          if ((hpOf[e.id] ?? 0) <= 0) continue;
-          final p = e.position(stage.paths[e.pathIndex]);
-          final d = math.sqrt(math.pow(p.x - pos.col, 2) + math.pow(p.y - pos.row, 2));
-          if (d > fs.range) continue;
+        for (final m in ms) {
+          if (m.hp <= 0) continue;
+          final q = m.pos(stage.paths[m.e.pathIndex]);
+          if (_dist(q.x, q.y, pos.col.toDouble(), pos.row.toDouble()) > range) continue;
           // 拠点にいちばん近い敵（進んだ距離が大きい）。同じなら id の順。
-          if (target == null || e.progress > target.progress || (e.progress == target.progress && e.id.compareTo(target.id) < 0)) {
-            target = e;
-            tp = p;
+          if (target == null || m.progress > target.progress || (m.progress == target.progress && m.e.id.compareTo(target.e.id) < 0)) {
+            target = m;
+            tp = q;
           }
         }
         if (target != null) {
-          void hit(Enemy e, int raw) {
-            final dmg = math.max(1, raw - e.armor);
-            hpOf[e.id] = hpOf[e.id]! - dmg;
-            events.add(BattleEvent(BattleEventType.hit, enemyId: e.id, facilityPos: pos, value: dmg));
+          final power = f.sabotagedUntil > now ? (fs.damage * sabotageRatio).round() : fs.damage;
+          final crit = isCrit(st.tickCount, pos, target.e.id);
+          final raw = math.max(1, (power * (crit ? critMultiplier : 1.0)).round());
+          int hit(_M m, int amount, {bool c = false, double armorIgnore = 0}) {
+            var a = amount;
+            if (m.shielded) {
+              a = math.max(1, (a * shieldMultiplier).round());
+              m.shielded = false;
+            }
+            final armor = (m.e.armor * (1 - armorIgnore)).round();
+            final dmg = math.max(1, a - armor);
+            m.hp -= dmg;
+            events.add(BattleEvent(BattleEventType.hit, enemyId: m.e.id, facilityPos: pos, value: dmg, crit: c));
+            return dmg;
           }
 
-          hit(target, fs.damage);
-          if (fs.action == 'splash') {
-            for (final e in enemies) {
-              if (e.id == target.id || (hpOf[e.id] ?? 0) <= 0) continue;
-              final p = e.position(stage.paths[e.pathIndex]);
-              if (math.sqrt(math.pow(p.x - tp!.x, 2) + math.pow(p.y - tp.y, 2)) <= splashRadius) {
-                hit(e, (fs.damage * splashRatio).round());
+          final armorIgnore = fs.action == 'pierce' ? pierceArmorIgnore : 0.0;
+          hit(target, raw, c: crit, armorIgnore: armorIgnore);
+          switch (fs.action) {
+            case 'splash':
+              for (final m in ms) {
+                if (m == target || m.hp <= 0) continue;
+                final q = m.pos(stage.paths[m.e.pathIndex]);
+                if (_dist(q.x, q.y, tp!.x, tp.y) <= splashRadius) hit(m, (raw * splashRatio).round());
               }
-            }
+            case 'chain':
+              var from = tp!;
+              final done = <_M>{target};
+              for (final ratio in chainRatios) {
+                _M? next;
+                var bd = double.infinity;
+                for (final m in ms) {
+                  if (done.contains(m) || m.hp <= 0) continue;
+                  final q = m.pos(stage.paths[m.e.pathIndex]);
+                  final d = _dist(q.x, q.y, from.x, from.y);
+                  if (d <= chainRadius && (d < bd || (d == bd && m.e.id.compareTo(next!.e.id) < 0))) {
+                    bd = d;
+                    next = m;
+                  }
+                }
+                if (next == null) break;
+                done.add(next);
+                hit(next, (raw * ratio).round());
+                from = next.pos(stage.paths[next.e.pathIndex]);
+              }
+            case 'slow':
+              target.slowUntil = now + slowSeconds;
+              target.slowFactor = slowFactor;
+            case 'burn':
+              target.burnUntil = now + burnSeconds;
+              target.burnDps = math.max(1, (raw * burnRatio).round());
           }
           cd = fs.cooldown;
         } else {
           cd = 0; // 撃てる敵がいなければ、準備完了のまま待つ
         }
       }
-      facilities[pos] = f.copyWith(cooldown: cd);
+      facilities[pos] = facilities[pos]!.copyWith(cooldown: cd);
     }
 
-    // 4. 撃破（コイン・スコア）
-    final alive = <Enemy>[];
-    for (final e in enemies) {
-      final hp = hpOf[e.id]!;
-      if (hp <= 0) {
-        final reward = _killReward(e, st.wave);
+    // 6. 撃破（コイン・スコア）
+    var coins = st.coins, score = st.score;
+    final alive = <_M>[];
+    for (final m in ms) {
+      if (m.hp <= 0) {
+        final reward = _killReward(m.e, st.wave);
         coins += reward;
-        score += e.isBoss ? 200 : 50;
-        events.add(BattleEvent(BattleEventType.kill, enemyId: e.id, value: reward, isBoss: e.isBoss));
+        score += m.e.isBoss ? 200 : 50;
+        events.add(BattleEvent(BattleEventType.kill, enemyId: m.e.id, value: reward, isBoss: m.e.isBoss));
       } else {
-        alive.add(e.copyWith(hp: hp));
+        alive.add(m);
       }
     }
 
-    // 5. 拠点への到達
+    // 7. 拠点への到達
     var baseHp = st.baseHp, mistakes = st.mistakes;
     final remain = <Enemy>[];
-    for (final e in alive) {
-      if (e.progress >= stage.paths[e.pathIndex].length - 1) {
-        baseHp -= e.breachDamage;
+    for (final m in alive) {
+      if (m.progress >= m.e.reach(stage.paths[m.e.pathIndex])) {
+        baseHp -= m.e.breachDamage;
         mistakes++;
-        events.add(BattleEvent(BattleEventType.breach, enemyId: e.id, value: e.breachDamage, isBoss: e.isBoss));
+        events.add(BattleEvent(BattleEventType.breach, enemyId: m.e.id, value: m.e.breachDamage, isBoss: m.e.isBoss));
       } else {
-        remain.add(e);
+        remain.add(m.toEnemy());
       }
     }
 
     st = st.copyWith(
       enemies: remain, facilities: facilities, coins: coins, score: score, baseHp: baseHp,
-      mistakes: mistakes, spawned: spawned, spawnAcc: acc,
+      mistakes: mistakes, spawned: spawned, spawnAcc: acc, summoned: summoned,
     );
 
-    // 6. 勝敗・波の終わり
+    // 8. 勝敗・波の終わり
     if (baseHp <= 0) {
       events.add(const BattleEvent(BattleEventType.defeat));
       return (state: st.copyWith(phase: BattlePhase.defeat, baseHp: 0), events: events);
@@ -261,9 +463,56 @@ class BattleEngine {
     return (state: st, events: events);
   }
 
+  GridPos? _nearestFacility(Map<GridPos, Facility> fs, List<GridPos> order, ({double x, double y}) p, double radius) {
+    GridPos? best;
+    var bd = double.infinity;
+    for (final pos in order) {
+      final d = _dist(p.x, p.y, pos.col.toDouble(), pos.row.toDouble());
+      if (d <= radius && d < bd) {
+        bd = d;
+        best = pos;
+      }
+    }
+    return best;
+  }
+
+  void _disableNearest(Map<GridPos, Facility> fs, List<GridPos> order, ({double x, double y}) p, double radius, double now, List<BattleEvent> events) {
+    final pos = _nearestFacility(fs, order, p, radius);
+    if (pos == null) return;
+    fs[pos] = fs[pos]!.copyWith(disabledUntil: now + disableSeconds);
+    events.add(BattleEvent(BattleEventType.facilityDisabled, facilityPos: pos));
+  }
+
   BattleState _beginWave(BattleState s, List<BattleEvent> events) {
     final n = s.wave + 1;
     events.add(BattleEvent(BattleEventType.waveStart, value: n));
     return s.copyWith(phase: BattlePhase.wave, wave: n, spawned: 0, spawnAcc: 0, prepTimer: 0);
   }
+}
+
+/// 1刻みの間だけ使う、敵の書き込み用の入れ物。終わったら [toEnemy] で不変の敵に戻す。
+class _M {
+  final Enemy e;
+  int hp;
+  double progress, slowUntil, slowFactor, burnUntil, burnAcc, hasteUntil, regenCd, actionCd;
+  int burnDps;
+  bool shielded;
+  _M(this.e)
+      : hp = e.hp,
+        progress = e.progress,
+        slowUntil = e.slowUntil,
+        slowFactor = e.slowFactor,
+        burnUntil = e.burnUntil,
+        burnAcc = e.burnAcc,
+        hasteUntil = e.hasteUntil,
+        regenCd = e.regenCd,
+        actionCd = e.actionCd,
+        burnDps = e.burnDps,
+        shielded = e.shielded;
+
+  ({double x, double y}) pos(List<GridPos> path) => Enemy.positionAt(e.flying, progress, path);
+
+  Enemy toEnemy() => e.copyWith(
+        hp: hp, progress: progress, shielded: shielded, slowUntil: slowUntil, slowFactor: slowFactor, burnUntil: burnUntil,
+        burnDps: burnDps, burnAcc: burnAcc, hasteUntil: hasteUntil, regenCd: regenCd, actionCd: actionCd);
 }
