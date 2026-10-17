@@ -22,3 +22,7 @@
 
 ## アプリでの読み込み
 `UiStrings.parse({'en': enJson, 'fr': frJson}, lang: 'fr')`。JSONは `rootBundle.loadString('packages/terrimap_core/i18n/battle.fr.json')` で読む。
+
+## 対応言語（案。`lib/i18n/languages.dart` で変更）
+en（原本）・de・fr・es・it・pt・nl・tr・ja・ko・zh（簡体字）の11言語。ドイツのアプリでは de、米国のアプリでは es を優先して訳すと効果が大きい。
+言語を足す・減らすときは `languages.dart` と、地域名の `packs/<国>/strings/<言語>.json` をそろえる。
