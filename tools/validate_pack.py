@@ -33,5 +33,32 @@ for lang in pack.get("languages", []):
     if miss: err.append(f"{lang}: 地域名の欠落 {sorted(miss)}")
     miss = caps - set(s.get("capitals", {}))
     if miss: err.append(f"{lang}: 首都名の欠落 {len(miss)}件")
+# 国の特性・戦い方(任意)。Dart版(PackValidator)と同じ規則。
+prof_path = p/"profile.json"
+if prof_path.exists():
+    try: prof = json.loads(prof_path.read_text())
+    except Exception as e: prof = None; err.append(f"profile.json: 読込失敗 {e}")
+    if prof is not None:
+        ENEMIES = {"normal", "speedy", "armored", "healer"}
+        TERRAINS = {"sea", "mountain", "urban", "agriculture", "mixed"}
+        if not prof.get("style"): err.append("profile.json: style が空")
+        mix = prof.get("enemyMix") or {}
+        if not mix: err.append("profile.json: enemyMix が空")
+        for k, v in mix.items():
+            if k not in ENEMIES: err.append(f"profile.json: enemyMix の未知の敵 {k}")
+            if not isinstance(v, (int, float)) or v < 0: err.append(f"profile.json: enemyMix.{k} が負または数値でない")
+        if mix and abs(sum(v for v in mix.values() if isinstance(v, (int, float))) - 1) > 0.01:
+            err.append("profile.json: enemyMix の合計が1でない")
+        eco = prof.get("economy") or {}
+        for k in ("startCoins", "income", "facilityCost"):
+            v = eco.get(k)
+            if not isinstance(v, (int, float)) or not (0.5 <= v <= 2.0): err.append(f"profile.json: economy.{k} は0.5〜2.0")
+        if prof.get("pathLength") not in ("short", "medium", "long"): err.append("profile.json: pathLength は short/medium/long")
+        if not (prof.get("signature") or {}).get("id"): err.append("profile.json: signature.id が空")
+        for rid, t in (prof.get("regions") or {}).items():
+            if rid not in set(ids): err.append(f"profile.json: 未知の地域 {rid}")
+            if t.get("terrain") is not None and t["terrain"] not in TERRAINS: err.append(f"profile.json: {rid} の terrain が不正")
+            for k, v in (t.get("facilityBonus") or {}).items():
+                if not isinstance(v, (int, float)) or not (1.0 <= v <= 2.0): err.append(f"profile.json: {rid} の facilityBonus.{k} は1.0〜2.0")
 print("\n".join(err) if err else f"OK {pack.get('packId')}: {len(ids)}地域")
 sys.exit(1 if err else 0)

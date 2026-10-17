@@ -1,0 +1,25 @@
+{
+ "style": "engineered",
+ "summary": {
+  "ja": "堅実・計画型。装甲の厚い敵が多く、州ごとの得意分野を組み合わせて守る。",
+  "en": "Steady and planned. Armored enemies are common; combine each state's specialty to defend."
+ },
+ "enemyMix": {"normal": 0.35, "speedy": 0.15, "armored": 0.40, "healer": 0.10},
+ "economy": {"startCoins": 1.0, "income": 1.1, "facilityCost": 1.0},
+ "pathLength": "medium",
+ "signature": {
+  "id": "federal_specialties",
+  "note": "州ごとに得意分野(施設の強化)を持つ。隣り合う州の得意分野がそろうと追加ボーナス。"
+ },
+ "regions": {
+  "DE-BY": {"terrain": "mountain", "tags": ["industry", "alps"], "facilityBonus": {"factory": 1.2}},
+  "DE-BW": {"terrain": "mixed", "tags": ["industry"], "facilityBonus": {"factory": 1.2}},
+  "DE-NW": {"terrain": "urban", "tags": ["industry", "mining"], "facilityBonus": {"mine": 1.2}},
+  "DE-NI": {"terrain": "agriculture", "tags": ["farming", "wind"], "facilityBonus": {"farm": 1.2}},
+  "DE-SH": {"terrain": "sea", "tags": ["coast", "wind"], "facilityBonus": {"fishery": 1.15}},
+  "DE-MV": {"terrain": "sea", "tags": ["coast"], "facilityBonus": {"fishery": 1.15}},
+  "DE-HH": {"terrain": "sea", "tags": ["port", "city_state"], "facilityBonus": {"fishery": 1.2}},
+  "DE-HB": {"terrain": "sea", "tags": ["port", "city_state"], "facilityBonus": {"fishery": 1.2}},
+  "DE-BE": {"terrain": "urban", "tags": ["capital", "city_state"], "facilityBonus": {"castle": 1.2}}
+ }
+}

@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'country_profile.dart';
+
 /// packの整合性検査(tools/validate_pack.py のDart版)。エラー文字列の一覧を返し、空なら合格。
 /// ファイル読込は呼び出し側。アプリ起動時やテストで同じ規則を使えるようにする。
 class PackValidator {
@@ -10,6 +12,7 @@ class PackValidator {
     required String regionsJson,
     required String geoJson,
     required Map<String, String> stringsJsonByLang,
+    String? profileJson, // 任意。あれば国の特性・戦い方も検査する
   }) {
     final err = <String>[];
     Map<String, dynamic> obj(String name, String src) {
@@ -78,6 +81,68 @@ class PackValidator {
       final cn = ((s['capitals'] as Map?) ?? const {}).keys.toSet();
       final cm = caps.difference(cn);
       if (cm.isNotEmpty) err.add('$lang: 首都名の欠落 ${cm.length}件');
+    }
+    if (profileJson != null) err.addAll(_validateProfile(profileJson, idSet));
+    return err;
+  }
+
+  static List<String> _validateProfile(String src, Set<String> regionIds) {
+    final err = <String>[];
+    Map<String, dynamic> m;
+    try {
+      m = jsonDecode(src) as Map<String, dynamic>;
+    } catch (e) {
+      return ['profile.json: 読込失敗 $e'];
+    }
+    if (((m['style'] ?? '') as Object).toString().isEmpty) err.add('profile.json: style が空');
+
+    final mix = m['enemyMix'];
+    if (mix is! Map || mix.isEmpty) {
+      err.add('profile.json: enemyMix が空');
+    } else {
+      var sum = 0.0;
+      mix.forEach((k, v) {
+        if (!CountryProfile.enemyKinds.contains(k)) err.add('profile.json: enemyMix の未知の敵 $k');
+        if (v is! num || v < 0) {
+          err.add('profile.json: enemyMix.$k が負または数値でない');
+        } else {
+          sum += v;
+        }
+      });
+      if ((sum - 1).abs() > 0.01) err.add('profile.json: enemyMix の合計が1でない($sum)');
+    }
+
+    final eco = m['economy'];
+    if (eco is! Map) {
+      err.add('profile.json: economy がない');
+    } else {
+      for (final k in ['startCoins', 'income', 'facilityCost']) {
+        final v = eco[k];
+        if (v is! num || v < 0.5 || v > 2.0) err.add('profile.json: economy.$k は0.5〜2.0');
+      }
+    }
+    if (!CountryProfile.pathLengths.contains(m['pathLength'])) {
+      err.add('profile.json: pathLength は ${CountryProfile.pathLengths.join('/')}');
+    }
+    final sig = m['signature'];
+    if (sig is! Map || ((sig['id'] ?? '') as Object).toString().isEmpty) err.add('profile.json: signature.id が空');
+
+    final regs = m['regions'];
+    if (regs is Map) {
+      regs.forEach((id, t) {
+        if (!regionIds.contains(id)) err.add('profile.json: 未知の地域 $id');
+        if (t is! Map) return;
+        final terrain = t['terrain'];
+        if (terrain != null && !CountryProfile.terrains.contains(terrain)) {
+          err.add('profile.json: $id の terrain が不正 $terrain');
+        }
+        final fb = t['facilityBonus'];
+        if (fb is Map) {
+          fb.forEach((k, v) {
+            if (v is! num || v < 1.0 || v > 2.0) err.add('profile.json: $id の facilityBonus.$k は1.0〜2.0');
+          });
+        }
+      });
     }
     return err;
   }
