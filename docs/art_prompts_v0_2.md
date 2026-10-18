@@ -11,6 +11,15 @@
 - 戦争・特定の歴史を連想させる表現、実在の紋章・ロゴ・国旗・人物の顔は入れない。
 - ボス・限定施設・天候は、v0.2 で追加。数の目安は下の「枚数」を参照。
 
+## Leonardo AI の設定（かわいい世界観を保つ）
+
+- モデル: Leonardo Phoenix か Lucid Origin（フラットなベクター風が出やすい）。プリセットスタイルは Illustration か Graphic Design。
+- 背景: 16:9（1344x768 など）。施設・敵・ボス: 1:1（1024x1024）。1回4枚生成して1枚選ぶ。
+- Negative prompt（共通）: `text, letters, logo, watermark, people, human face, weapon, blood, realistic, photo, 3d render, dark, scary, flags, emblem, road, path`（施設・敵は `background scenery` も足して、無地の白背景にする）
+- 画風の固定: 最初に選んだ背景1枚を Style Reference（強さ Mid〜High）に入れる。施設・敵は、気に入った施設1枚を Character Reference ではなく Style Reference にして、同じ線の太さと色合いにそろえる。
+- 敵・ボスは、怖くせずにかわいく: プロンプトに `chibi, round shape, big eyes, friendly, smiling` を足す。
+- 商用利用: 有料プランで生成した画像を使う（無料プランの画像は公開される・商用不可の場合があるので、利用規約を最新で確認）。
+
 ## 試作（まずドイツで17枚）
 
 1. **背景を2枚**: `alps` と `city`（画風と色の幅を見る）。1枚目で画風を決める。
