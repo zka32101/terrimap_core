@@ -159,5 +159,18 @@ if prof_path.exists():
             if t.get("terrain") is not None and t["terrain"] not in TERRAINS: err.append(f"profile.json: {rid} の terrain が不正")
             for k, v in (t.get("facilityBonus") or {}).items():
                 if not isinstance(v, (int, float)) or not (1.0 <= v <= 2.0): err.append(f"profile.json: {rid} の facilityBonus.{k} は1.0〜2.0")
+# facts.json（任意）: 名所の地域が実在し、id が重複せず、英語の名前があること
+if (p/'facts.json').exists():
+    try: facts = json.loads((p/'facts.json').read_text())
+    except Exception as e: facts = {}; err.append(f"facts.json: 読込失敗 {e}")
+    if facts and facts.get("v") != 1: err.append("facts.json: v は 1")
+    seen = set()
+    for l in (facts.get("landmarks") or []):
+        lid = l.get("id")
+        if lid in seen: err.append(f"facts.json: 名所 id の重複 {lid}")
+        seen.add(lid)
+        if l.get("region") not in set(ids): err.append(f"facts.json: {lid} の未知の地域 {l.get('region')}")
+        if not (l.get("name") or {}).get("en"): err.append(f"facts.json: {lid} に英語の名前がない")
+        if l.get("check", "unchecked") not in ("unchecked", "checked"): err.append(f"facts.json: {lid} の check が不正")
 print("\n".join(err) if err else f"OK {pack.get('packId')}: {len(ids)}地域")
 sys.exit(1 if err else 0)
