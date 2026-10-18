@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+import '../pack/pack_facts.dart';
 import '../pack/region_pack.dart';
 import 'rng.dart';
 
@@ -12,6 +13,8 @@ enum QuestionType {
   /// 隣接: 対象の地域と**接している**地域を4択で答える（正解は隣の地域のうち1つ。誤答は接していない地域）。
   /// 隣のない地域（飛び地の州など）は、この問題にならず、地図から州名の問題になる。
   neighborOf,
+  /// 名所: 「この名所はどの州にある？」を4択で答える（名所は `packs/<国>/facts.json`）。名所のデータがない州は、地図から州名の問題になる。
+  landmarkOf,
 }
 
 class Question {
@@ -19,7 +22,9 @@ class Question {
   final String targetId;
   final List<String> choiceIds; // 4択(locateOnMapは空: 地図タップで回答)
   final String correctId;
-  const Question(this.type, this.targetId, this.choiceIds, this.correctId);
+  /// 問題の題材の id（名所の問題では名所の id。なければ null）。
+  final String? subjectId;
+  const Question(this.type, this.targetId, this.choiceIds, this.correctId, {this.subjectId});
   bool isCorrect(String answerId) => answerId == correctId;
 }
 
@@ -46,6 +51,19 @@ class QuizEngine {
       final type = types[_rng.nextInt(types.length)];
       if (type == QuestionType.locateOnMap) {
         out.add(Question(type, t, const [], t));
+        continue;
+      }
+      if (type == QuestionType.landmarkOf) {
+        final marks = pack.facts?.inRegion(t) ?? const <Landmark>[];
+        if (marks.isNotEmpty) {
+          final ordered = [...marks]..sort((a, b) => a.id.compareTo(b.id));
+          final lm = ordered[_rng.nextInt(ordered.length)];
+          final distract = _rng.shuffled(all.where((x) => x != t)).take(3);
+          out.add(Question(type, t, _rng.shuffled([t, ...distract]), t, subjectId: lm.id));
+          continue;
+        }
+        final distract = _rng.shuffled(all.where((x) => x != t)).take(3);
+        out.add(Question(QuestionType.nameFromMap, t, _rng.shuffled([t, ...distract]), t));
         continue;
       }
       if (type == QuestionType.neighborOf) {

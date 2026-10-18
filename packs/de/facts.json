@@ -1,0 +1,225 @@
+{
+ "v": 1,
+ "landmarks": [
+  {
+   "id": "heidelberg_castle",
+   "region": "DE-BW",
+   "name": {
+    "en": "Heidelberg Castle",
+    "de": "Heidelberger Schloss"
+   },
+   "use": true,
+   "check": "unchecked",
+   "source": "UNESCO World Heritage List / 各施設・自治体の公式ページ"
+  },
+  {
+   "id": "europa_park",
+   "region": "DE-BW",
+   "name": {
+    "en": "Europa-Park (Rust)",
+    "de": "Europa-Park (Rust)"
+   },
+   "use": true,
+   "check": "unchecked",
+   "source": "UNESCO World Heritage List / 各施設・自治体の公式ページ"
+  },
+  {
+   "id": "neuschwanstein",
+   "region": "DE-BY",
+   "name": {
+    "en": "Neuschwanstein Castle",
+    "de": "Schloss Neuschwanstein"
+   },
+   "use": true,
+   "check": "unchecked",
+   "source": "UNESCO World Heritage List / 各施設・自治体の公式ページ"
+  },
+  {
+   "id": "zugspitze",
+   "region": "DE-BY",
+   "name": {
+    "en": "Zugspitze (highest mountain in Germany)",
+    "de": "Zugspitze (höchster Berg Deutschlands)"
+   },
+   "use": true,
+   "check": "unchecked",
+   "source": "UNESCO World Heritage List / 各施設・自治体の公式ページ"
+  },
+  {
+   "id": "brandenburg_gate",
+   "region": "DE-BE",
+   "name": {
+    "en": "Brandenburg Gate",
+    "de": "Brandenburger Tor"
+   },
+   "use": true,
+   "check": "unchecked",
+   "source": "UNESCO World Heritage List / 各施設・自治体の公式ページ"
+  },
+  {
+   "id": "reichstag",
+   "region": "DE-BE",
+   "name": {
+    "en": "Reichstag building",
+    "de": "Reichstagsgebäude"
+   },
+   "use": true,
+   "check": "unchecked",
+   "source": "UNESCO World Heritage List / 各施設・自治体の公式ページ"
+  },
+  {
+   "id": "sanssouci",
+   "region": "DE-BB",
+   "name": {
+    "en": "Sanssouci Palace (Potsdam)",
+    "de": "Schloss Sanssouci (Potsdam)"
+   },
+   "use": true,
+   "check": "unchecked",
+   "source": "UNESCO World Heritage List / 各施設・自治体の公式ページ"
+  },
+  {
+   "id": "bremen_roland",
+   "region": "DE-HB",
+   "name": {
+    "en": "Roland statue of Bremen",
+    "de": "Bremer Roland"
+   },
+   "use": true,
+   "check": "unchecked",
+   "source": "UNESCO World Heritage List / 各施設・自治体の公式ページ"
+  },
+  {
+   "id": "elbphilharmonie",
+   "region": "DE-HH",
+   "name": {
+    "en": "Elbphilharmonie",
+    "de": "Elbphilharmonie"
+   },
+   "use": true,
+   "check": "unchecked",
+   "source": "UNESCO World Heritage List / 各施設・自治体の公式ページ"
+  },
+  {
+   "id": "bergpark_wilhelmshoehe",
+   "region": "DE-HE",
+   "name": {
+    "en": "Bergpark Wilhelmshöhe (Kassel)",
+    "de": "Bergpark Wilhelmshöhe (Kassel)"
+   },
+   "use": true,
+   "check": "unchecked",
+   "source": "UNESCO World Heritage List / 各施設・自治体の公式ページ"
+  },
+  {
+   "id": "koenigsstuhl",
+   "region": "DE-MV",
+   "name": {
+    "en": "Königsstuhl chalk cliff (Rügen)",
+    "de": "Königsstuhl (Rügen)"
+   },
+   "use": true,
+   "check": "unchecked",
+   "source": "UNESCO World Heritage List / 各施設・自治体の公式ページ"
+  },
+  {
+   "id": "hildesheim_cathedral",
+   "region": "DE-NI",
+   "name": {
+    "en": "Hildesheim Cathedral",
+    "de": "Hildesheimer Dom"
+   },
+   "use": true,
+   "check": "unchecked",
+   "source": "UNESCO World Heritage List / 各施設・自治体の公式ページ"
+  },
+  {
+   "id": "cologne_cathedral",
+   "region": "DE-NW",
+   "name": {
+    "en": "Cologne Cathedral",
+    "de": "Kölner Dom"
+   },
+   "use": true,
+   "check": "unchecked",
+   "source": "UNESCO World Heritage List / 各施設・自治体の公式ページ"
+  },
+  {
+   "id": "zollverein",
+   "region": "DE-NW",
+   "name": {
+    "en": "Zollverein Coal Mine (Essen)",
+    "de": "Zeche Zollverein (Essen)"
+   },
+   "use": true,
+   "check": "unchecked",
+   "source": "UNESCO World Heritage List / 各施設・自治体の公式ページ"
+  },
+  {
+   "id": "porta_nigra",
+   "region": "DE-RP",
+   "name": {
+    "en": "Porta Nigra (Trier)",
+    "de": "Porta Nigra (Trier)"
+   },
+   "use": true,
+   "check": "unchecked",
+   "source": "UNESCO World Heritage List / 各施設・自治体の公式ページ"
+  },
+  {
+   "id": "saarschleife",
+   "region": "DE-SL",
+   "name": {
+    "en": "Saarschleife (Saar Loop)",
+    "de": "Saarschleife"
+   },
+   "use": true,
+   "check": "unchecked",
+   "source": "UNESCO World Heritage List / 各施設・自治体の公式ページ"
+  },
+  {
+   "id": "dresden_frauenkirche",
+   "region": "DE-SN",
+   "name": {
+    "en": "Dresden Frauenkirche",
+    "de": "Dresdner Frauenkirche"
+   },
+   "use": true,
+   "check": "unchecked",
+   "source": "UNESCO World Heritage List / 各施設・自治体の公式ページ"
+  },
+  {
+   "id": "quedlinburg",
+   "region": "DE-ST",
+   "name": {
+    "en": "Old town of Quedlinburg",
+    "de": "Altstadt von Quedlinburg"
+   },
+   "use": true,
+   "check": "unchecked",
+   "source": "UNESCO World Heritage List / 各施設・自治体の公式ページ"
+  },
+  {
+   "id": "holstentor",
+   "region": "DE-SH",
+   "name": {
+    "en": "Holstentor (Lübeck)",
+    "de": "Holstentor (Lübeck)"
+   },
+   "use": true,
+   "check": "unchecked",
+   "source": "UNESCO World Heritage List / 各施設・自治体の公式ページ"
+  },
+  {
+   "id": "wartburg",
+   "region": "DE-TH",
+   "name": {
+    "en": "Wartburg Castle",
+    "de": "Wartburg"
+   },
+   "use": true,
+   "check": "unchecked",
+   "source": "UNESCO World Heritage List / 各施設・自治体の公式ページ"
+  }
+ ]
+}
