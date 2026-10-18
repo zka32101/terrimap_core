@@ -28,6 +28,9 @@ class BattleProgress {
   int clearedStates(Iterable<String> regionIds, {Difficulty? difficulty}) =>
       regionIds.where((r) => isCleared(StageKind.normal, r, difficulty: difficulty)).length;
 
+  /// その種別でクリアしたステージの数（難易度は問わない）。
+  int clearedCountOf(StageKind kind) => _cleared.entries.where((e) => e.key.startsWith('${kind.name}:') && e.value.isNotEmpty).length;
+
   /// 地方決戦の解放: その地方の州の**過半数**をクリア（どの難易度でも）。
   bool regionalUnlocked(RegionGroup group) => clearedStates(group.regions) * 2 > group.regions.length;
 
