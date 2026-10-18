@@ -135,21 +135,28 @@ class _BattlePainter extends CustomPainter {
       ..strokeWidth = 1.5;
     final onPath = {for (final p in stage.paths) ...p};
 
-    // 背景画像があれば全面に敷く。陸は地面を重ねて盤面を「地面の上」に見せ（空に浮いて見えないように）、進路をその上に描く
+    // 背景画像があれば全面に敷く。
+    // - 縦長（真上から見た地面の絵）: そのまま敷き、進路だけを地面の上に描く
+    // - 横長（風景の絵）: ぼかして遠景にし、陸の地面を重ねて盤面を手前に見せる（空に浮いて見えないように）
     final backdrop = art?.backdrop(stage.backdrop);
+    final topDown = backdrop != null && backdrop.height >= backdrop.width * 1.3;
     if (backdrop != null) {
-      _cover(canvas, backdrop, Offset.zero & size, blur: 5); // ぼかして「遠くの景色」にし、盤面を手前に見せる
-      canvas.drawRect(Offset.zero & size, Paint()..color = const Color(0x33000000));
+      _cover(canvas, backdrop, Offset.zero & size, blur: topDown ? 0 : 5);
+      if (!topDown) canvas.drawRect(Offset.zero & size, Paint()..color = const Color(0x33000000));
     }
-    final landPaint = ground;
+    final landSet = stage.land.toSet();
     for (final p in stage.land) {
       final onP = onPath.contains(p);
-      canvas.drawRect(rect(p).deflate(0.4), onP ? pathPaint : landPaint);
+      if (topDown && !onP) continue;
+      if (topDown) {
+        canvas.drawRRect(RRect.fromRectAndRadius(rect(p).deflate(cell * 0.04), Radius.circular(cell * 0.1)), Paint()..color = const Color(0xE6D7CCC8));
+      } else {
+        canvas.drawRect(rect(p).deflate(0.4), onP ? pathPaint : ground);
+      }
     }
-    if (backdrop != null) {
+    if (backdrop != null && !topDown) {
       // 陸の外周に影を落として、地面の厚みを出す
       final shadow = Paint()..color = const Color(0x33000000);
-      final landSet = stage.land.toSet();
       for (final p in stage.land) {
         if (!landSet.contains(GridPos(p.col, p.row + 1))) {
           final r = rect(p);

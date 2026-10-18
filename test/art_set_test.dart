@@ -71,4 +71,15 @@ void main() {
     expect(find.byType(BattleView), findsOneWidget);
     expect(t.takeException(), isNull);
   });
+
+  testWidgets('縦長（俯瞰）の背景でも描ける', (t) async {
+    final tall = (await t.runAsync(() => solid(90, 160, Colors.green)))!;
+    final s = session();
+    final art = ArtSet(images: {'backdrops/${s.engine.stage.backdrop}': tall});
+    await t.pumpWidget(MaterialApp(
+      home: SizedBox(width: 360, height: 640, child: BattleView(stage: s.engine.stage, state: s.state, art: art)),
+    ));
+    expect(find.byType(BattleView), findsOneWidget);
+    expect(t.takeException(), isNull);
+  });
 }
