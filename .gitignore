@@ -2,3 +2,5 @@ packs/jp/
 .dart_tool/
 build/
 __pycache__/
+art_raw/
+art/
