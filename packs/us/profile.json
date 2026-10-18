@@ -849,5 +849,94 @@
     "en": "Cactus Nurse"
    }
   }
+ },
+ "groups": {
+  "northeast": {
+   "name": {
+    "en": "Northeast",
+    "ja": "北東部"
+   },
+   "center": "US-PA",
+   "regions": [
+    "US-CT",
+    "US-ME",
+    "US-MA",
+    "US-NH",
+    "US-RI",
+    "US-VT",
+    "US-NJ",
+    "US-NY",
+    "US-PA"
+   ]
+  },
+  "midwest": {
+   "name": {
+    "en": "Midwest",
+    "ja": "中西部"
+   },
+   "center": "US-IL",
+   "regions": [
+    "US-IL",
+    "US-IN",
+    "US-MI",
+    "US-OH",
+    "US-WI",
+    "US-IA",
+    "US-KS",
+    "US-MN",
+    "US-MO",
+    "US-NE",
+    "US-ND",
+    "US-SD"
+   ]
+  },
+  "south": {
+   "name": {
+    "en": "South",
+    "ja": "南部"
+   },
+   "center": "US-GA",
+   "regions": [
+    "US-DE",
+    "US-DC",
+    "US-FL",
+    "US-GA",
+    "US-MD",
+    "US-NC",
+    "US-SC",
+    "US-VA",
+    "US-WV",
+    "US-AL",
+    "US-KY",
+    "US-MS",
+    "US-TN",
+    "US-AR",
+    "US-LA",
+    "US-OK",
+    "US-TX"
+   ]
+  },
+  "west": {
+   "name": {
+    "en": "West",
+    "ja": "西部"
+   },
+   "center": "US-CO",
+   "regions": [
+    "US-AZ",
+    "US-CO",
+    "US-ID",
+    "US-MT",
+    "US-NV",
+    "US-NM",
+    "US-UT",
+    "US-WY",
+    "US-AK",
+    "US-CA",
+    "US-HI",
+    "US-OR",
+    "US-WA"
+   ]
+  }
  }
 }

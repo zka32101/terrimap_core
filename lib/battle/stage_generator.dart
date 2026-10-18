@@ -22,43 +22,73 @@ class StageGenerator {
   static const _minSlots = 6;
   static const _dfsBudget = 60000;
 
-  Stage generate(String regionId, Difficulty difficulty, {StageKind kind = StageKind.normal}) {
-    if (kind != StageKind.normal) {
-      throw UnimplementedError('地方決戦・エクストラは M7 で作る（設計書 §6.9）');
+  /// 通常のステージは州のid、地方決戦（[StageKind.regional]）は地方のid（`profile.groups`）を渡す。
+  /// エクストラ（[StageKind.extra]）は M7b で作る。
+  Stage generate(String id, Difficulty difficulty, {StageKind kind = StageKind.normal}) {
+    if (kind == StageKind.extra) throw UnimplementedError('エクストラは M7b で作る（設計書 §6.9）');
+    final params = difficultyParams[difficulty]!;
+    if (kind == StageKind.regional) {
+      final g = _profile?.groups[id] ?? (throw ArgumentError('未知の地方: $id'));
+      final members = [for (final r in g.regions) pack.regions.firstWhere((x) => x.id == r)];
+      final center = members.firstWhere((r) => r.id == g.center);
+      return _make(_Spec(
+        key: id, members: members, center: center, difficulty: difficulty, kind: kind,
+        waveCount: math.max(1, regionalWaves + params.waveAddition.sign), hpScale: regionalHpScale,
+        gridMax: regionalGridMax, minEntrances: 2, groupId: id,
+      ));
     }
-    final region = pack.regions.firstWhere((r) => r.id == regionId, orElse: () => throw ArgumentError('未知の地域: $regionId'));
-    final seed = fnv1a('${pack.packId}|$regionId|${difficulty.name}|${kind.name}');
+    final region = pack.regions.firstWhere((r) => r.id == id, orElse: () => throw ArgumentError('未知の地域: $id'));
+    return _make(_Spec(
+      key: id, members: [region], center: region, difficulty: difficulty, kind: kind,
+      waveCount: (5 + params.waveAddition).clamp(1, 10), hpScale: 1.0, gridMax: _maxSize, minEntrances: 1,
+    ));
+  }
+
+  /// 地方決戦: 7波（easy 6・hard 8）、敵のHP 1.2倍、盤面は最大14、入口は2か所以上。
+  static const regionalWaves = 7;
+  static const regionalHpScale = 1.2;
+  static const regionalGridMax = 14;
+
+  Stage _make(_Spec spec) {
+    final region = spec.center, regionId = region.id, difficulty = spec.difficulty, kind = spec.kind;
+    final seed = fnv1a('${pack.packId}|${spec.key}|${difficulty.name}|${kind.name}');
     final rng = Rng(seed);
     final params = difficultyParams[difficulty]!;
-    final trait = _profile?.traitOf(regionId);
+    final trait = spec.members.length == 1 ? _profile?.traitOf(regionId) : _mixTrait(spec.members);
+    final centerTrait = _profile?.traitOf(regionId);
     final pathLength = _profile?.pathLength ?? 'medium';
 
-    // 1. 州の形（投影後）。盤面にするのは**本土**1つだけ（州都を含むポリゴン。なければ最大のポリゴン）。
+    // 1. 州の形（投影後）。盤面にするのは、州ごとに**本土**1つ（州都を含むポリゴン。なければ最大のポリゴン）。
     //    小さな島や離れた土地は飾り。例: ハワイは州都（ホノルル）のあるオアフ島を盤面にする。
-    final polys = [for (final p in region.polygons) _project(p)];
-    final all = polys;
-    final areas = [for (final p in polys) _area(p)];
-    final maxArea = areas.reduce(math.max);
-    final cap = region.capitalPos == null ? null : _projectPt(region.capitalPos![0], region.capitalPos![1]);
-    var mainIdx = areas.indexOf(maxArea);
-    if (cap != null) {
-      for (var i = 0; i < polys.length; i++) {
-        if (areas[i] >= maxArea * 0.05 && _inRing(cap[0], cap[1], polys[i])) {
-          mainIdx = i;
-          break;
+    final major = <List<List<double>>>[];
+    final all = <List<List<double>>>[];
+    for (final m in spec.members) {
+      final polys = [for (final p in m.polygons) _project(p)];
+      all.addAll(polys);
+      final areas = [for (final p in polys) _area(p)];
+      final maxArea = areas.reduce(math.max);
+      final mc = m.capitalPos == null ? null : _projectPt(m.capitalPos![0], m.capitalPos![1]);
+      var mainIdx = areas.indexOf(maxArea);
+      if (mc != null) {
+        for (var i = 0; i < polys.length; i++) {
+          if (areas[i] >= maxArea * 0.05 && _inRing(mc[0], mc[1], polys[i])) {
+            mainIdx = i;
+            break;
+          }
         }
       }
+      major.add(polys[mainIdx]);
     }
-    final major = [polys[mainIdx]];
+    final cap = region.capitalPos == null ? null : _projectPt(region.capitalPos![0], region.capitalPos![1]);
     final bb = _bbox(major);
     final bw = bb[2] - bb[0], bh = bb[3] - bb[1];
     final aspect = bw / bh;
 
     // 2. 盤面の解像度を決め、州の形で切り抜く（最大の連結成分だけを使う）。
     late _Grid grid;
-    for (var size = _baseSize[pathLength] ?? 8; ; size++) {
-      grid = _rasterize(major, bb, size, aspect);
-      if (grid.land.length >= _minLand || size >= _maxSize) break;
+    for (var size = (_baseSize[pathLength] ?? 8) + (spec.members.length > 1 ? 4 : 0); ; size++) {
+      grid = _rasterize(major, bb, size, aspect, spec.gridMax);
+      if (grid.land.length >= _minLand || size >= spec.gridMax) break;
     }
     if (grid.land.length < 12) throw StateError('$regionId: 陸地マスが少なすぎる(${grid.land.length})');
 
@@ -67,12 +97,13 @@ class StageGenerator {
     final base = _nearestLand(grid, target);
 
     // 4. 入口 = 隣の州との境界（なければ海・国境）。
+    final memberIds = {for (final m in spec.members) m.id};
+    final outside = {for (final m in spec.members) ...m.neighbors}.difference(memberIds);
     final neighborPolys = {
-      for (final n in region.neighbors)
-        n: [for (final p in pack.regions.firstWhere((r) => r.id == n).polygons) _project(p)]
+      for (final n in outside) n: [for (final p in pack.regions.firstWhere((r) => r.id == n).polygons) _project(p)]
     };
     final groups = _entranceGroups(grid, all, neighborPolys, base);
-    var chosen = _chooseGroups(groups, params.maxEntrances, rng);
+    var chosen = _chooseGroups(groups, math.max(params.maxEntrances, spec.minEntrances), rng);
     // 拠点に近すぎる入口は、進路が短すぎて遊べないので外す（ほかに入口があるときだけ）
     final far = [for (final g in chosen) if (g.cells.any((c) => c.manhattan(base) >= _minEntranceDistance)) g];
     if (far.isNotEmpty) chosen = far;
@@ -123,10 +154,16 @@ class StageGenerator {
       for (final e in entrances)
         if (e.neighborId != null) e.neighborId!: _profile?.traitOf(e.neighborId!).enemyBias ?? const {},
     };
-    final waves = _waves(params, trait, entrances, neighborBias, seed, rng);
+    final waves = _waves(params, trait, entrances, neighborBias, seed, rng, waveCount: spec.waveCount, hpScale: spec.hpScale);
+
+    // 盤面にある州（その州の形の中にマスの中心があるもの。離れた土地の州は外れる）
+    final present = [
+      for (final m in spec.members)
+        if (spec.members.length == 1 || grid.land.any((c) => _inPolys(grid.cx(c.col), grid.cy(c.row), [for (final p in m.polygons) _project(p)]))) m.id,
+    ];
 
     return Stage(
-      id: '$regionId:${difficulty.name}:${kind.name}',
+      id: '${spec.key}:${difficulty.name}:${kind.name}',
       packId: pack.packId,
       regionId: regionId,
       difficulty: difficulty,
@@ -145,12 +182,27 @@ class StageGenerator {
       slots: slots,
       waves: waves,
       baseHp: math.max(1, 15 + params.heartBonus),
-      season: _season(trait?.weatherEvent, rng),
-      terrain: trait?.terrain,
-      weatherEvent: trait?.weatherEvent,
-      backdrop: trait?.backdrop,
-      exclusiveFacility: trait?.exclusiveFacility,
+      season: _season(centerTrait?.weatherEvent, rng),
+      terrain: centerTrait?.terrain,
+      weatherEvent: centerTrait?.weatherEvent,
+      backdrop: centerTrait?.backdrop,
+      exclusiveFacility: centerTrait?.exclusiveFacility,
+      groupId: spec.groupId,
+      memberIds: present,
+      exclusiveFacilities: [
+        for (final id in present)
+          if (_profile?.traitOf(id).exclusiveFacility != null) _profile!.traitOf(id).exclusiveFacility!,
+      ],
     );
+  }
+
+  /// 地方決戦の敵の偏りは、州の偏りの幾何平均。ほかの項目は使わない。
+  RegionTrait _mixTrait(List<Region> members) {
+    final kinds = {for (final m in members) ...?_profile?.traitOf(m.id).enemyBias.keys};
+    return RegionTrait(enemyBias: {
+      for (final k in kinds)
+        k: math.exp(members.map((m) => math.log(_profile?.traitOf(m.id).enemyBias[k] ?? 1.0)).reduce((a, b) => a + b) / members.length),
+    });
   }
 
   // ── 投影・形 ────────────────────────────────────────────
@@ -194,9 +246,9 @@ class StageGenerator {
 
   // ── 盤面 ────────────────────────────────────────────────
 
-  _Grid _rasterize(List<List<List<double>>> major, List<double> bb, int size, double aspect) {
-    final cols = (size * math.sqrt(aspect)).round().clamp(_minSize, _maxSize);
-    final rows = (size / math.sqrt(aspect)).round().clamp(_minSize, _maxSize);
+  _Grid _rasterize(List<List<List<double>>> major, List<double> bb, int size, double aspect, int gridMax) {
+    final cols = (size * math.sqrt(aspect)).round().clamp(_minSize, gridMax);
+    final rows = (size / math.sqrt(aspect)).round().clamp(_minSize, gridMax);
     final cw = (bb[2] - bb[0]) / cols, ch = (bb[3] - bb[1]) / rows;
     final land = <GridPos>{};
     for (var r = 0; r < rows; r++) {
@@ -359,8 +411,9 @@ class StageGenerator {
   static const _minEntranceDistance = 6; // 入口と拠点の最短距離（マス）
 
   List<StageWave> _waves(DifficultyParams p, RegionTrait? trait, List<StageEntrance> entrances,
-      Map<String, Map<String, double>> neighborBias, int seed, Rng rng) {
-    final count = (5 + p.waveAddition).clamp(1, 10);
+      Map<String, Map<String, double>> neighborBias, int seed, Rng rng,
+      {required int waveCount, double hpScale = 1.0}) {
+    final count = waveCount;
     final mix = _profile?.enemyMix ?? const {'normal': 1.0};
     return [
       for (var w = 1; w <= count; w++)
@@ -378,7 +431,7 @@ class StageGenerator {
           return StageWave(
             number: w,
             enemyCount: n,
-            baseHp: (48 * w * p.hpMultiplier).round(),
+            baseHp: (48 * w * p.hpMultiplier * hpScale).round(),
             baseAttack: (5 + w * 2 * p.hpMultiplier).round(),
             spawnInterval: math.max(0.5, 1.5 - w * 0.15),
             hasBoss: w == count,
@@ -432,4 +485,28 @@ class _Group {
   final String? neighborId;
   final List<GridPos> cells;
   _Group(this.neighborId, this.cells);
+}
+
+/// 1つのステージを作るための入力。通常は州1つ、地方決戦は州の集まり。
+class _Spec {
+  final String key; // seed とステージidに使う（州のid／地方のid）
+  final List<Region> members;
+  final Region center; // 拠点（州都）・天候・限定施設の基準
+  final Difficulty difficulty;
+  final StageKind kind;
+  final int waveCount, gridMax, minEntrances;
+  final double hpScale;
+  final String? groupId;
+  const _Spec({
+    required this.key,
+    required this.members,
+    required this.center,
+    required this.difficulty,
+    required this.kind,
+    required this.waveCount,
+    required this.hpScale,
+    required this.gridMax,
+    required this.minEntrances,
+    this.groupId,
+  });
 }

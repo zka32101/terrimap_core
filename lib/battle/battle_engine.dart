@@ -57,6 +57,8 @@ class BattleEngine {
   static const swarmHp = 0.6; // swarm: 1体あたりのHPの割合（1回の出現で2体）
   static const bossSkillInterval = 8.0, bossHasteSeconds = 3.0, bossHasteFactor = 1.8, bossHealRatio = 0.10;
   static const bossSummonCount = 2, bossSummonHp = 0.5;
+  // 地方決戦は盤面が広く波も多いので、開始コインと撃破コインを増やす
+  static const regionalCoins = 1.6, regionalReward = 1.3;
   // 進路の長さによる速さの補正: 短い進路は遅く、長い進路は速くして、拠点までかかる時間を近づける
   static const lengthReference = 25.0, lengthFactorMin = 0.6, lengthFactorMax = 1.25;
   static const upgradeCostRatio = 0.75, refundRatio = 0.6;
@@ -97,7 +99,7 @@ class BattleEngine {
         spawnAcc: 0,
         enemies: const [],
         facilities: const {},
-        coins: (startCoinsBase[stage.difficulty]! * (profile?.startCoins ?? 1.0)).round(),
+        coins: (startCoinsBase[stage.difficulty]! * (profile?.startCoins ?? 1.0) * (stage.kind == StageKind.regional ? regionalCoins : 1.0)).round(),
         baseHp: stage.baseHp,
         score: 0,
         mistakes: 0,
@@ -120,21 +122,33 @@ class BattleEngine {
     return s.copyWith(coins: s.coins - cost, facilities: {...s.facilities, pos: f.copyWith(hp: maxHpOf(f))});
   }
 
-  /// この地域の限定施設を置く。置けなければ null（地域に限定施設がない・すでに1つある・設置枠でない・コイン不足）。
-  BattleState? placeExclusive(BattleState s, GridPos pos) {
-    final id = stage.exclusiveFacility;
-    final kind = exclusiveKinds[id];
-    if (id == null || kind == null || s.isOver || !stage.slots.contains(pos) || s.facilities.containsKey(pos)) return null;
-    if (s.facilities.values.any((f) => f.exclusive != null)) return null;
-    final cost = exclusiveCostOf();
+  /// このステージで置ける限定施設のid（重複なし）。通常は1つ、地方決戦は州ごと。
+  List<String> get exclusiveIds => stage.exclusiveFacilities.isNotEmpty
+      ? stage.exclusiveFacilities.toSet().toList()
+      : [if (stage.exclusiveFacility != null) stage.exclusiveFacility!];
+
+  /// まだ置いていない限定施設のid（置ける順）。
+  List<String> exclusiveLeft(BattleState s) {
+    final placed = {for (final f in s.facilities.values) if (f.exclusive != null) f.exclusive!};
+    return [for (final id in exclusiveIds) if (!placed.contains(id)) id];
+  }
+
+  /// 限定施設を置く。[id] を省くと、まだ置いていない最初のもの。置けなければ null
+  /// （限定施設がない・同じものがすでにある・設置枠でない・コイン不足）。
+  BattleState? placeExclusive(BattleState s, GridPos pos, {String? id}) {
+    final left = exclusiveLeft(s);
+    final pick = id ?? (left.isEmpty ? null : left.first);
+    final kind = exclusiveKinds[pick];
+    if (pick == null || kind == null || !left.contains(pick) || s.isOver || !stage.slots.contains(pos) || s.facilities.containsKey(pos)) return null;
+    final cost = exclusiveCostOf(pick);
     if (cost == null || s.coins < cost) return null;
-    final f = Facility(FacilityType.castle, pos, invested: cost, exclusive: id);
+    final f = Facility(FacilityType.castle, pos, invested: cost, exclusive: pick);
     return s.copyWith(coins: s.coins - cost, facilities: {...s.facilities, pos: f.copyWith(hp: maxHpOf(f))});
   }
 
-  /// 限定施設の値段（地域に限定施設がなければ null）。
-  int? exclusiveCostOf() {
-    final kind = exclusiveKinds[stage.exclusiveFacility];
+  /// 限定施設の値段（[id] を省くと、このステージの最初のもの。なければ null）。
+  int? exclusiveCostOf([String? id]) {
+    final kind = exclusiveKinds[id ?? (exclusiveIds.isEmpty ? null : exclusiveIds.first)];
     if (kind == null) return null;
     return math.max(1, (exclusiveSpecs[kind]!.cost * (profile?.facilityCost ?? 1.0)).round());
   }
@@ -198,9 +212,10 @@ class BattleEngine {
   /// [forRepair] が null ならスキル選択用、施設の位置なら修理用。
   Question? assistQuestion(BattleState s, {GridPos? forRepair}) {
     if (!assistEnabled || s.isOver) return null;
-    final region = pack!.regions.where((r) => r.id == stage.regionId);
-    if (region.isEmpty) return null;
-    final pool = {stage.regionId, ...region.first.neighbors};
+    final ids = stage.memberIds.isEmpty ? [stage.regionId] : stage.memberIds;
+    final regions = pack!.regions.where((r) => ids.contains(r.id)).toList();
+    if (regions.isEmpty) return null;
+    final pool = {...ids, for (final r in regions) ...r.neighbors};
     final seed = fnv1a('${stage.seed}|assist|${forRepair == null ? 'skill' : 'repair'}|${s.wave}|${forRepair?.col},${forRepair?.row}');
     final qs = QuizEngine(pack!, seed: seed).generate(
       count: 1,
@@ -263,7 +278,9 @@ class BattleEngine {
     if (ex != null) return (damage: ex.damage, range: ex.range + (f.level - 1) * 0.2, cooldown: 1 / ex.attackSpeed, action: ex.action);
     final base = facilityBase[f.type]!;
     final act = profile?.attackActions[f.type.name];
-    final bonus = profile?.traitOf(stage.regionId).facilityBonus[f.type.name] ?? 1.0;
+    // 地方決戦では、盤面にある州の得意分野のうち、いちばん強いものを使う
+    final ids = stage.memberIds.isEmpty ? [stage.regionId] : stage.memberIds;
+    final bonus = ids.map((id) => profile?.traitOf(id).facilityBonus[f.type.name] ?? 1.0).reduce(math.max);
     final dmg = base.damage * f.level * (act?.damage ?? 1.0) * bonus * (_season.typeDamage[f.type] ?? 1.0) * signature.facilityDamage(f.type);
     return (
       damage: math.max(1, dmg.round()),
@@ -320,7 +337,7 @@ class BattleEngine {
 
   int _killReward(Enemy e, int wave, String? skill, [double mult = 1.0]) {
     final base = e.isBoss ? 60 + wave * 5 : 12 + wave * 3;
-    return math.max(1, (base * _params.rewardMultiplier * (profile?.income ?? 1.0) * (skill == 'waveCoinBonus' ? skillCoinBonus : 1.0) * _season.coin * mult).round());
+    return math.max(1, (base * _params.rewardMultiplier * (profile?.income ?? 1.0) * (skill == 'waveCoinBonus' ? skillCoinBonus : 1.0) * _season.coin * mult * (stage.kind == StageKind.regional ? regionalReward : 1.0)).round());
   }
 
   /// クリティカルか。seed・刻み・施設・敵から決まる（状態を持たない決定的な乱数）。

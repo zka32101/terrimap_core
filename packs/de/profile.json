@@ -445,5 +445,63 @@
     "de": "Waldgeist"
    }
   }
+ },
+ "groups": {
+  "north": {
+   "name": {
+    "en": "North",
+    "de": "Norden",
+    "ja": "北部"
+   },
+   "center": "DE-NI",
+   "regions": [
+    "DE-SH",
+    "DE-HH",
+    "DE-HB",
+    "DE-NI",
+    "DE-MV"
+   ]
+  },
+  "east": {
+   "name": {
+    "en": "East",
+    "de": "Osten",
+    "ja": "東部"
+   },
+   "center": "DE-ST",
+   "regions": [
+    "DE-BB",
+    "DE-BE",
+    "DE-ST",
+    "DE-SN",
+    "DE-TH"
+   ]
+  },
+  "west": {
+   "name": {
+    "en": "West",
+    "de": "Westen",
+    "ja": "西部"
+   },
+   "center": "DE-HE",
+   "regions": [
+    "DE-NW",
+    "DE-HE",
+    "DE-RP",
+    "DE-SL"
+   ]
+  },
+  "south": {
+   "name": {
+    "en": "South",
+    "de": "Süden",
+    "ja": "南部"
+   },
+   "center": "DE-BY",
+   "regions": [
+    "DE-BW",
+    "DE-BY"
+   ]
+  }
  }
 }

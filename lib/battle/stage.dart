@@ -79,6 +79,11 @@ class Stage {
   // 地域の特性（profile.json があるときだけ入る）
   final String? terrain, weatherEvent, backdrop, exclusiveFacility;
 
+  /// 地方決戦: 地方のid、盤面にある州のid、置ける限定施設（州ごと）。通常のステージでは null・[regionId] だけ・[exclusiveFacility] だけ。
+  final String? groupId;
+  final List<String> memberIds;
+  final List<String> exclusiveFacilities;
+
   const Stage({
     required this.id,
     required this.packId,
@@ -104,6 +109,9 @@ class Stage {
     this.weatherEvent,
     this.backdrop,
     this.exclusiveFacility,
+    this.groupId,
+    this.memberIds = const [],
+    this.exclusiveFacilities = const [],
   });
 
   /// 季節だけを変えた複製（天候・季節の効果の確認用）。
@@ -112,6 +120,7 @@ class Stage {
         originX: originX, originY: originY, cellW: cellW, cellH: cellH, land: land, base: base, entrances: entrances,
         paths: paths, slots: slots, waves: waves, baseHp: baseHp, season: s, terrain: terrain, weatherEvent: weatherEvent,
         backdrop: backdrop, exclusiveFacility: exclusiveFacility,
+        groupId: groupId, memberIds: memberIds, exclusiveFacilities: exclusiveFacilities,
       );
 
   bool isLand(int col, int row) => land.contains(GridPos(col, row));
@@ -139,6 +148,9 @@ class Stage {
         'weatherEvent': weatherEvent,
         'backdrop': backdrop,
         'exclusiveFacility': exclusiveFacility,
+        'groupId': groupId,
+        'memberIds': memberIds,
+        'exclusiveFacilities': exclusiveFacilities,
       };
 
   /// 同じステージかを比べる／保存するための文字列。
