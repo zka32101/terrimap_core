@@ -1,4 +1,4 @@
-# 画像生成プロンプト集 v0.1
+# 画像生成プロンプト集 v0.2
 
 `tools/make_art_prompts.py` が `profile.json` から生成（設定を変えたら作り直す）。Canva / Leonardo AI 用。
 
@@ -8,7 +8,16 @@
 - **最初の1枚**で画風を決め、気に入った画像を2枚目以降の参照画像(Image Guidance / Style Reference)にして画風を揃える。
 - 背景: 横長 16:9。道は描かない（道はゲーム側で引く）。
 - 施設・敵: 正方形 1:1。無地の白背景で作り、後で背景除去。
-- 戦争・特定の歴史を連想させる表現、実在の紋章・ロゴは入れない。
+- 戦争・特定の歴史を連想させる表現、実在の紋章・ロゴ・国旗・人物の顔は入れない。
+- ボス・限定施設・天候は、v0.2 で追加。数の目安は下の「枚数」を参照。
+
+## 試作（まずドイツで17枚）
+
+1. **背景を2枚**: `alps` と `city`（画風と色の幅を見る）。1枚目で画風を決める。
+2. **施設を6枚**: `farm_windmill` 〜 `chapel`（1枚目の背景を参照画像に）。
+3. **敵を4枚**: `rust_sprite` 〜 `forest_sprite`。
+4. **ボスを1枚**: `Water Nymph of the Rhine`。
+5. 画面（バトル）に置いて、見やすさ・大きさ・背景との相性を確かめる。良ければ残りを量産。
 
 ## DE
 
@@ -99,6 +108,64 @@
 - **forest_sprite**（森の精 / healer）
   ```
   a gentle forest spirit with leaves, healer, single game sprite, front view, plain white background, cute flat vector illustration, soft pastel colors, clean shapes, mobile tower-defense game art, no text, no people, no weapons
+  ```
+
+### 限定施設（州ごとに1つ置ける特別な施設）
+
+- **automotive_works**（automotive_works）
+  ```
+  a large car works with a test track, single game sprite, front view, plain white background, cute flat vector illustration, soft pastel colors, clean shapes, mobile tower-defense game art, no text, no people, no weapons
+  ```
+- **brewery**（brewery）
+  ```
+  a traditional brewery with copper kettles, single game sprite, front view, plain white background, cute flat vector illustration, soft pastel colors, clean shapes, mobile tower-defense game art, no text, no people, no weapons
+  ```
+- **container_port**（container_port）
+  ```
+  a container terminal with gantry cranes, single game sprite, front view, plain white background, cute flat vector illustration, soft pastel colors, clean shapes, mobile tower-defense game art, no text, no people, no weapons
+  ```
+- **parliament**（parliament）
+  ```
+  a glass-domed parliament building, single game sprite, front view, plain white background, cute flat vector illustration, soft pastel colors, clean shapes, mobile tower-defense game art, no text, no people, no weapons
+  ```
+- **porcelain_works**（porcelain_works）
+  ```
+  a porcelain workshop with a kiln and tea set, single game sprite, front view, plain white background, cute flat vector illustration, soft pastel colors, clean shapes, mobile tower-defense game art, no text, no people, no weapons
+  ```
+- **ruhr_works**（ruhr_works）
+  ```
+  a steelworks with blast furnace towers, single game sprite, front view, plain white background, cute flat vector illustration, soft pastel colors, clean shapes, mobile tower-defense game art, no text, no people, no weapons
+  ```
+- **seaport**（seaport）
+  ```
+  a seaport with a big cargo ship and cranes, single game sprite, front view, plain white background, cute flat vector illustration, soft pastel colors, clean shapes, mobile tower-defense game art, no text, no people, no weapons
+  ```
+- **stock_exchange**（stock_exchange）
+  ```
+  a stock exchange hall with columns and a bull statue, single game sprite, front view, plain white background, cute flat vector illustration, soft pastel colors, clean shapes, mobile tower-defense game art, no text, no people, no weapons
+  ```
+- **wartburg**（wartburg）
+  ```
+  a medieval hilltop fortress, single game sprite, front view, plain white background, cute flat vector illustration, soft pastel colors, clean shapes, mobile tower-defense game art, no text, no people, no weapons
+  ```
+- **winery**（winery）
+  ```
+  a winery with barrels and vine rows, single game sprite, front view, plain white background, cute flat vector illustration, soft pastel colors, clean shapes, mobile tower-defense game art, no text, no people, no weapons
+  ```
+
+### ボス（エクストラの敵。正方形 1:1・白背景）
+
+- **Water Nymph of the Rhine**（de_loreley / legend）
+  ```
+  a mysterious water nymph made of river mist sitting on a rock, no human face details, single game boss sprite, large, front view, plain white background, cute flat vector illustration, soft pastel colors, clean shapes, mobile tower-defense game art, no text, no people, no weapons
+  ```
+- **The Great Grey Wolf**（de_grimm / legend）
+  ```
+  a huge grey wolf with glowing eyes, storybook style, single game boss sprite, large, front view, plain white background, cute flat vector illustration, soft pastel colors, clean shapes, mobile tower-defense game art, no text, no people, no weapons
+  ```
+- **The Cave Dragon**（de_nibelung / legend）
+  ```
+  a big cave dragon curled around a pile of gold, friendly cartoon style, single game boss sprite, large, front view, plain white background, cute flat vector illustration, soft pastel colors, clean shapes, mobile tower-defense game art, no text, no people, no weapons
   ```
 
 ## US
@@ -199,4 +266,116 @@
   ```
   a cute cactus healer with a bandage, single game sprite, front view, plain white background, cute flat vector illustration, soft pastel colors, clean shapes, mobile tower-defense game art, no text, no people, no weapons
   ```
+
+### 限定施設（州ごとに1つ置ける特別な施設）
+
+- **aerospace_works**（aerospace_works）
+  ```
+  an aerospace factory with a rocket on a stand, single game sprite, front view, plain white background, cute flat vector illustration, soft pastel colors, clean shapes, mobile tower-defense game art, no text, no people, no weapons
+  ```
+- **capitol**（capitol）
+  ```
+  a domed capitol building, single game sprite, front view, plain white background, cute flat vector illustration, soft pastel colors, clean shapes, mobile tower-defense game art, no text, no people, no weapons
+  ```
+- **distillery**（distillery）
+  ```
+  a whiskey distillery with barrels, single game sprite, front view, plain white background, cute flat vector illustration, soft pastel colors, clean shapes, mobile tower-defense game art, no text, no people, no weapons
+  ```
+- **national_lab**（national_lab）
+  ```
+  a science laboratory with a radar dish, single game sprite, front view, plain white background, cute flat vector illustration, soft pastel colors, clean shapes, mobile tower-defense game art, no text, no people, no weapons
+  ```
+- **oil_derrick**（oil_derrick）
+  ```
+  a large oil derrick, single game sprite, front view, plain white background, cute flat vector illustration, soft pastel colors, clean shapes, mobile tower-defense game art, no text, no people, no weapons
+  ```
+- **pipeline**（pipeline）
+  ```
+  a pipeline pumping station with pipes, single game sprite, front view, plain white background, cute flat vector illustration, soft pastel colors, clean shapes, mobile tower-defense game art, no text, no people, no weapons
+  ```
+- **space_center**（space_center）
+  ```
+  a space center launch pad with a rocket, single game sprite, front view, plain white background, cute flat vector illustration, soft pastel colors, clean shapes, mobile tower-defense game art, no text, no people, no weapons
+  ```
+- **stock_exchange**（stock_exchange）
+  ```
+  a stock exchange hall with columns and a bull statue, single game sprite, front view, plain white background, cute flat vector illustration, soft pastel colors, clean shapes, mobile tower-defense game art, no text, no people, no weapons
+  ```
+- **tech_campus**（tech_campus）
+  ```
+  a modern tech campus with round glass buildings, single game sprite, front view, plain white background, cute flat vector illustration, soft pastel colors, clean shapes, mobile tower-defense game art, no text, no people, no weapons
+  ```
+
+### ボス（エクストラの敵。正方形 1:1・白背景）
+
+- **The Giant Blue Ox**（us_bunyan / legend）
+  ```
+  a giant blue ox with large horns, folk-tale style, single game boss sprite, large, front view, plain white background, cute flat vector illustration, soft pastel colors, clean shapes, mobile tower-defense game art, no text, no people, no weapons
+  ```
+- **The Gale Spirit**（us_wright / biography）
+  ```
+  a swirling wind spirit with a small propeller-like tail, single game boss sprite, large, front view, plain white background, cute flat vector illustration, soft pastel colors, clean shapes, mobile tower-defense game art, no text, no people, no weapons
+  ```
+- **The Moon Keeper**（us_moon / history）
+  ```
+  a round moon guardian creature with craters and a gentle glow, single game boss sprite, large, front view, plain white background, cute flat vector illustration, soft pastel colors, clean shapes, mobile tower-defense game art, no text, no people, no weapons
+  ```
+
+## 共通（国をまたいで使う）
+
+### 天候の演出（全面に重ねる透過PNG。16:9）
+
+- **hurricane**（天候）
+  ```
+  swirling hurricane clouds and heavy rain, transparent overlay layer, no ground, no buildings, wide scene, cute flat vector illustration, soft pastel colors, clean shapes, mobile tower-defense game art, no text, no people, no weapons
+  ```
+- **tornado**（天候）
+  ```
+  a funnel tornado of dust and debris, transparent overlay layer, no ground, no buildings, wide scene, cute flat vector illustration, soft pastel colors, clean shapes, mobile tower-defense game art, no text, no people, no weapons
+  ```
+- **blizzard**（天候）
+  ```
+  heavy blowing snow, transparent overlay layer, no ground, no buildings, wide scene, cute flat vector illustration, soft pastel colors, clean shapes, mobile tower-defense game art, no text, no people, no weapons
+  ```
+- **heatwave**（天候）
+  ```
+  shimmering heat haze with a bright orange sun, transparent overlay layer, no ground, no buildings, wide scene, cute flat vector illustration, soft pastel colors, clean shapes, mobile tower-defense game art, no text, no people, no weapons
+  ```
+- **wildfire**（天候）
+  ```
+  orange embers and smoke drifting, transparent overlay layer, no ground, no buildings, wide scene, cute flat vector illustration, soft pastel colors, clean shapes, mobile tower-defense game art, no text, no people, no weapons
+  ```
+- **flood**（天候）
+  ```
+  rising blue water with ripples, transparent overlay layer, no ground, no buildings, wide scene, cute flat vector illustration, soft pastel colors, clean shapes, mobile tower-defense game art, no text, no people, no weapons
+  ```
+- **earthquake**（天候）
+  ```
+  cracks in the ground and dust, transparent overlay layer, no ground, no buildings, wide scene, cute flat vector illustration, soft pastel colors, clean shapes, mobile tower-defense game art, no text, no people, no weapons
+  ```
+- **storm**（天候）
+  ```
+  dark storm clouds with lightning, transparent overlay layer, no ground, no buildings, wide scene, cute flat vector illustration, soft pastel colors, clean shapes, mobile tower-defense game art, no text, no people, no weapons
+  ```
+
+### 季節（背景の色味。別画像にせず、色調補正で足りるか先に試す）
+
+- **spring**: fresh green with blossoms
+- **summer**: bright sunny and saturated
+- **autumn**: orange and red leaves
+- **winter**: snow-covered and cool blue
+
+## 枚数
+
+| 分類 | 1国 | 備考 |
+|---|---|---|
+| 背景 | 10〜12 | エクストラ用（3）を含む |
+| 施設 | 6 | 国の見た目 |
+| 限定施設 | 9〜10 | 最小構成は系統ごとの1枚ずつに共通化（6系統） |
+| 敵 | 4 | 能力は色や飾りで足りる |
+| ボス | 3 | |
+| 天候 | 8 | 共通で2国に使う |
+| アイコン・ストア | 約10 | `docs/terrimap_icon_design_v0_1.md` 参照 |
+
+1国 約50枚、2国で約100枚（天候を共通にして）。最小構成で約30枚。
 
