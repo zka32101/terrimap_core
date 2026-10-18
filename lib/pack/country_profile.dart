@@ -31,6 +31,7 @@ class CountryProfile {
   final Map<String, Skin> facilitySkins; // 施設の種類→この国での見た目と名前
   final Map<String, Skin> enemySkins; // 敵の種類→この国での見た目と名前
   final Map<String, RegionGroup> groups; // 地方決戦の地方（id→州の集まり）。なければ地方決戦はない
+  final List<ExtraStage> extras; // エクストラステージ（その国の歴史・伝記・伝説）。なければエクストラはない
 
   const CountryProfile({
     required this.style,
@@ -48,6 +49,7 @@ class CountryProfile {
     this.facilitySkins = const {},
     this.enemySkins = const {},
     this.groups = const {},
+    this.extras = const [],
   });
 
   factory CountryProfile.parse(String json) {
@@ -68,6 +70,7 @@ class CountryProfile {
       backdrops: _obj(_obj(m['theme'])['backdrops']).map((k, v) => MapEntry(k, Backdrop.fromJson(_obj(v)))),
       facilitySkins: _obj(m['facilities']).map((k, v) => MapEntry(k, Skin.fromJson(_obj(v)))),
       enemySkins: _obj(m['enemySkins']).map((k, v) => MapEntry(k, Skin.fromJson(_obj(v)))),
+      extras: [for (final e in (m['extras'] as List? ?? const [])) ExtraStage.fromJson(_obj(e))],
       groups: _obj(m['groups']).map((k, v) => MapEntry(k, RegionGroup.fromJson(k, _obj(v)))),
     );
   }
@@ -115,6 +118,60 @@ class RegionTrait {
         exclusiveFacility: j['exclusiveFacility'] as String?,
         enemyBias: _obj(j['enemyBias']).map((k, v) => MapEntry(k, (v as num).toDouble())),
       );
+}
+
+/// エクストラステージ（クリア後。設計書 §6.9）。主題はその国の歴史・伝記・伝説で、戦争・差別は扱わない。
+class ExtraStage {
+  static const bases = {'legend', 'biography', 'history'};
+  static const seasonNames = {'spring', 'summer', 'autumn', 'winter'};
+  static const bossSkills = {'speedBurst', 'hpRegen', 'summon', 'stunFacility'};
+
+  final String id;
+  final String basis; // legend（伝説・民話）／biography（伝記）／history（歴史・業績）
+  final List<String> regions; // 舞台の州
+  final String center; // 拠点（州都）の州
+  final List<String> seasons; // 波ごとに巡る季節
+  final String weatherEvent; // 天候
+  final String? backdrop; // 背景
+  final String bossSkill; // ボスのスキル
+  final int waves; // 波の数（8〜10）
+  final Map<String, String> title, summary, fact, bossName; // 言語→名前・あらすじ・事実の注記・ボスの名前
+  const ExtraStage({
+    required this.id,
+    required this.basis,
+    required this.regions,
+    required this.center,
+    required this.seasons,
+    required this.weatherEvent,
+    required this.bossSkill,
+    required this.waves,
+    required this.title,
+    required this.summary,
+    required this.fact,
+    required this.bossName,
+    this.backdrop,
+  });
+
+  factory ExtraStage.fromJson(Map<String, dynamic> j) => ExtraStage(
+        id: j['id'] as String,
+        basis: j['basis'] as String,
+        regions: [for (final r in (j['regions'] as List)) r as String],
+        center: j['center'] as String,
+        seasons: [for (final x in (j['seasons'] as List)) x as String],
+        weatherEvent: j['weatherEvent'] as String,
+        backdrop: j['backdrop'] as String?,
+        bossSkill: j['bossSkill'] as String,
+        waves: (j['waves'] as num).toInt(),
+        title: _obj(j['title']).map((k, v) => MapEntry(k, v as String)),
+        summary: _obj(j['summary']).map((k, v) => MapEntry(k, v as String)),
+        fact: _obj(j['fact']).map((k, v) => MapEntry(k, v as String)),
+        bossName: _obj(j['bossName']).map((k, v) => MapEntry(k, v as String)),
+      );
+
+  String titleIn(String lang) => title[lang] ?? title['en'] ?? id;
+  String summaryIn(String lang) => summary[lang] ?? summary['en'] ?? '';
+  String factIn(String lang) => fact[lang] ?? fact['en'] ?? '';
+  String bossNameIn(String lang) => bossName[lang] ?? bossName['en'] ?? '';
 }
 
 /// 地方決戦の地方（州の集まり）。[center] の州都が拠点になる。

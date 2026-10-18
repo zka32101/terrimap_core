@@ -503,5 +503,117 @@
     "DE-BY"
    ]
   }
- }
+ },
+ "extras": [
+  {
+   "id": "de_loreley",
+   "basis": "legend",
+   "regions": [
+    "DE-RP",
+    "DE-HE"
+   ],
+   "center": "DE-RP",
+   "seasons": [
+    "autumn",
+    "winter",
+    "spring",
+    "summer"
+   ],
+   "weatherEvent": "flood",
+   "backdrop": "vineyard",
+   "bossSkill": "hpRegen",
+   "waves": 8,
+   "title": {
+    "en": "The Rock of Loreley",
+    "de": "Der Loreley-Felsen",
+    "ja": "ローレライの岩"
+   },
+   "summary": {
+    "en": "Along the Rhine, a siren is said to sing from a high rock. Defend the river valley as her song stirs the mist.",
+    "de": "Am Rhein soll eine Nixe von einem hohen Felsen singen. Verteidige das Flusstal, während ihr Lied den Nebel aufwühlt.",
+    "ja": "ライン川の高い岩の上で、妖精が歌うと伝えられています。歌声が霧を揺らすなか、川の谷を守りましょう。"
+   },
+   "fact": {
+    "en": "The Loreley is a real rock above the Rhine near Sankt Goarshausen. The singing siren is a legend, made famous by Clemens Brentano (1801) and Heinrich Heine's poem (1824)."
+   },
+   "bossName": {
+    "en": "Water Nymph of the Rhine",
+    "de": "Wassernixe des Rheins",
+    "ja": "ラインの水の精"
+   }
+  },
+  {
+   "id": "de_grimm",
+   "basis": "legend",
+   "regions": [
+    "DE-BW",
+    "DE-HE"
+   ],
+   "center": "DE-HE",
+   "seasons": [
+    "spring",
+    "summer",
+    "autumn",
+    "winter"
+   ],
+   "weatherEvent": "tornado",
+   "backdrop": "black_forest",
+   "bossSkill": "summon",
+   "waves": 9,
+   "title": {
+    "en": "The Grimm Forest",
+    "de": "Der Grimm-Wald",
+    "ja": "グリムの森"
+   },
+   "summary": {
+    "en": "Wolves, wandering animals and swarms of mice from the old folk tales fill the forest. Hold the path through the trees.",
+    "de": "Wölfe, wandernde Tiere und Mäuseschwärme aus den alten Märchen füllen den Wald. Halte den Weg durch die Bäume.",
+    "ja": "古い民話の狼や動物、ねずみの群れが森にあふれています。木々のあいだの道を守りましょう。"
+   },
+   "fact": {
+    "en": "Jacob and Wilhelm Grimm collected folk tales and published them as Children's and Household Tales (first edition 1812). The creatures here are inspired by those tales, not by a historical event."
+   },
+   "bossName": {
+    "en": "The Great Grey Wolf",
+    "de": "Der große graue Wolf",
+    "ja": "大きな灰色の狼"
+   }
+  },
+  {
+   "id": "de_nibelung",
+   "basis": "legend",
+   "regions": [
+    "DE-RP"
+   ],
+   "center": "DE-RP",
+   "seasons": [
+    "winter",
+    "spring",
+    "summer",
+    "autumn"
+   ],
+   "weatherEvent": "earthquake",
+   "backdrop": "castle_hills",
+   "bossSkill": "stunFacility",
+   "waves": 10,
+   "title": {
+    "en": "The Dragon of the Nibelungs",
+    "de": "Der Drache der Nibelungen",
+    "ja": "ニーベルンゲンの竜"
+   },
+   "summary": {
+    "en": "In a medieval hero legend, a dragon guards a cave of treasure. Hold the castle hills against its guardians.",
+    "de": "In einer mittelalterlichen Heldensage hütet ein Drache eine Höhle voller Schätze. Verteidige die Burghügel gegen seine Wächter.",
+    "ja": "中世の英雄伝説では、竜が宝の洞窟を守っています。城の丘で、その守り手たちを食い止めましょう。"
+   },
+   "fact": {
+    "en": "The Nibelungenlied is a medieval German epic poem written around 1200. Worms, in today's Rhineland-Palatinate, is one of its settings. The dragon and the hero are legendary."
+   },
+   "bossName": {
+    "en": "The Cave Dragon",
+    "de": "Der Höhlendrache",
+    "ja": "洞窟の竜"
+   }
+  }
+ ]
 }

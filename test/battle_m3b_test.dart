@@ -21,7 +21,7 @@ RegionPack load(String id) {
 class ChainEngine extends BattleEngine {
   ChainEngine(super.stage, {super.profile});
   @override
-  ({int damage, double range, double cooldown, String action}) facilityStats(Facility f) =>
+  ({int damage, double range, double cooldown, String action}) facilityStats(Facility f, {int wave = 1}) =>
       (damage: 100, range: 3.0, cooldown: 1.0, action: 'chain');
 }
 

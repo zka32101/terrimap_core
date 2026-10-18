@@ -268,6 +268,42 @@ class PackValidator {
       });
     }
 
+    // エクストラ: 題材（伝説・伝記・歴史）、舞台、季節の巡り、事実の注記が必須
+    final extras = m['extras'];
+    if (extras is List) {
+      final seen = <String>{};
+      for (final e in extras) {
+        if (e is! Map) {
+          err.add('profile.json: extras の要素がオブジェクトでない');
+          continue;
+        }
+        final id = '${e['id']}';
+        if (!seen.add(id)) err.add('profile.json: extras の id が重複 $id');
+        if (!ExtraStage.bases.contains(e['basis'])) err.add('profile.json: extras.$id の basis は ${ExtraStage.bases.join('/')}');
+        final regs = e['regions'];
+        if (regs is! List || regs.isEmpty) {
+          err.add('profile.json: extras.$id の regions が空');
+        } else {
+          for (final r in regs) {
+            if (!regionIds.contains(r)) err.add('profile.json: extras.$id の未知の地域 $r');
+          }
+          if (!regs.contains(e['center'])) err.add('profile.json: extras.$id の center が regions にない');
+        }
+        final ss = e['seasons'];
+        if (ss is! List || ss.isEmpty || ss.any((x) => !ExtraStage.seasonNames.contains(x))) err.add('profile.json: extras.$id の seasons が不正');
+        if (!CountryProfile.weatherEvents.contains(e['weatherEvent'])) err.add('profile.json: extras.$id の weatherEvent が不正');
+        if (!ExtraStage.bossSkills.contains(e['bossSkill'])) err.add('profile.json: extras.$id の bossSkill が不正');
+        final w = e['waves'];
+        if (w is! int || w < 8 || w > 10) err.add('profile.json: extras.$id の waves は8〜10');
+        for (final k in ['title', 'summary', 'fact', 'bossName']) {
+          final v = e[k];
+          if (v is! Map || ((v['en'] ?? '') as Object).toString().isEmpty) err.add('profile.json: extras.$id の $k に英語がない');
+        }
+        final bd = e['backdrop'];
+        if (bd != null && !backdrops.contains(bd)) err.add('profile.json: extras.$id の backdrop $bd が theme.backdrops にない');
+      }
+    }
+
     final regs = m['regions'];
     if (regs is Map) {
       regs.forEach((id, t) {
