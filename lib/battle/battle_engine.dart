@@ -220,7 +220,7 @@ class BattleEngine {
     final seed = fnv1a('${stage.seed}|assist|${forRepair == null ? 'skill' : 'repair'}|${s.wave}|${forRepair?.col},${forRepair?.row}');
     final qs = QuizEngine(pack!, seed: seed).generate(
       count: 1,
-      types: const [QuestionType.nameFromMap, QuestionType.capitalFromName, QuestionType.nameFromCapital, QuestionType.silhouette],
+      types: const [QuestionType.nameFromMap, QuestionType.capitalFromName, QuestionType.nameFromCapital, QuestionType.silhouette, QuestionType.neighborOf],
       pool: pool,
     );
     return qs.isEmpty ? null : qs.first;
