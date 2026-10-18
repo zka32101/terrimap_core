@@ -110,11 +110,13 @@ class _BattlePainter extends CustomPainter {
   }
 
   /// [img] で [dst] を隙間なく覆う（はみ出しは切る）。
-  static void _cover(Canvas canvas, ui.Image img, Rect dst) {
+  static void _cover(Canvas canvas, ui.Image img, Rect dst, {double blur = 0}) {
     final k = math.max(dst.width / img.width, dst.height / img.height);
     final sw = dst.width / k, sh = dst.height / k;
     final src = Rect.fromLTWH((img.width - sw) / 2, (img.height - sh) / 2, sw, sh);
-    canvas.drawImageRect(img, src, dst, Paint()..filterQuality = FilterQuality.medium);
+    final paint = Paint()..filterQuality = FilterQuality.medium;
+    if (blur > 0) paint.imageFilter = ui.ImageFilter.blur(sigmaX: blur, sigmaY: blur, tileMode: TileMode.clamp);
+    canvas.drawImageRect(img, src, dst, paint);
   }
 
   @override
@@ -133,13 +135,34 @@ class _BattlePainter extends CustomPainter {
       ..strokeWidth = 1.5;
     final onPath = {for (final p in stage.paths) ...p};
 
-    // 背景画像があれば全面に敷き、陸の地面は塗らず進路だけ重ねる（道はゲーム側で描く）
+    // 背景画像があれば全面に敷く。
+    // - 縦長（真上から見た地面の絵）: そのまま敷き、進路だけを地面の上に描く
+    // - 横長（風景の絵）: ぼかして遠景にし、陸の地面を重ねて盤面を手前に見せる（空に浮いて見えないように）
     final backdrop = art?.backdrop(stage.backdrop);
-    if (backdrop != null) _cover(canvas, backdrop, Offset.zero & size);
+    final topDown = backdrop != null && backdrop.height >= backdrop.width * 1.3;
+    if (backdrop != null) {
+      _cover(canvas, backdrop, Offset.zero & size, blur: topDown ? 0 : 5);
+      if (!topDown) canvas.drawRect(Offset.zero & size, Paint()..color = const Color(0x33000000));
+    }
+    final landSet = stage.land.toSet();
     for (final p in stage.land) {
       final onP = onPath.contains(p);
-      if (backdrop != null && !onP) continue;
-      canvas.drawRect(rect(p).deflate(0.4), onP ? pathPaint : ground);
+      if (topDown && !onP) continue;
+      if (topDown) {
+        canvas.drawRRect(RRect.fromRectAndRadius(rect(p).deflate(cell * 0.04), Radius.circular(cell * 0.1)), Paint()..color = const Color(0xE6D7CCC8));
+      } else {
+        canvas.drawRect(rect(p).deflate(0.4), onP ? pathPaint : ground);
+      }
+    }
+    if (backdrop != null && !topDown) {
+      // 陸の外周に影を落として、地面の厚みを出す
+      final shadow = Paint()..color = const Color(0x33000000);
+      for (final p in stage.land) {
+        if (!landSet.contains(GridPos(p.col, p.row + 1))) {
+          final r = rect(p);
+          canvas.drawRect(Rect.fromLTWH(r.left, r.bottom, r.width, cell * 0.12), shadow);
+        }
+      }
     }
     for (final s in stage.slots) {
       canvas.drawRRect(RRect.fromRectAndRadius(rect(s).deflate(cell * 0.12), Radius.circular(cell * 0.12)), slotPaint);
