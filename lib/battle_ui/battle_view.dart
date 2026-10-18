@@ -1,10 +1,12 @@
 import 'dart:math' as math;
+import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 
 import '../battle/battle_engine.dart';
 import '../battle/grid.dart';
 import '../battle/stage.dart';
+import 'art_set.dart';
 
 /// 季節ごとの地面の色。
 const seasonGround = <Season, Color>{
@@ -30,7 +32,7 @@ const enemyColors = <String, Color>{
   'healer': Color(0xFF26A69A),
 };
 
-/// ステージの盤面（陸・進路・設置枠・拠点・施設・敵）を描く。素材は使わず、色と図形だけの最小版。
+/// ステージの盤面（陸・進路・設置枠・拠点・施設・敵）を描く。[art] に画像があればそれを使い、無い要素は色と図形で描く。
 /// マスをタップすると [onCellTap] が呼ばれる。
 class BattleView extends StatelessWidget {
   final Stage stage;
@@ -44,8 +46,18 @@ class BattleView extends StatelessWidget {
   /// 施設の最大耐久（耐久バーの割合に使う。`engine.maxHpOf`）。省略すると耐久バーは出さない。
   final int Function(Facility f)? facilityMaxHp;
 
+  /// 背景・施設・敵・ボスの画像（省略または画像なしなら図形のみ）。
+  final ArtSet? art;
+
   const BattleView(
-      {super.key, required this.stage, required this.state, this.selected, this.selectedRange, this.onCellTap, this.facilityMaxHp});
+      {super.key,
+      required this.stage,
+      required this.state,
+      this.selected,
+      this.selectedRange,
+      this.onCellTap,
+      this.facilityMaxHp,
+      this.art});
 
   /// 盤面を表示サイズに収めたときのマスの一辺と、左上の余白。
   static ({double cell, double dx, double dy}) layout(Size size, int cols, int rows) {
@@ -73,7 +85,7 @@ class BattleView extends StatelessWidget {
         },
         child: CustomPaint(
           size: size,
-          painter: _BattlePainter(stage, state, selected, selectedRange, facilityMaxHp),
+          painter: _BattlePainter(stage, state, selected, selectedRange, facilityMaxHp, art),
         ),
       );
     });
@@ -86,7 +98,24 @@ class _BattlePainter extends CustomPainter {
   final GridPos? selected;
   final double? range;
   final int Function(Facility f)? maxHp;
-  _BattlePainter(this.stage, this.state, this.selected, this.range, this.maxHp);
+  final ArtSet? art;
+  _BattlePainter(this.stage, this.state, this.selected, this.range, this.maxHp, this.art);
+
+  /// [img] を [dst] に収まる最大の大きさで（縦横比を保って）描く。
+  static void _sprite(Canvas canvas, ui.Image img, Rect dst, {double opacity = 1}) {
+    final src = Rect.fromLTWH(0, 0, img.width.toDouble(), img.height.toDouble());
+    final k = math.min(dst.width / src.width, dst.height / src.height);
+    final out = Rect.fromCenter(center: dst.center, width: src.width * k, height: src.height * k);
+    canvas.drawImageRect(img, src, out, Paint()..filterQuality = FilterQuality.medium..color = Color.fromRGBO(0, 0, 0, opacity));
+  }
+
+  /// [img] で [dst] を隙間なく覆う（はみ出しは切る）。
+  static void _cover(Canvas canvas, ui.Image img, Rect dst) {
+    final k = math.max(dst.width / img.width, dst.height / img.height);
+    final sw = dst.width / k, sh = dst.height / k;
+    final src = Rect.fromLTWH((img.width - sw) / 2, (img.height - sh) / 2, sw, sh);
+    canvas.drawImageRect(img, src, dst, Paint()..filterQuality = FilterQuality.medium);
+  }
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -104,8 +133,13 @@ class _BattlePainter extends CustomPainter {
       ..strokeWidth = 1.5;
     final onPath = {for (final p in stage.paths) ...p};
 
+    // 背景画像があれば全面に敷き、陸の地面は塗らず進路だけ重ねる（道はゲーム側で描く）
+    final backdrop = art?.backdrop(stage.backdrop);
+    if (backdrop != null) _cover(canvas, backdrop, Offset.zero & size);
     for (final p in stage.land) {
-      canvas.drawRect(rect(p).deflate(0.4), onPath.contains(p) ? pathPaint : ground);
+      final onP = onPath.contains(p);
+      if (backdrop != null && !onP) continue;
+      canvas.drawRect(rect(p).deflate(0.4), onP ? pathPaint : ground);
     }
     for (final s in stage.slots) {
       canvas.drawRRect(RRect.fromRectAndRadius(rect(s).deflate(cell * 0.12), Radius.circular(cell * 0.12)), slotPaint);
@@ -144,12 +178,17 @@ class _BattlePainter extends CustomPainter {
       final r = rect(f.pos).deflate(cell * 0.14);
       final base = f.exclusive != null ? const Color(0xFFD4AF37) : facilityColors[f.type]!;
       final stopped = f.disabledUntil > state.time;
-      canvas.drawRRect(RRect.fromRectAndRadius(r, Radius.circular(cell * 0.18)), Paint()..color = stopped ? base.withValues(alpha: 0.4) : base);
+      final img = art?.facility(f);
+      if (img != null) {
+        _sprite(canvas, img, rect(f.pos).deflate(cell * 0.04), opacity: stopped ? 0.4 : 1);
+      } else {
+        canvas.drawRRect(RRect.fromRectAndRadius(r, Radius.circular(cell * 0.18)), Paint()..color = stopped ? base.withValues(alpha: 0.4) : base);
+      }
       // レベル（点）
       for (var i = 0; i < f.level; i++) {
         canvas.drawCircle(Offset(r.left + cell * 0.14 + i * cell * 0.15, r.bottom - cell * 0.12), cell * 0.045, Paint()..color = Colors.white);
       }
-      if (f.exclusive != null) {
+      if (f.exclusive != null && img == null) {
         final tp = TextPainter(text: TextSpan(text: '★', style: TextStyle(color: Colors.white, fontSize: cell * 0.4)), textDirection: TextDirection.ltr)..layout();
         tp.paint(canvas, r.center - Offset(tp.width / 2, tp.height / 2));
       }
@@ -160,15 +199,21 @@ class _BattlePainter extends CustomPainter {
     for (final e in state.enemies) {
       final pos = Enemy.positionAt(e.flying, e.progress, stage.paths[e.pathIndex]);
       final c = center(pos.x, pos.y);
-      final rad = cell * (e.isBoss ? 0.34 : 0.2);
-      canvas.drawCircle(c, rad, Paint()..color = enemyColors[e.kind] ?? Colors.red);
-      canvas.drawCircle(
-          c,
-          rad,
-          Paint()
-            ..color = e.isBoss ? const Color(0xFFFFD54F) : Colors.white
-            ..style = PaintingStyle.stroke
-            ..strokeWidth = e.isBoss ? 2.5 : 1.2);
+      final img = art?.enemy(e);
+      // 画像は図形より大きく見せる（絵の余白ぶん）
+      final rad = cell * (img != null ? (e.isBoss ? 0.5 : 0.32) : (e.isBoss ? 0.34 : 0.2));
+      if (img != null) {
+        _sprite(canvas, img, Rect.fromCircle(center: c, radius: rad));
+      } else {
+        canvas.drawCircle(c, rad, Paint()..color = enemyColors[e.kind] ?? Colors.red);
+        canvas.drawCircle(
+            c,
+            rad,
+            Paint()
+              ..color = e.isBoss ? const Color(0xFFFFD54F) : Colors.white
+              ..style = PaintingStyle.stroke
+              ..strokeWidth = e.isBoss ? 2.5 : 1.2);
+      }
       _hpBar(canvas, Rect.fromLTWH(c.dx - rad, c.dy - rad - cell * 0.1, rad * 2, cell * 0.06), e.hp, e.maxHp);
     }
   }
@@ -180,5 +225,5 @@ class _BattlePainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant _BattlePainter old) => old.state != state || old.selected != selected || old.range != range || old.stage != stage;
+  bool shouldRepaint(covariant _BattlePainter old) => old.state != state || old.selected != selected || old.range != range || old.stage != stage || old.art != art;
 }

@@ -78,7 +78,7 @@ def main():
            "- 画風の固定: 最初に選んだ背景1枚を Style Reference（強さ Mid〜High）に入れる。施設・敵は、気に入った施設1枚を Character Reference ではなく Style Reference にして、同じ線の太さと色合いにそろえる。",
            "- 敵・ボスは、怖くせずにかわいく: プロンプトに `chibi, round shape, big eyes, friendly, smiling` を足す。",
            "- 商用利用: 有料プランで生成した画像を使う（無料プランの画像は公開される・商用不可の場合があるので、利用規約を最新で確認）。", "",
-           "## 試作（まずドイツで17枚）", "",
+           "## 試作（まずドイツで13枚）", "",
            "1. **背景を2枚**: `alps` と `city`（画風と色の幅を見る）。1枚目で画風を決める。",
            "2. **施設を6枚**: `farm_windmill` 〜 `chapel`（1枚目の背景を参照画像に）。",
            "3. **敵を4枚**: `rust_sprite` 〜 `forest_sprite`。",
