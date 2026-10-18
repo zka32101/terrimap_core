@@ -110,11 +110,13 @@ class _BattlePainter extends CustomPainter {
   }
 
   /// [img] で [dst] を隙間なく覆う（はみ出しは切る）。
-  static void _cover(Canvas canvas, ui.Image img, Rect dst) {
+  static void _cover(Canvas canvas, ui.Image img, Rect dst, {double blur = 0}) {
     final k = math.max(dst.width / img.width, dst.height / img.height);
     final sw = dst.width / k, sh = dst.height / k;
     final src = Rect.fromLTWH((img.width - sw) / 2, (img.height - sh) / 2, sw, sh);
-    canvas.drawImageRect(img, src, dst, Paint()..filterQuality = FilterQuality.medium);
+    final paint = Paint()..filterQuality = FilterQuality.medium;
+    if (blur > 0) paint.imageFilter = ui.ImageFilter.blur(sigmaX: blur, sigmaY: blur, tileMode: TileMode.clamp);
+    canvas.drawImageRect(img, src, dst, paint);
   }
 
   @override
@@ -133,13 +135,27 @@ class _BattlePainter extends CustomPainter {
       ..strokeWidth = 1.5;
     final onPath = {for (final p in stage.paths) ...p};
 
-    // 背景画像があれば全面に敷き、陸の地面は塗らず進路だけ重ねる（道はゲーム側で描く）
+    // 背景画像があれば全面に敷く。陸は地面を重ねて盤面を「地面の上」に見せ（空に浮いて見えないように）、進路をその上に描く
     final backdrop = art?.backdrop(stage.backdrop);
-    if (backdrop != null) _cover(canvas, backdrop, Offset.zero & size);
+    if (backdrop != null) {
+      _cover(canvas, backdrop, Offset.zero & size, blur: 5); // ぼかして「遠くの景色」にし、盤面を手前に見せる
+      canvas.drawRect(Offset.zero & size, Paint()..color = const Color(0x33000000));
+    }
+    final landPaint = ground;
     for (final p in stage.land) {
       final onP = onPath.contains(p);
-      if (backdrop != null && !onP) continue;
-      canvas.drawRect(rect(p).deflate(0.4), onP ? pathPaint : ground);
+      canvas.drawRect(rect(p).deflate(0.4), onP ? pathPaint : landPaint);
+    }
+    if (backdrop != null) {
+      // 陸の外周に影を落として、地面の厚みを出す
+      final shadow = Paint()..color = const Color(0x33000000);
+      final landSet = stage.land.toSet();
+      for (final p in stage.land) {
+        if (!landSet.contains(GridPos(p.col, p.row + 1))) {
+          final r = rect(p);
+          canvas.drawRect(Rect.fromLTWH(r.left, r.bottom, r.width, cell * 0.12), shadow);
+        }
+      }
     }
     for (final s in stage.slots) {
       canvas.drawRRect(RRect.fromRectAndRadius(rect(s).deflate(cell * 0.12), Radius.circular(cell * 0.12)), slotPaint);
