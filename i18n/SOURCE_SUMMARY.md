@@ -6,29 +6,27 @@
 
 | # | 種類 | 場所 | 件数 | 今ある言語 | 訳す手順 |
 |---|---|---|---|---|---|
-| A | バトル画面の文言 | `i18n/battle.en.json` | 161件（約487語） | en | `tools/i18n_check.py missing/merge/check`（`i18n/README.md`） |
+| A | バトル画面の文言 | `i18n/battle.en.json` | 167件（約507語） | en | `tools/i18n_check.py missing/merge/check`（`i18n/README.md`） |
 | B-DE | 地域名・州都名 | `packs/de/strings/<言語>.json` | 地域16＋州都16 | en・de | 固有名詞。各言語の通称で（機械翻訳は避け、Wikipedia の言語版などで確認） |
 | B-US | 地域名・州都名 | `packs/us/strings/<言語>.json` | 地域51＋州都51 | en | 固有名詞。各言語の通称で（機械翻訳は避け、Wikipedia の言語版などで確認） |
 | C-DE | プロファイルの文言（地方名・エクストラ・施設/敵の名前） | `packs/de/profile.json` | 地方4・エクストラ3・施設6・敵4 | en・ja（一部 de） | 下の§4。エクストラの `fact` は**先に事実確認**（§5） |
 | C-US | プロファイルの文言（地方名・エクストラ・施設/敵の名前） | `packs/us/profile.json` | 地方4・エクストラ3・施設6・敵4 | en・ja（一部 de） | 下の§4。エクストラの `fact` は**先に事実確認**（§5） |
-| D-terrimap_ge | アプリのホーム・クイズ・設定など | `terrimap_ge/lib/strings.dart` | 35件 | en・de | 文言を言語ごとの map に足す（`{}` などの引数は残す） |
-| D-terrimap_us | アプリのホーム・クイズ・設定など | `terrimap_us/lib/strings.dart` | 35件 | en | 文言を言語ごとの map に足す（`{}` などの引数は残す） |
 
 ## 2. 言語ごとの状況
 
-| 言語 | A バトル | B-DE | B-US | C-DE 地方・エクストラ | C-US 地方・エクストラ | D-terrimap_ge | D-terrimap_us |
-|---|---|---|---|---|---|---|---|
-| en | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| de | — | ✅ | — | ✅ | — | ✅ | — |
-| fr | — | — | — | — | — | — | — |
-| es | — | — | — | — | — | — | — |
-| it | — | — | — | — | — | — | — |
-| pt | — | — | — | — | — | — | — |
-| nl | — | — | — | — | — | — | — |
-| tr | — | — | — | — | — | — | — |
-| ja | — | — | — | ✅ | ✅ | — | — |
-| ko | — | — | — | — | — | — | — |
-| zh | — | — | — | — | — | — | — |
+| 言語 | A バトル | B-DE | B-US | C-DE 地方・エクストラ | C-US 地方・エクストラ |
+|---|---|---|---|---|---|
+| en | ✅ | ✅ | ✅ | ✅ | ✅ |
+| de | — | ✅ | — | ✅ | — |
+| fr | — | — | — | — | — |
+| es | — | — | — | — | — |
+| it | — | — | — | — | — |
+| pt | — | — | — | — | — |
+| nl | — | — | — | — | — |
+| tr | — | — | — | — | — |
+| ja | — | — | — | ✅ | ✅ |
+| ko | — | — | — | — | — |
+| zh | — | — | — | — | — |
 
 （✅=ある、—=まだ。`profile.json` には ja/de があるが、en 以外は一部）
 
@@ -53,6 +51,7 @@ Google翻訳に出す形は `python3 tools/i18n_check.py missing <言語>`。`{n
 | `base.*` | 2 | An enemy reached the base! |
 | `daily.*` | 7 | Daily Battle |
 | `replay.*` | 7 | Watch replay |
+| `collection.*` | 6 | Collection |
 
 ## 4. C プロファイルの文言（原本の英語）
 
@@ -99,86 +98,4 @@ Google翻訳に出す形は `python3 tools/i18n_check.py missing <言語>`。`{n
 - 短い名前（施設・敵・ボス）は、機械翻訳のあと実機で見て直す。
 - 地域名・州都名は固有名詞。各言語の通称にそろえる（`packs/<国>/pack.json` の `languages` に言語を足して `python3 tools/validate_pack.py packs/<国>` で検査）。
 - 米国版（US）の優先は es、ドイツ版（DE）の優先は de・fr・en。
-
-## 6. D アプリの文言（原本の英語）
-
-### terrimap_ge（35件）
-
-| キー | 英語 |
-|---|---|
-| `appTitle` | State Master – Germany |
-| `quiz` | Quiz |
-| `daily` | Daily challenge |
-| `settings` | Settings |
-| `progress` | Progress |
-| `language` | Language |
-| `attribution` | Data credits |
-| `locate` | Tap this state on the map: |
-| `nameFromMap` | Which state is highlighted? |
-| `capitalFromName` | What is the capital of this state? |
-| `nameFromCapital` | Which state has this capital? |
-| `silhouette` | Which state has this shape? |
-| `correct` | Correct! |
-| `wrong` | Not quite. |
-| `next` | Next |
-| `finish` | Finish |
-| `result` | Result |
-| `again` | Play again |
-| `home` | Home |
-| `share` | Copy result |
-| `copied` | Copied to clipboard |
-| `answerWas` | Answer: |
-| `beginner` | Beginner |
-| `explorer` | Explorer |
-| `expert` | Expert |
-| `master` | Master |
-| `locked` | Locked |
-| `unlockTitle` | Unlock all 16 states |
-| `unlockBody` | Play every state and remove ads with a one-time purchase. No subscription. |
-| `unlockButton` | Unlock |
-| `restore` | Restore purchases |
-| `notNow` | Not now |
-| `freeStates` | Free states |
-| `battle` | Battle |
-| `battleSubtitle` | Defend the state capital |
-
-### terrimap_us（35件）
-
-| キー | 英語 |
-|---|---|
-| `appTitle` | State Master – USA |
-| `quiz` | Quiz |
-| `daily` | Daily challenge |
-| `settings` | Settings |
-| `progress` | Progress |
-| `language` | Language |
-| `attribution` | Data credits |
-| `locate` | Tap this state on the map: |
-| `nameFromMap` | Which state is highlighted? |
-| `capitalFromName` | What is the capital of this state? |
-| `nameFromCapital` | Which state has this capital? |
-| `silhouette` | Which state has this shape? |
-| `correct` | Correct! |
-| `wrong` | Not quite. |
-| `next` | Next |
-| `finish` | Finish |
-| `result` | Result |
-| `again` | Play again |
-| `home` | Home |
-| `share` | Copy result |
-| `copied` | Copied to clipboard |
-| `answerWas` | Answer: |
-| `beginner` | Beginner |
-| `explorer` | Explorer |
-| `expert` | Expert |
-| `master` | Master |
-| `locked` | Locked |
-| `unlockTitle` | Unlock all 51 states |
-| `unlockBody` | Play every state and remove ads with a one-time purchase. No subscription. |
-| `unlockButton` | Unlock |
-| `restore` | Restore purchases |
-| `notNow` | Not now |
-| `freeStates` | Free states |
-| `battle` | Battle |
-| `battleSubtitle` | Defend the state capital |
 

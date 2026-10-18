@@ -159,5 +159,11 @@
   "exclusive.name.stock_exchange": "Stock Exchange",
   "exclusive.name.tech_campus": "Tech Campus",
   "exclusive.name.wartburg": "Wartburg Castle",
-  "exclusive.name.winery": "Winery"
+  "exclusive.name.winery": "Winery",
+  "collection.title": "Collection",
+  "collection.count": "{n}/{total}",
+  "collection.empty": "No landmarks yet. Clear a state to collect its landmarks.",
+  "collection.locked": "Clear {name} to unlock",
+  "collection.new": "New landmark cards!",
+  "collection.newBadge": "NEW"
 }
