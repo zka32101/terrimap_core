@@ -9,6 +9,9 @@ enum QuestionType {
   nameFromCapital,
   /// 形当て: 対象地域だけの輪郭を見せて、名称を4択で答える。
   silhouette,
+  /// 隣接: 対象の地域と**接している**地域を4択で答える（正解は隣の地域のうち1つ。誤答は接していない地域）。
+  /// 隣のない地域（飛び地の州など）は、この問題にならず、地図から州名の問題になる。
+  neighborOf,
 }
 
 class Question {
@@ -45,10 +48,44 @@ class QuizEngine {
         out.add(Question(type, t, const [], t));
         continue;
       }
+      if (type == QuestionType.neighborOf) {
+        final nb = _neighbors(t, all);
+        if (nb.isNotEmpty) {
+          final correct = nb[_rng.nextInt(nb.length)];
+          out.add(Question(type, t, _rng.shuffled([correct, ..._farOnes(t, nb, all)]), correct));
+          continue;
+        }
+        // 隣がない地域は、地図から州名の問題にする
+        final distract = _rng.shuffled(all.where((x) => x != t)).take(3);
+        out.add(Question(QuestionType.nameFromMap, t, _rng.shuffled([t, ...distract]), t));
+        continue;
+      }
       final distract = _rng.shuffled(all.where((x) => x != t)).take(3);
       out.add(Question(type, t, _rng.shuffled([t, ...distract]), t));
     }
     return out;
+  }
+
+  /// 地域 [id] の隣（packのデータにある地域だけ。並びは固定）。
+  List<String> _neighbors(String id, List<String> all) {
+    final set = all.toSet();
+    final r = pack.regions.where((x) => x.id == id);
+    return r.isEmpty ? const [] : ([for (final n in r.first.neighbors) if (set.contains(n)) n]..sort());
+  }
+
+  /// 隣接の問題の誤答 3 つ。隣ではなく、**隣と2つ以上共通の隣をもつ地域**（角で接するだけ・水域をはさむ等で紛らわしい地域）も避ける。
+  /// 足りなければ、隣でない地域から補う。
+  List<String> _farOnes(String t, List<String> nb, List<String> all) {
+    final nbSet = nb.toSet();
+    final mine = nbSet;
+    bool confusing(String x) {
+      final other = _neighbors(x, all).toSet();
+      return other.intersection(mine).length >= 2;
+    }
+    final notNeighbor = all.where((x) => x != t && !nbSet.contains(x)).toList();
+    final clear = notNeighbor.where((x) => !confusing(x)).toList();
+    final pool = clear.length >= 3 ? clear : notNeighbor;
+    return _rng.shuffled(pool).take(3).toList();
   }
 
   /// 重み付きで重複なしの並びを作る(Efraimidis-Spirakis: キー=-ln(u)/w の昇順)。
