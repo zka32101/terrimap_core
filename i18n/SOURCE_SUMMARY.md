@@ -6,7 +6,7 @@
 
 | # | 種類 | 場所 | 件数 | 今ある言語 | 訳す手順 |
 |---|---|---|---|---|---|
-| A | バトル画面の文言 | `i18n/battle.en.json` | 143件（約457語） | en | `tools/i18n_check.py missing/merge/check`（`i18n/README.md`） |
+| A | バトル画面の文言 | `i18n/battle.en.json` | 161件（約487語） | en | `tools/i18n_check.py missing/merge/check`（`i18n/README.md`） |
 | B-DE | 地域名・州都名 | `packs/de/strings/<言語>.json` | 地域16＋州都16 | en・de | 固有名詞。各言語の通称で（機械翻訳は避け、Wikipedia の言語版などで確認） |
 | B-US | 地域名・州都名 | `packs/us/strings/<言語>.json` | 地域51＋州都51 | en | 固有名詞。各言語の通称で（機械翻訳は避け、Wikipedia の言語版などで確認） |
 | C-DE | プロファイルの文言（地方名・エクストラ・施設/敵の名前） | `packs/de/profile.json` | 地方4・エクストラ3・施設6・敵4 | en・ja（一部 de） | 下の§4。エクストラの `fact` は**先に事実確認**（§5） |
@@ -42,7 +42,7 @@ Google翻訳に出す形は `python3 tools/i18n_check.py missing <言語>`。`{n
 | `difficulty.*` | 3 | Easy |
 | `stage.*` | 22 | Choose a state to defend |
 | `facility.*` | 22 | Farm |
-| `exclusive.*` | 6 | Boosts nearby buildings by 15%. |
+| `exclusive.*` | 24 | Boosts nearby buildings by 15%. |
 | `enemy.*` | 13 | Raider |
 | `boss.*` | 4 | The boss speeds up! |
 | `skill.*` | 16 | Choose a skill for the next wave |

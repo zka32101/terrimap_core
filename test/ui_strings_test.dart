@@ -60,4 +60,15 @@ void main() {
       expect(base.containsKey(k), true, reason: k);
     }
   });
+
+  test('国のプロファイルにある限定施設は、すべて名前の文言(exclusive.name.<id>)がある', () {
+    final base = (jsonDecode(en) as Map<String, dynamic>);
+    for (final c in ['de', 'us']) {
+      final regions = (jsonDecode(File('packs/$c/profile.json').readAsStringSync()) as Map<String, dynamic>)['regions'] as Map<String, dynamic>;
+      for (final r in regions.values) {
+        final id = (r as Map<String, dynamic>)['exclusiveFacility'] as String?;
+        if (id != null) expect(base.containsKey('exclusive.name.$id'), true, reason: '$c: $id');
+      }
+    }
+  });
 }
