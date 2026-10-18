@@ -83,10 +83,10 @@ void main() {
     }
   });
 
-  test('未知の地方は例外。エクストラは M7b まで未実装', () {
+  test('未知の地方・エクストラは例外', () {
     final gen = StageGenerator(packs['de']!);
     expect(() => gen.generate('nope', Difficulty.normal, kind: StageKind.regional), throwsArgumentError);
-    expect(() => gen.generate('DE-BY', Difficulty.normal, kind: StageKind.extra), throwsUnimplementedError);
+    expect(() => gen.generate('DE-BY', Difficulty.normal, kind: StageKind.extra), throwsArgumentError);
   });
 
   group('地方決戦のバトル', () {

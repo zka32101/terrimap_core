@@ -25,8 +25,16 @@ class StageGenerator {
   /// 通常のステージは州のid、地方決戦（[StageKind.regional]）は地方のid（`profile.groups`）を渡す。
   /// エクストラ（[StageKind.extra]）は M7b で作る。
   Stage generate(String id, Difficulty difficulty, {StageKind kind = StageKind.normal}) {
-    if (kind == StageKind.extra) throw UnimplementedError('エクストラは M7b で作る（設計書 §6.9）');
     final params = difficultyParams[difficulty]!;
+    if (kind == StageKind.extra) {
+      final x = _profile?.extras.where((e) => e.id == id).firstOrNull ?? (throw ArgumentError('未知のエクストラ: $id'));
+      final members = [for (final r in x.regions) pack.regions.firstWhere((r2) => r2.id == r)];
+      return _make(_Spec(
+        key: id, members: members, center: members.firstWhere((r) => r.id == x.center), difficulty: difficulty, kind: kind,
+        waveCount: x.waves, hpScale: extraHpScale, gridMax: members.length > 1 ? regionalGridMax : _maxSize, minEntrances: 2,
+        extra: x,
+      ));
+    }
     if (kind == StageKind.regional) {
       final g = _profile?.groups[id] ?? (throw ArgumentError('未知の地方: $id'));
       final members = [for (final r in g.regions) pack.regions.firstWhere((x) => x.id == r)];
@@ -48,6 +56,9 @@ class StageGenerator {
   static const regionalWaves = 7;
   static const regionalHpScale = 1.2;
   static const regionalGridMax = 14;
+
+  /// エクストラ: 敵のHP 1.4倍、波は8〜10、季節が波ごとに巡り、天候が1回増える。
+  static const extraHpScale = 1.4;
 
   Stage _make(_Spec spec) {
     final region = spec.center, regionId = region.id, difficulty = spec.difficulty, kind = spec.kind;
@@ -182,10 +193,14 @@ class StageGenerator {
       slots: slots,
       waves: waves,
       baseHp: math.max(1, 15 + params.heartBonus),
-      season: _season(centerTrait?.weatherEvent, rng),
+      season: spec.extra != null ? Season.values.byName(spec.extra!.seasons.first) : _season(centerTrait?.weatherEvent, rng),
       terrain: centerTrait?.terrain,
-      weatherEvent: centerTrait?.weatherEvent,
-      backdrop: centerTrait?.backdrop,
+      weatherEvent: spec.extra?.weatherEvent ?? centerTrait?.weatherEvent,
+      backdrop: spec.extra?.backdrop ?? centerTrait?.backdrop,
+      extraId: spec.extra?.id,
+      waveSeasons: [for (final x in spec.extra?.seasons ?? const <String>[]) Season.values.byName(x)],
+      bossSkill: spec.extra?.bossSkill,
+      weatherBoost: spec.extra == null ? 0 : 1,
       exclusiveFacility: centerTrait?.exclusiveFacility,
       groupId: spec.groupId,
       memberIds: present,
@@ -497,6 +512,7 @@ class _Spec {
   final int waveCount, gridMax, minEntrances;
   final double hpScale;
   final String? groupId;
+  final ExtraStage? extra;
   const _Spec({
     required this.key,
     required this.members,
@@ -508,5 +524,6 @@ class _Spec {
     required this.gridMax,
     required this.minEntrances,
     this.groupId,
+    this.extra,
   });
 }

@@ -57,7 +57,7 @@ class BattleEngine {
   static const swarmHp = 0.6; // swarm: 1体あたりのHPの割合（1回の出現で2体）
   static const bossSkillInterval = 8.0, bossHasteSeconds = 3.0, bossHasteFactor = 1.8, bossHealRatio = 0.10;
   static const bossSummonCount = 2, bossSummonHp = 0.5;
-  // 地方決戦は盤面が広く波も多いので、開始コインと撃破コインを増やす
+  // 地方決戦・エクストラは盤面が広く波も多いので、開始コインと撃破コインを増やす
   static const regionalCoins = 1.6, regionalReward = 1.3;
   // 進路の長さによる速さの補正: 短い進路は遅く、長い進路は速くして、拠点までかかる時間を近づける
   static const lengthReference = 25.0, lengthFactorMin = 0.6, lengthFactorMax = 1.25;
@@ -82,12 +82,13 @@ class BattleEngine {
   static const symbolHealInterval = 10.0;
   static const bossSkills = ['speedBurst', 'hpRegen', 'summon', 'stunFacility'];
 
-  SeasonEffect get _season => Weather.seasons[stage.season]!;
+  /// [wave]（1始まり）の季節の効果。エクストラは波ごとに季節が巡る。
+  SeasonEffect _seasonAt(int wave) => Weather.seasons[stage.seasonAt(wave)]!;
 
   DifficultyParams get _params => difficultyParams[stage.difficulty]!;
 
   /// この地域のボスのスキル（地域idから決まる）。
-  String get bossSkill => bossSkills[fnv1a(stage.regionId) % bossSkills.length];
+  String get bossSkill => stage.bossSkill ?? bossSkills[fnv1a(stage.regionId) % bossSkills.length];
 
   // ── 開始・操作 ───────────────────────────────────────────
 
@@ -99,7 +100,7 @@ class BattleEngine {
         spawnAcc: 0,
         enemies: const [],
         facilities: const {},
-        coins: (startCoinsBase[stage.difficulty]! * (profile?.startCoins ?? 1.0) * (stage.kind == StageKind.regional ? regionalCoins : 1.0)).round(),
+        coins: (startCoinsBase[stage.difficulty]! * (profile?.startCoins ?? 1.0) * (stage.kind != StageKind.normal ? regionalCoins : 1.0)).round(),
         baseHp: stage.baseHp,
         score: 0,
         mistakes: 0,
@@ -273,7 +274,8 @@ class BattleEngine {
   // ── 性能 ────────────────────────────────────────────────
 
   /// 施設の実効の性能（国の攻撃アクション・地域のボーナスを適用）。
-  ({int damage, double range, double cooldown, String action}) facilityStats(Facility f) {
+  ({int damage, double range, double cooldown, String action}) facilityStats(Facility f, {int wave = 1}) {
+    final season = _seasonAt(wave);
     final ex = f.exclusive == null ? null : exclusiveSpecs[exclusiveKinds[f.exclusive]];
     if (ex != null) return (damage: ex.damage, range: ex.range + (f.level - 1) * 0.2, cooldown: 1 / ex.attackSpeed, action: ex.action);
     final base = facilityBase[f.type]!;
@@ -281,11 +283,11 @@ class BattleEngine {
     // 地方決戦では、盤面にある州の得意分野のうち、いちばん強いものを使う
     final ids = stage.memberIds.isEmpty ? [stage.regionId] : stage.memberIds;
     final bonus = ids.map((id) => profile?.traitOf(id).facilityBonus[f.type.name] ?? 1.0).reduce(math.max);
-    final dmg = base.damage * f.level * (act?.damage ?? 1.0) * bonus * (_season.typeDamage[f.type] ?? 1.0) * signature.facilityDamage(f.type);
+    final dmg = base.damage * f.level * (act?.damage ?? 1.0) * bonus * (season.typeDamage[f.type] ?? 1.0) * signature.facilityDamage(f.type);
     return (
       damage: math.max(1, dmg.round()),
       range: (base.range + (f.level - 1) * 0.2) * (act?.range ?? 1.0),
-      cooldown: (1 / base.attackSpeed) * (act?.cooldown ?? 1.0) * (_season.typeCooldown[f.type] ?? 1.0),
+      cooldown: (1 / base.attackSpeed) * (act?.cooldown ?? 1.0) * (season.typeCooldown[f.type] ?? 1.0),
       action: act?.action ?? 'single',
     );
   }
@@ -303,8 +305,9 @@ class BattleEngine {
     final action = isBoss ? 'none' : (t?.action ?? 'none');
     var hp = isBoss ? (w.baseHp * 2.5).round() : (w.baseHp * b.hpMult * (t?.hp ?? 1.0)).round();
     if (ability == 'swarm') hp = (hp * swarmHp).round();
-    if (!isBoss && kind == 'normal') hp = (hp * _season.normalHp).round();
-    final speed = b.speedMult * (isBoss ? 0.6 : 1.2) * (t?.speed ?? 1.0) * _params.speedMultiplier * _season.enemySpeed * (kind == 'speedy' ? _season.speedySpeed : 1.0) * lengthFactor(stage.paths[w.entranceIndices[index % w.entranceIndices.length]].length);
+    final season = _seasonAt(w.number);
+    if (!isBoss && kind == 'normal') hp = (hp * season.normalHp).round();
+    final speed = b.speedMult * (isBoss ? 0.6 : 1.2) * (t?.speed ?? 1.0) * _params.speedMultiplier * season.enemySpeed * (kind == 'speedy' ? season.speedySpeed : 1.0) * lengthFactor(stage.paths[w.entranceIndices[index % w.entranceIndices.length]].length);
     // 拠点への被害: 既存の規則（easyは常に1。ボス・装甲は重い）× 国の倍率
     final heavy = _params.heavyBreach;
     final base = !heavy ? 1 : (isBoss ? (stage.difficulty == Difficulty.hard ? 3 : 2) : (kind == 'armored' ? 2 : 1));
@@ -337,7 +340,7 @@ class BattleEngine {
 
   int _killReward(Enemy e, int wave, String? skill, [double mult = 1.0]) {
     final base = e.isBoss ? 60 + wave * 5 : 12 + wave * 3;
-    return math.max(1, (base * _params.rewardMultiplier * (profile?.income ?? 1.0) * (skill == 'waveCoinBonus' ? skillCoinBonus : 1.0) * _season.coin * mult * (stage.kind == StageKind.regional ? regionalReward : 1.0)).round());
+    return math.max(1, (base * _params.rewardMultiplier * (profile?.income ?? 1.0) * (skill == 'waveCoinBonus' ? skillCoinBonus : 1.0) * _seasonAt(wave).coin * mult * (stage.kind != StageKind.normal ? regionalReward : 1.0)).round());
   }
 
   /// クリティカルか。seed・刻み・施設・敵から決まる（状態を持たない決定的な乱数）。
@@ -420,7 +423,7 @@ class BattleEngine {
     final blocked = [...st.blockedWeather];
     var we = WeatherEffect.none;
     final slots = Weather.schedule(
-        seed: stage.seed, wave: st.wave, type: stage.weatherEvent, season: stage.season, difficulty: stage.difficulty, extra: signature.weatherExtra);
+        seed: stage.seed, wave: st.wave, type: stage.weatherEvent, season: stage.seasonAt(st.wave), difficulty: stage.difficulty, extra: signature.weatherExtra + stage.weatherBoost);
     final rel = now - st.waveStart, prev = rel - dt;
     var fire = false; // wildfire: 1秒をまたいだ
     for (final sl in slots) {
@@ -537,7 +540,7 @@ class BattleEngine {
         m.regenCd -= dt;
         if (m.regenCd <= 0) {
           m.regenCd = regenInterval;
-          m.hp = math.min(m.e.maxHp, m.hp + math.max(1, (m.e.maxHp * regenRatio * we.regen * _season.regen).round()));
+          m.hp = math.min(m.e.maxHp, m.hp + math.max(1, (m.e.maxHp * regenRatio * we.regen * _seasonAt(st.wave).regen).round()));
         }
       }
       if (m.e.action == 'none' && m.e.bossSkill == null) continue;
@@ -647,7 +650,7 @@ class BattleEngine {
           facilities[pos] = f.copyWith(cooldown: 0);
           continue;
         }
-        final fs = facilityStats(f);
+        final fs = facilityStats(f, wave: st.wave);
         if (fs.damage == 0) {
           facilities[pos] = f.copyWith(cooldown: 0);
           continue;

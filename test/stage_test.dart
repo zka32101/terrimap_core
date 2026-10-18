@@ -183,8 +183,8 @@ void main() {
     expect(armored / total, lessThan(0.6));
   });
 
-  test('エクストラは M7b まで未実装', () {
-    expect(() => StageGenerator(packs['de']!).generate('DE-BY', Difficulty.normal, kind: StageKind.extra), throwsUnimplementedError);
+  test('エクストラのidでない指定は例外', () {
+    expect(() => StageGenerator(packs['de']!).generate('DE-BY', Difficulty.normal, kind: StageKind.extra), throwsArgumentError);
   });
 
   test('未知の地域はエラー', () {

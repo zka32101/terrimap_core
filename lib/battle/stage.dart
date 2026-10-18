@@ -81,6 +81,12 @@ class Stage {
 
   /// 地方決戦: 地方のid、盤面にある州のid、置ける限定施設（州ごと）。通常のステージでは null・[regionId] だけ・[exclusiveFacility] だけ。
   final String? groupId;
+
+  /// エクストラ: ステージのid、波ごとの季節（巡る）、ボスのスキル、天候の追加回数。通常・地方決戦では null・空・null・0。
+  final String? extraId;
+  final List<Season> waveSeasons;
+  final String? bossSkill;
+  final int weatherBoost;
   final List<String> memberIds;
   final List<String> exclusiveFacilities;
 
@@ -110,6 +116,10 @@ class Stage {
     this.backdrop,
     this.exclusiveFacility,
     this.groupId,
+    this.extraId,
+    this.waveSeasons = const [],
+    this.bossSkill,
+    this.weatherBoost = 0,
     this.memberIds = const [],
     this.exclusiveFacilities = const [],
   });
@@ -120,8 +130,11 @@ class Stage {
         originX: originX, originY: originY, cellW: cellW, cellH: cellH, land: land, base: base, entrances: entrances,
         paths: paths, slots: slots, waves: waves, baseHp: baseHp, season: s, terrain: terrain, weatherEvent: weatherEvent,
         backdrop: backdrop, exclusiveFacility: exclusiveFacility,
-        groupId: groupId, memberIds: memberIds, exclusiveFacilities: exclusiveFacilities,
+        groupId: groupId, extraId: extraId, waveSeasons: waveSeasons, bossSkill: bossSkill, weatherBoost: weatherBoost, memberIds: memberIds, exclusiveFacilities: exclusiveFacilities,
       );
+
+  /// [wave]（1始まり）の季節。エクストラは波ごとに巡り、それ以外は [season] のまま。
+  Season seasonAt(int wave) => waveSeasons.isEmpty ? season : waveSeasons[(wave - 1).clamp(0, 1 << 20) % waveSeasons.length];
 
   bool isLand(int col, int row) => land.contains(GridPos(col, row));
 
@@ -149,6 +162,10 @@ class Stage {
         'backdrop': backdrop,
         'exclusiveFacility': exclusiveFacility,
         'groupId': groupId,
+        'extraId': extraId,
+        'waveSeasons': [for (final x in waveSeasons) x.name],
+        'bossSkill': bossSkill,
+        'weatherBoost': weatherBoost,
         'memberIds': memberIds,
         'exclusiveFacilities': exclusiveFacilities,
       };
