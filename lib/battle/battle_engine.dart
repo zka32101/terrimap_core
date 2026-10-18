@@ -66,6 +66,14 @@ class BattleEngine {
   static const waveSkills = ['waveAtkBonus', 'waveRangeBonus', 'waveCoinBonus', 'waveAtkSpeedBonus', 'slow', 'weatherBlock'];
   static const hardOnlySkills = ['repair'];
   static const skillChoiceCount = 3;
+  /// クイズ正解の一時バフ（仮の数値）: 攻撃 +20%、10秒、連続正解で段数が増え最大 +50%。
+  static const quizBuffSeconds = 10.0, quizBuffStep = 0.2, quizBuffMax = 0.5;
+  static double quizBuffBonus(BattleState s) => s.time < s.buffUntil ? math.min(quizBuffMax, quizBuffStep + (s.buffStacks - 1) * 0.1) : 0;
+  BattleState _withBuff(BattleState s) {
+    final stacks = s.time < s.buffUntil ? s.buffStacks + 1 : 1;
+    return s.copyWith(buffUntil: s.time + quizBuffSeconds, buffStacks: stacks);
+  }
+
   static const skillAtkBonus = 1.25, skillRangeBonus = 1.0, skillCoinBonus = 1.2, skillAtkSpeedBonus = 1.15, skillSlowFactor = 0.8;
   // hard: 施設の耐久と、敵の施設への攻撃（設計書 §6.2）
   static const facilityHpFactor = 1.5, castleHpFactor = 1.5, exclusiveHpFactor = 2.0; // 施設HP = 1波の基礎HP × 係数 × レベル
@@ -231,7 +239,7 @@ class BattleEngine {
   BattleState resolveSkillQuiz(BattleState s, {required bool correct}) {
     final choices = skillChoices(s);
     if (!assistEnabled || choices.isEmpty) return s;
-    if (correct) return s.copyWith(skillUnlocked: true);
+    if (correct) return _withBuff(s.copyWith(skillUnlocked: true));
     final id = choices[fnv1a('${stage.seed}|autoskill|${s.wave + 1}') % choices.length];
     return _applySkill(s, id);
   }
@@ -241,7 +249,7 @@ class BattleEngine {
     final f = s.facilities[pos];
     if (s.isOver || f == null || repairCostOf(f) == null) return null;
     if (!assistEnabled || !correct) return repair(s, pos);
-    return s.copyWith(facilities: {...s.facilities, pos: f.copyWith(hp: maxHpOf(f))});
+    return _withBuff(s.copyWith(facilities: {...s.facilities, pos: f.copyWith(hp: maxHpOf(f))}));
   }
 
   /// スキルを選ぶ。候補にない・選択済みなら null。repair は選んだ時点で停止・妨害を直す。
@@ -681,7 +689,7 @@ class BattleEngine {
         }
         if (target != null) {
           final base = f.sabotagedUntil > now ? (fs.damage * sabotageRatio).round() : fs.damage;
-          final power = (base * (boosted ? coreBoost : 1.0) * (st.skill == 'waveAtkBonus' ? skillAtkBonus : 1.0) * we.damage * (we.typeDamage[f.type] ?? 1.0)).round();
+          final power = (base * (boosted ? coreBoost : 1.0) * (st.skill == 'waveAtkBonus' ? skillAtkBonus : 1.0) * we.damage * (we.typeDamage[f.type] ?? 1.0) * (1 + quizBuffBonus(st))).round();
           final crit = isCrit(st.tickCount, pos, target.e.id);
           final raw = math.max(1, (power * (crit ? critMultiplier : 1.0)).round());
           int hit(_M m, int amount, {bool c = false, double armorIgnore = 0}) {

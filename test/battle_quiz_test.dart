@@ -16,6 +16,7 @@ RegionPack load(String id) {
 }
 
 void main() {
+  quizBuffTests();
   final de = load('de');
   BattleEngine eng(Difficulty d, {bool assist = true, bool withPack = true}) =>
       BattleEngine(StageGenerator(de).generate('DE-BY', d), profile: de.profile, pack: withPack ? de : null, quizAssist: assist);
@@ -118,5 +119,22 @@ void main() {
     expect(eng(Difficulty.hard).assistTimeLimit, 10);
     expect(eng(Difficulty.normal).assistTimeLimit, isNull);
     expect(eng(Difficulty.easy).assistTimeLimit, isNull);
+  });
+}
+
+void quizBuffTests() {
+  final de = load('de');
+  final e = BattleEngine(StageGenerator(de).generate('DE-BY', Difficulty.normal), profile: de.profile, pack: de, quizAssist: true);
+  group('クイズ正解の一時バフ', () {
+    test('正解で攻撃バフ、連続で段数増、不正解では付かず、時間で切れる', () {
+      final s0 = e.start();
+      expect(BattleEngine.quizBuffBonus(s0), 0);
+      expect(BattleEngine.quizBuffBonus(e.resolveSkillQuiz(s0, correct: false)), 0);
+      final s1 = e.resolveSkillQuiz(s0, correct: true);
+      expect(BattleEngine.quizBuffBonus(s1), closeTo(0.2, 1e-9));
+      final s2 = e.resolveSkillQuiz(s1, correct: true);
+      expect(BattleEngine.quizBuffBonus(s2), closeTo(0.3, 1e-9));
+      expect(BattleEngine.quizBuffBonus(s2.copyWith(time: s2.time + 11)), 0);
+    });
   });
 }

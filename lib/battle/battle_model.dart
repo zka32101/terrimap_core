@@ -175,6 +175,8 @@ class BattleState {
   final int summoned; // ボスが呼んだ敵の数（id用）
   final String? skill; // 次（または今）の波で効くスキル（波が終わると外れる）
   final int weatherBlocks; // 天候の無効化の残り回数（次に起きる天候を1回防ぐ）
+  final double buffUntil; // クイズ正解の一時バフが切れる時刻
+  final int buffStacks; // 連続正解のバフ段数（時間内に再正解で増える）
   final bool skillUnlocked; // クイズ連動: このスキル選択でクイズに正解した
   final double waveStart; // 現在の波が始まった時刻（天候の予定の基準）
   final List<String> blockedWeather; // 防いだ天候（'波:番号'）
@@ -197,6 +199,8 @@ class BattleState {
     this.weatherBlocks = 0,
     this.waveStart = 0,
     this.skillUnlocked = false,
+    this.buffUntil = 0,
+    this.buffStacks = 0,
     this.blockedWeather = const [],
   });
 
@@ -220,6 +224,8 @@ class BattleState {
     int? weatherBlocks,
     double? waveStart,
     bool? skillUnlocked,
+    double? buffUntil,
+    int? buffStacks,
     List<String>? blockedWeather,
   }) =>
       BattleState(
@@ -242,6 +248,8 @@ class BattleState {
         waveStart: waveStart ?? this.waveStart,
         skillUnlocked: clearSkill ? false : (skillUnlocked ?? this.skillUnlocked),
         blockedWeather: blockedWeather ?? this.blockedWeather,
+        buffUntil: buffUntil ?? this.buffUntil,
+        buffStacks: buffStacks ?? this.buffStacks,
       );
 
   bool get isOver => phase == BattlePhase.victory || phase == BattlePhase.defeat;
