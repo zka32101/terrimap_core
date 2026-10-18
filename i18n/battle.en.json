@@ -127,5 +127,14 @@
   "stage.basis.legend": "Legend",
   "stage.basis.biography": "Biography",
   "stage.basis.history": "History",
-  "stage.regionBase": "Base: {capital}"
+  "stage.regionBase": "Base: {capital}",
+  "daily.title": "Daily Battle",
+  "daily.today": "Today: {name} · {difficulty}",
+  "daily.play": "Play today's battle",
+  "daily.done": "You finished today's battle.",
+  "daily.share": "Share result",
+  "daily.challenge": "Challenge a friend",
+  "daily.challenge.hint": "Share your setup. Can they beat it?",
+  "replay.watch": "Watch replay",
+  "replay.invalid": "This replay could not be verified."
 }

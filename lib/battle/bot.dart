@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import '../quiz/rng.dart';
 import 'battle_engine.dart';
 import 'grid.dart';
+import 'replay.dart';
 import 'stage.dart';
 
 /// 自動対戦のボットの強さ。バランス確認（設計書 §8）で、プレイヤーの腕前の代わりに使う。
@@ -29,7 +30,9 @@ class BotResult {
 class BattleBot {
   final BattleEngine engine;
   final BotProfile profile;
-  BattleBot(this.engine, this.profile);
+  /// 操作の記録。渡すと、[play] の操作がリプレイになる。
+  final ReplayRecorder ops;
+  BattleBot(this.engine, this.profile, {ReplayRecorder? recorder}) : ops = recorder ?? ReplayRecorder(engine);
 
   Stage get _stage => engine.stage;
 
@@ -99,17 +102,17 @@ class BattleBot {
     // スキル（準備中）
     final choices = engine.skillChoices(st);
     if (choices.isNotEmpty) {
-      if (engine.assistEnabled) st = engine.resolveSkillQuiz(st, correct: _right(st, 'skill'));
+      if (engine.assistEnabled) st = ops.resolveSkillQuiz(st, correct: _right(st, 'skill'));
       if (st.skill == null) {
         final pick = _skillPreference.firstWhere(choices.contains, orElse: () => choices.first);
-        st = engine.chooseSkill(st, pick) ?? st;
+        st = ops.chooseSkill(st, pick) ?? st;
       }
     }
     // 修理（hard）
     for (final pos in st.facilities.keys.toList()..sort()) {
       final f = st.facilities[pos]!;
       if (engine.repairCostOf(f) == null) continue;
-      final r = engine.assistEnabled ? engine.repairByQuiz(st, pos, correct: _right(st, 'repair${pos.col},${pos.row}')) : engine.repair(st, pos);
+      final r = engine.assistEnabled ? ops.repairByQuiz(st, pos, correct: _right(st, 'repair${pos.col},${pos.row}')) : ops.repair(st, pos);
       if (r != null) st = r;
     }
     var budget = (st.coins * profile.spendRatio).floor();
@@ -120,7 +123,7 @@ class BattleBot {
       if (exCost != null && budget >= exCost) {
         for (final pos in _rankedSlots) {
           if (st.facilities.containsKey(pos)) continue;
-          final r = engine.placeExclusive(st, pos);
+          final r = ops.placeExclusive(st, pos);
           if (r != null) {
             budget -= exCost;
             st = r;
@@ -150,14 +153,14 @@ class BattleBot {
         if (pos == null) return false;
         final c = engine.upgradeCostOf(st.facilities[pos]!);
         if (c == null || budget < c || st.coins < c) return false;
-        st = engine.upgrade(st, pos) ?? st;
+        st = ops.upgrade(st, pos) ?? st;
         budget -= c;
         return true;
       }
 
       bool tryPlace() {
         if (type == null || free.isEmpty || budget < cost || st.coins < cost) return false;
-        final r = engine.place(st, type, free.first);
+        final r = ops.place(st, type, free.first);
         if (r == null) return false;
         st = r;
         budget -= cost;
