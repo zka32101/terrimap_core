@@ -82,10 +82,11 @@ class Weather {
   static int perWave(Difficulty d) => d == Difficulty.hard ? 2 : 1;
 
   /// その波の天候の予定（seed・波の番号から決まる）。天候がない地域・季節に合わない場合は空。
-  static List<WeatherSlot> schedule({required int seed, required int wave, required String? type, required Season season, required Difficulty difficulty}) {
+  static List<WeatherSlot> schedule(
+      {required int seed, required int wave, required String? type, required Season season, required Difficulty difficulty, int extra = 0}) {
     if (type == null || !types.contains(type) || !fits(type, season)) return const [];
     return [
-      for (var i = 0; i < perWave(difficulty); i++)
+      for (var i = 0; i < perWave(difficulty) + extra; i++)
         WeatherSlot(
           type,
           i,

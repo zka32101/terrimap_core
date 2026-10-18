@@ -8,6 +8,7 @@ import 'battle_model.dart';
 import 'difficulty.dart';
 import 'exclusive.dart';
 import 'grid.dart';
+import 'signature.dart';
 import 'stage.dart';
 import 'weather.dart';
 
@@ -23,6 +24,9 @@ class BattleEngine {
   final CountryProfile? profile;
   /// クイズ連動（設計書 §6.12）に使う pack。省略するとクイズ連動は使えない。
   final RegionPack? pack;
+
+  /// 国の目玉（`profile.signature.id`）。バトルの計算は、この窓口の倍率だけを使う。
+  late final SignatureRule signature = SignatureRule.create(profile?.signatureId, stage: stage, pack: pack, profile: profile);
 
   /// クイズ連動のオン/オフ（設定）。オフなら、スキルは3つから選べ、修理はコインだけ。
   final bool quizAssist;
@@ -260,7 +264,7 @@ class BattleEngine {
     final base = facilityBase[f.type]!;
     final act = profile?.attackActions[f.type.name];
     final bonus = profile?.traitOf(stage.regionId).facilityBonus[f.type.name] ?? 1.0;
-    final dmg = base.damage * f.level * (act?.damage ?? 1.0) * bonus * (_season.typeDamage[f.type] ?? 1.0);
+    final dmg = base.damage * f.level * (act?.damage ?? 1.0) * bonus * (_season.typeDamage[f.type] ?? 1.0) * signature.facilityDamage(f.type);
     return (
       damage: math.max(1, dmg.round()),
       range: (base.range + (f.level - 1) * 0.2) * (act?.range ?? 1.0),
@@ -399,7 +403,7 @@ class BattleEngine {
     final blocked = [...st.blockedWeather];
     var we = WeatherEffect.none;
     final slots = Weather.schedule(
-        seed: stage.seed, wave: st.wave, type: stage.weatherEvent, season: stage.season, difficulty: stage.difficulty);
+        seed: stage.seed, wave: st.wave, type: stage.weatherEvent, season: stage.season, difficulty: stage.difficulty, extra: signature.weatherExtra);
     final rel = now - st.waveStart, prev = rel - dt;
     var fire = false; // wildfire: 1秒をまたいだ
     for (final sl in slots) {
@@ -423,7 +427,7 @@ class BattleEngine {
       }
       if (blocked.contains(key)) continue;
       if (rel >= sl.start && rel < sl.end) {
-        we = Weather.effects[sl.type]!;
+        we = scaleWeather(Weather.effects[sl.type]!, signature.weatherIntensity);
         if (sl.type == 'wildfire' && rel.floor() != prev.floor()) fire = true;
       }
       if (crossed(sl.end)) events.add(BattleEvent(BattleEventType.weatherEnd, detail: sl.type, value: st.wave));
