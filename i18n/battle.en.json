@@ -165,5 +165,14 @@
   "collection.empty": "No landmarks yet. Clear a state to collect its landmarks.",
   "collection.locked": "Clear {name} to unlock",
   "collection.new": "New landmark cards!",
-  "collection.newBadge": "NEW"
+  "collection.newBadge": "NEW",
+  "invite.title": "Invite a friend",
+  "invite.headline": "{app}: Can you beat {stage} ({difficulty})?",
+  "invite.result": "My result: {mark} ♥{hp}",
+  "invite.copied": "Invite copied. Paste it in a message!",
+  "invite.beat": "Their result: {mark} ♥{hp}",
+  "invite.hint": "Long-press a state to invite a friend. Paste an invite or a replay code here.",
+  "invite.replayCode": "Copy replay code",
+  "invite.invalid": "This invite can't be used.",
+  "invite.locked": "Unlock this stage to play it."
 }
