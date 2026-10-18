@@ -30,7 +30,11 @@ class BattleEngine {
 
   /// クイズ連動のオン/オフ（設定）。オフなら、スキルは3つから選べ、修理はコインだけ。
   final bool quizAssist;
-  BattleEngine(this.stage, {this.profile, this.pack, this.quizAssist = true});
+
+  /// 復習: 州ごとの出題の重み（[battleReviewWeights]）。渡すと、間違えた州がクイズ連動で出やすくなる。
+  /// 問題の中身だけが変わり、戦闘の計算には影響しない（リプレイは正解・不正解の記録だけで再現できる）。
+  final Map<String, double>? reviewWeights;
+  BattleEngine(this.stage, {this.profile, this.pack, this.quizAssist = true, this.reviewWeights});
 
   /// クイズ連動が有効か。
   bool get assistEnabled => pack != null && quizAssist;
@@ -230,6 +234,7 @@ class BattleEngine {
       count: 1,
       types: const [QuestionType.nameFromMap, QuestionType.capitalFromName, QuestionType.nameFromCapital, QuestionType.silhouette, QuestionType.neighborOf, QuestionType.landmarkOf],
       pool: pool,
+      weights: reviewWeights,
     );
     return qs.isEmpty ? null : qs.first;
   }
