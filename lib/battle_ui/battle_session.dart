@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 
 import '../battle/battle_engine.dart';
 import '../battle/grid.dart';
+import '../battle/replay.dart';
 import '../quiz/quiz_engine.dart';
 
 /// 画面とエンジンの間に入る、バトル1回ぶんの操作役。時間の進め方（速度・一時停止）、選択中のマス、直近のイベントを持つ。
@@ -21,6 +22,11 @@ class BattleSession extends ChangeNotifier {
   final List<BattleEvent> log = [];
   static const maxLog = 40;
 
+  /// 操作の記録（リプレイ用）。
+  late final ReplayRecorder recorder = ReplayRecorder(engine);
+
+  double _acc = 0; // 刻みに満たない残りの時間（毎回同じ刻みで進めるため。リプレイを正確にする）
+
   BattleSession(this.engine) : state = engine.start();
 
   bool get isOver => state.isOver;
@@ -39,9 +45,16 @@ class BattleSession extends ChangeNotifier {
   /// [seconds] 秒ぶん進める（一時停止中・終了後は進めない）。
   void tick(double seconds) {
     if (paused || isOver || seconds <= 0) return;
-    final r = engine.advance(state, seconds * speed);
-    state = r.state;
-    _add(r.events);
+    _acc += seconds * speed;
+    final events = <BattleEvent>[];
+    while (_acc >= BattleEngine.step - 1e-9 && !state.isOver) {
+      final r = engine.tick(state, BattleEngine.step);
+      state = r.state;
+      events.addAll(r.events);
+      _acc -= BattleEngine.step;
+    }
+    if (state.isOver) _acc = 0;
+    _add(events);
     notifyListeners();
   }
 
@@ -75,14 +88,14 @@ class BattleSession extends ChangeNotifier {
   }
 
   /// 選択中の設置枠に施設を置く。
-  bool place(FacilityType type) => selected != null && _apply(engine.place(state, type, selected!));
+  bool place(FacilityType type) => selected != null && _apply(recorder.place(state, type, selected!));
 
-  bool placeExclusive() => selected != null && _apply(engine.placeExclusive(state, selected!));
+  bool placeExclusive() => selected != null && _apply(recorder.placeExclusive(state, selected!));
 
-  bool upgrade() => selected != null && _apply(engine.upgrade(state, selected!));
+  bool upgrade() => selected != null && _apply(recorder.upgrade(state, selected!));
 
   bool remove() {
-    final ok = selected != null && _apply(engine.remove(state, selected!));
+    final ok = selected != null && _apply(recorder.remove(state, selected!));
     if (ok) selected = null;
     return ok;
   }
@@ -90,13 +103,13 @@ class BattleSession extends ChangeNotifier {
   /// 修理。[correct] が null ならコインで修理、true/false ならクイズの結果で修理する。
   bool repair({bool? correct}) {
     if (selected == null) return false;
-    return _apply(correct == null ? engine.repair(state, selected!) : engine.repairByQuiz(state, selected!, correct: correct));
+    return _apply(correct == null ? recorder.repair(state, selected!) : recorder.repairByQuiz(state, selected!, correct: correct));
   }
 
   /// 準備を飛ばして波を始める。
   void startWave() {
     if (!inPrep) return;
-    final r = engine.startWave(state);
+    final r = recorder.startWave(state);
     state = r.state;
     _add(r.events);
     notifyListeners();
@@ -116,9 +129,9 @@ class BattleSession extends ChangeNotifier {
 
   /// スキル選択のクイズの結果を反映する。
   void answerSkillQuiz({required bool correct}) {
-    state = engine.resolveSkillQuiz(state, correct: correct);
+    state = recorder.resolveSkillQuiz(state, correct: correct);
     notifyListeners();
   }
 
-  bool chooseSkill(String id) => _apply(engine.chooseSkill(state, id));
+  bool chooseSkill(String id) => _apply(recorder.chooseSkill(state, id));
 }
