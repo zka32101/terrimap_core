@@ -7,6 +7,7 @@ import '../battle/battle_engine.dart';
 import '../battle/grid.dart';
 import '../battle/stage.dart';
 import 'art_set.dart';
+import 'weather_overlay.dart';
 
 /// 季節ごとの地面の色。
 const seasonGround = <Season, Color>{
@@ -49,6 +50,9 @@ class BattleView extends StatelessWidget {
   /// 背景・施設・敵・ボスの画像（省略または画像なしなら図形のみ）。
   final ArtSet? art;
 
+  /// 今起きている天候（hurricane / tornado / blizzard / heatwave / wildfire / flood / earthquake / storm）。盤面に重ねて描く。なければ null。
+  final String? weather;
+
   const BattleView(
       {super.key,
       required this.stage,
@@ -57,7 +61,8 @@ class BattleView extends StatelessWidget {
       this.selectedRange,
       this.onCellTap,
       this.facilityMaxHp,
-      this.art});
+      this.art,
+      this.weather});
 
   /// 盤面を表示サイズに収めたときのマスの一辺と、左上の余白。
   static ({double cell, double dx, double dy}) layout(Size size, int cols, int rows) {
@@ -85,7 +90,7 @@ class BattleView extends StatelessWidget {
         },
         child: CustomPaint(
           size: size,
-          painter: _BattlePainter(stage, state, selected, selectedRange, facilityMaxHp, art),
+          painter: _BattlePainter(stage, state, selected, selectedRange, facilityMaxHp, art, weather),
         ),
       );
     });
@@ -99,7 +104,8 @@ class _BattlePainter extends CustomPainter {
   final double? range;
   final int Function(Facility f)? maxHp;
   final ArtSet? art;
-  _BattlePainter(this.stage, this.state, this.selected, this.range, this.maxHp, this.art);
+  final String? weather;
+  _BattlePainter(this.stage, this.state, this.selected, this.range, this.maxHp, this.art, this.weather);
 
   /// [img] を [dst] に収まる最大の大きさで（縦横比を保って）描く。
   static void _sprite(Canvas canvas, ui.Image img, Rect dst, {double opacity = 1}) {
@@ -121,6 +127,15 @@ class _BattlePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
+    canvas.save();
+    final shake = weatherShake(weather, state.time);
+    if (shake != Offset.zero) canvas.translate(shake.dx, shake.dy);
+    _paintBoard(canvas, size);
+    canvas.restore();
+    if (weather != null) paintWeather(canvas, size, weather!, state.time);
+  }
+
+  void _paintBoard(Canvas canvas, Size size) {
     final l = BattleView.layout(size, stage.cols, stage.rows);
     final cell = l.cell;
     Rect rect(GridPos p) => Rect.fromLTWH(l.dx + p.col * cell, l.dy + p.row * cell, cell, cell);
@@ -248,5 +263,5 @@ class _BattlePainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant _BattlePainter old) => old.state != state || old.selected != selected || old.range != range || old.stage != stage || old.art != art;
+  bool shouldRepaint(covariant _BattlePainter old) => old.state != state || old.selected != selected || old.range != range || old.stage != stage || old.art != art || old.weather != weather;
 }
