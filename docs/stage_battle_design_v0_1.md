@@ -474,3 +474,10 @@ final replay = engine.toReplay(s);                          // 操作の記録�
 - `lib/battle/daily_battle.dart`: `DailyBattle.forDate(pack, 日付)`。日付（UTC）と packId から州と難易度（easy 3 : normal 5 : hard 2）が決まる。`allowedIds` で無料の州に絞れる。`shareText` が波ごとの🟩（無傷）🟥（被害）⬛（届かず）と拠点HPの共有文字列を作る。
 - 画面の文言を9件追加（`daily.*`・`replay.*`）。テスト8件追加。
 - 未決: ゴースト表示（将来）、ランキング（サーバーが要る。再生による検証はできる）、アプリ側の画面（今日のバトル・共有・挑戦リンクの受け取り）。
+
+### リプレイ視聴（コア側）
+
+- `lib/battle_ui/replay_player.dart`（`ReplayPlayer`）: `Replay` を画面で再生する役。`BattleSession` と同じく、時間はフレームから `tick(秒)` で渡す。記録の操作を、記録された刻み（`tickCount`）で適用するので、遊んだときと同じ結果になる。
+- 一時停止・速度（1/2/4倍）・最初から見直す（`restart`）・最後まで飛ばす（`skipToEnd`）・進み具合（`progress`）・イベントのログ。
+- 終わったら `matchesRecorded` で、記録された結果（勝敗・拠点HP・スコア）と一致するかが分かる。操作が適用できない記録（改ざん・版違い）は `corrupt` になって止まる。
+- 画面の文言を5件追加（`replay.title`・`replay.restart`・`replay.skip`・`replay.finished`・`replay.matches`）。テスト5件追加。
