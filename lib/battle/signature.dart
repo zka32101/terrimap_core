@@ -47,8 +47,8 @@ class FederalSpecialties extends SignatureRule {
   factory FederalSpecialties.forStage(Stage stage, RegionPack? pack, CountryProfile? profile) {
     final count = <FacilityType, int>{};
     if (pack != null && profile != null) {
-      final region = pack.regions.where((r) => r.id == stage.regionId);
-      final ids = {stage.regionId, if (region.isNotEmpty) ...region.first.neighbors};
+      final own = stage.memberIds.isEmpty ? [stage.regionId] : stage.memberIds;
+      final ids = {...own, for (final r in pack.regions.where((r) => own.contains(r.id))) ...r.neighbors};
       for (final id in ids) {
         for (final t in FacilityType.values) {
           if (profile.traitOf(id).facilityBonus.containsKey(t.name)) count[t] = (count[t] ?? 0) + 1;

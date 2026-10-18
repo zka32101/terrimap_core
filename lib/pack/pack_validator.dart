@@ -243,6 +243,31 @@ class PackValidator {
     skins('facilities', CountryProfile.facilityTypes, '施設');
     skins('enemySkins', CountryProfile.enemyKinds, '敵');
 
+    // 地方決戦の地方: 州は実在し、中心は地方の中に含まれ、地方どうしで重ならない
+    final groups = m['groups'];
+    if (groups is Map) {
+      final seen = <String, String>{};
+      groups.forEach((gid, g) {
+        if (g is! Map) {
+          err.add('profile.json: groups.$gid がオブジェクトでない');
+          return;
+        }
+        final members = g['regions'];
+        if (members is! List || members.length < 2) {
+          err.add('profile.json: groups.$gid の regions は2つ以上');
+          return;
+        }
+        for (final r in members) {
+          if (!regionIds.contains(r)) err.add('profile.json: groups.$gid の未知の地域 $r');
+          if (seen.containsKey(r)) err.add('profile.json: $r が groups.${seen[r]} と groups.$gid の両方にある');
+          seen[r as String] = '$gid';
+        }
+        if (!members.contains(g['center'])) err.add('profile.json: groups.$gid の center が regions にない');
+        final name = g['name'];
+        if (name is! Map || ((name['en'] ?? '') as Object).toString().isEmpty) err.add('profile.json: groups.$gid の name に英語がない');
+      });
+    }
+
     final regs = m['regions'];
     if (regs is Map) {
       regs.forEach((id, t) {

@@ -113,17 +113,20 @@ class BattleBot {
       if (r != null) st = r;
     }
     var budget = (st.coins * profile.spendRatio).floor();
-    // 限定施設（1つ）
-    final exCost = engine.exclusiveCostOf();
-    if (exCost != null && budget >= exCost && st.facilities.length >= 3 && !st.facilities.values.any((f) => f.exclusive != null)) {
-      for (final pos in _rankedSlots) {
-        if (st.facilities.containsKey(pos)) continue;
-        final r = engine.placeExclusive(st, pos);
-        if (r != null) {
-          budget -= exCost;
-          st = r;
+    // 限定施設（置いていないものを、最初の3つを置いたあとで、1つずつ）
+    final left = engine.exclusiveLeft(st);
+    if (left.isNotEmpty && st.facilities.length >= 3) {
+      final exCost = engine.exclusiveCostOf(left.first);
+      if (exCost != null && budget >= exCost) {
+        for (final pos in _rankedSlots) {
+          if (st.facilities.containsKey(pos)) continue;
+          final r = engine.placeExclusive(st, pos);
+          if (r != null) {
+            budget -= exCost;
+            st = r;
+          }
+          break;
         }
-        break;
       }
     }
     // 購入と強化。レベル1→2は新しい施設より割安なので、最初の4つを置いたら先に強化する

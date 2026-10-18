@@ -30,6 +30,7 @@ class CountryProfile {
   final Map<String, Backdrop> backdrops; // 背景の種類id→配色(地域の backdrop が参照する)
   final Map<String, Skin> facilitySkins; // 施設の種類→この国での見た目と名前
   final Map<String, Skin> enemySkins; // 敵の種類→この国での見た目と名前
+  final Map<String, RegionGroup> groups; // 地方決戦の地方（id→州の集まり）。なければ地方決戦はない
 
   const CountryProfile({
     required this.style,
@@ -46,6 +47,7 @@ class CountryProfile {
     this.backdrops = const {},
     this.facilitySkins = const {},
     this.enemySkins = const {},
+    this.groups = const {},
   });
 
   factory CountryProfile.parse(String json) {
@@ -66,6 +68,7 @@ class CountryProfile {
       backdrops: _obj(_obj(m['theme'])['backdrops']).map((k, v) => MapEntry(k, Backdrop.fromJson(_obj(v)))),
       facilitySkins: _obj(m['facilities']).map((k, v) => MapEntry(k, Skin.fromJson(_obj(v)))),
       enemySkins: _obj(m['enemySkins']).map((k, v) => MapEntry(k, Skin.fromJson(_obj(v)))),
+      groups: _obj(m['groups']).map((k, v) => MapEntry(k, RegionGroup.fromJson(k, _obj(v)))),
     );
   }
 
@@ -112,6 +115,25 @@ class RegionTrait {
         exclusiveFacility: j['exclusiveFacility'] as String?,
         enemyBias: _obj(j['enemyBias']).map((k, v) => MapEntry(k, (v as num).toDouble())),
       );
+}
+
+/// 地方決戦の地方（州の集まり）。[center] の州都が拠点になる。
+class RegionGroup {
+  final String id;
+  final List<String> regions;
+  final String center;
+  final Map<String, String> name; // 言語→地方の名前
+  const RegionGroup({required this.id, required this.regions, required this.center, required this.name});
+
+  factory RegionGroup.fromJson(String id, Map<String, dynamic> j) => RegionGroup(
+        id: id,
+        regions: [for (final r in (j['regions'] as List)) r as String],
+        center: j['center'] as String,
+        name: _obj(j['name']).map((k, v) => MapEntry(k, v as String)),
+      );
+
+  /// 表示名。言語がなければ英語、それもなければ id。
+  String nameIn(String lang) => name[lang] ?? name['en'] ?? id;
 }
 
 /// この国での敵の特性。倍率は1.0が標準。ability は常時の性質、action は敵が自分から起こす行動。
