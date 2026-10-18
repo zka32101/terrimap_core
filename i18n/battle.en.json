@@ -110,5 +110,22 @@
   "result.retry": "Try again",
   "result.back": "Back to map",
   "base.breach": "An enemy reached the base!",
-  "base.heal": "The base recovered 1 HP."
+  "base.heal": "The base recovered 1 HP.",
+  "stage.mode.state": "States",
+  "stage.mode.region": "Regions",
+  "stage.mode.extra": "Extra",
+  "stage.cleared": "Cleared",
+  "stage.progress": "{n}/{total} states cleared",
+  "stage.locked.region": "Clear more than half of the states in this region to unlock.",
+  "stage.locked.extra": "Clear every state on Hard to unlock the extra stages.",
+  "stage.locked.premium": "Unlock all states to play this stage.",
+  "stage.play": "Play",
+  "stage.about": "About this story",
+  "stage.fact": "What is real",
+  "stage.boss": "Boss: {name}",
+  "stage.waves": "{n} waves",
+  "stage.basis.legend": "Legend",
+  "stage.basis.biography": "Biography",
+  "stage.basis.history": "History",
+  "stage.regionBase": "Base: {capital}"
 }

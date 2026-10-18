@@ -427,3 +427,12 @@ final replay = engine.toReplay(s);                          // 操作の記録�
 - **バランス**（expert のボット、6ステージ）: easy 5勝・normal 2勝・hard 1勝。ボットで分かったこと: 天候が `storm`・`blizzard`（射程−1）のステージは normal でも勝てなかったので、エクストラの天候は洪水・竜巻・地震・熱波にした。
 - **題材の決まり**（§6.9）は守っている: 戦争・差別なし、敵は幻想の存在、国旗・国章・実在の人物の顔なし。**公開前に、ゲーム内の説明文の事実関係を確認する**（`fact` の文面は仮）。
 - 次: M7c（アプリ側: 解放の条件・進捗・画面）。ボスの見た目・素材は後で。
+
+### M7c（コア側）で実装したこと
+
+`lib/battle/battle_progress.dart`（`BattleProgress`）: バトルのクリア記録と解放。画面にも保存先にも依存せず、保存はアプリ側（`toJsonString` / `fromJsonString`）。
+- 記録: `recordClear(kind, id, difficulty)`。鍵は `<種別>:<id>`。
+- 地方決戦の解放: その地方の州の**過半数**をクリア（どの難易度でも。半分ちょうどは不可）。
+- エクストラの解放: **全州を hard でクリア**。
+- 画面の文言を追加: `stage.mode.*`・`stage.locked.*`・`stage.progress`・`stage.about`・`stage.fact`・`stage.basis.*` など（`i18n/battle.en.json`）。
+- 方針: 地方決戦・エクストラは、無料でない州のクリアが要るので、実質的に「全州解放」（買い切り）の内容。
