@@ -6,7 +6,7 @@
 
 | # | 種類 | 場所 | 件数 | 今ある言語 | 訳す手順 |
 |---|---|---|---|---|---|
-| A | バトル画面の文言 | `i18n/battle.en.json` | 138件（約443語） | en | `tools/i18n_check.py missing/merge/check`（`i18n/README.md`） |
+| A | バトル画面の文言 | `i18n/battle.en.json` | 143件（約457語） | en | `tools/i18n_check.py missing/merge/check`（`i18n/README.md`） |
 | B-DE | 地域名・州都名 | `packs/de/strings/<言語>.json` | 地域16＋州都16 | en・de | 固有名詞。各言語の通称で（機械翻訳は避け、Wikipedia の言語版などで確認） |
 | B-US | 地域名・州都名 | `packs/us/strings/<言語>.json` | 地域51＋州都51 | en | 固有名詞。各言語の通称で（機械翻訳は避け、Wikipedia の言語版などで確認） |
 | C-DE | プロファイルの文言（地方名・エクストラ・施設/敵の名前） | `packs/de/profile.json` | 地方4・エクストラ3・施設6・敵4 | en・ja（一部 de） | 下の§4。エクストラの `fact` は**先に事実確認**（§5） |
@@ -52,7 +52,7 @@ Google翻訳に出す形は `python3 tools/i18n_check.py missing <言語>`。`{n
 | `result.*` | 6 | Victory! |
 | `base.*` | 2 | An enemy reached the base! |
 | `daily.*` | 7 | Daily Battle |
-| `replay.*` | 2 | Watch replay |
+| `replay.*` | 7 | Watch replay |
 
 ## 4. C プロファイルの文言（原本の英語）
 
@@ -72,7 +72,7 @@ Google翻訳に出す形は `python3 tools/i18n_check.py missing <言語>`。`{n
 |---|---|---|---|---|---|
 | `de_loreley` | legend | The Rock of Loreley | Water Nymph of the Rhine | Along the Rhine, a siren is said to sing from a high rock. Defend the river valley as her song stirs the mist. | The Loreley is a real rock above the Rhine near Sankt Goarshausen. The singing siren is a legend, made famous by Clemens Brentano (1801) and Heinrich Heine's poem (1824). |
 | `de_grimm` | legend | The Grimm Forest | The Great Grey Wolf | Wolves, wandering animals and swarms of mice from the old folk tales fill the forest. Hold the path through the trees. | Jacob and Wilhelm Grimm collected folk tales and published them as Children's and Household Tales (first edition 1812). The creatures here are inspired by those tales, not by a historical event. |
-| `de_nibelung` | legend | The Dragon of the Nibelungs | The Cave Dragon | In a medieval hero legend, a dragon guards a cave of treasure. Hold the castle hills against its guardians. | The Nibelungenlied is a medieval German epic poem written around 1200. Worms, in today's Rhineland-Palatinate, is one of its settings. The dragon and the hero are legendary. |
+| `de_nibelung` | legend | The Dragon of the Nibelungs | The Cave Dragon | In a medieval hero legend, a dragon guards a cave of treasure. Hold the castle hills against its guardians. | The Nibelungenlied is a medieval German epic poem written around 1200. Worms, in today's Rhineland-Palatinate, is one of its settings. Siegfried's dragon fight is told in it as a legend; a dragon guarding a hoard in a cave is closer to the Norse versions. The hero and the dragon are legendary. |
 
 ### US
 
