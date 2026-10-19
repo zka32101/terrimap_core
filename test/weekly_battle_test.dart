@@ -51,6 +51,18 @@ void main() {
     });
   }
 
+  test('許可する州を渡すと、地方決戦ではなく、その州だけから選ぶ', () {
+    final pack = load('de');
+    final allowed = {for (final r in pack.regions.take(3)) r.id};
+    for (var w = 0; w < 20; w++) {
+      final day = DateTime.utc(2026, 1, 5).add(Duration(days: 7 * w)).toIso8601String().substring(0, 10);
+      final x = WeeklyBattle.forDate(pack, day, allowedIds: allowed);
+      expect(x.kind, StageKind.normal);
+      expect(allowed, contains(x.stageId));
+    }
+    expect(() => WeeklyBattle.forDate(pack, '2026-10-19', allowedIds: <String>{}), throwsArgumentError);
+  });
+
   test('招待コード: 結果つきで往復できる', () {
     final pack = load('de');
     final w = WeeklyBattle.forDate(pack, '2026-10-20');

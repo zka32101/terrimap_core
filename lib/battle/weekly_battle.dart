@@ -8,6 +8,7 @@ import 'invite.dart';
 
 /// 今週のチャレンジ。週（UTC・月曜はじまり）と packId から、ステージと難易度が決まる。全員が同じ条件で、1週に1回だけ挑戦できる。
 /// 地方決戦がある国は地方決戦から、ない国は州から選ぶ。難易度は、hard 6 : normal 4。
+/// [allowedIds] を渡すと、地方決戦ではなく、その州だけから選ぶ（無料の間は無料の州に絞る、など）。
 /// 結果を送るときは、友だちへの招待（[Invite]）と同じコードを使う。
 class WeeklyBattle {
   final String week; // 例 2026-W43
@@ -33,10 +34,10 @@ class WeeklyBattle {
   /// 週の終わり（日曜）まで、今日を入れて何日あるか（月曜=7、日曜=1）。
   static int daysLeft(String date) => 8 - _d(date).weekday;
 
-  factory WeeklyBattle.forDate(RegionPack pack, String date) {
+  factory WeeklyBattle.forDate(RegionPack pack, String date, {Set<String>? allowedIds}) {
     final week = weekOf(date);
     final h = fnv1a('weekly-battle|$week|${pack.packId}');
-    final groups = (pack.profile?.groups.keys.toList() ?? <String>[])..sort();
+    final groups = allowedIds != null ? <String>[] : ((pack.profile?.groups.keys.toList() ?? <String>[])..sort());
     final StageKind kind;
     final String id;
     final int rest;
@@ -45,7 +46,7 @@ class WeeklyBattle {
       id = groups[h % groups.length];
       rest = h ~/ groups.length;
     } else {
-      final ids = [for (final r in pack.regions) r.id]..sort();
+      final ids = [for (final r in pack.regions) if (allowedIds == null || allowedIds.contains(r.id)) r.id]..sort();
       if (ids.isEmpty) throw ArgumentError('選べる州がありません');
       kind = StageKind.normal;
       id = ids[h % ids.length];
