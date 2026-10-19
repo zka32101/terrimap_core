@@ -4,8 +4,8 @@ usage:
   python3 tools/art_manifest.py --check [--dir art]        # 画像のサイズ・透過を検査（NG があれば終了コード1）
   python3 tools/art_manifest.py --prototype                # 試作13枚だけ
 
-置き場所: <dir>/<国>/{backdrops,facilities,exclusive,enemies,bosses}/<id>.png と <dir>/common/weather/<id>.png
-  backdrops=背景id / facilities=施設のskin / exclusive=限定施設id / enemies=敵のskin / bosses=エクストラid
+置き場所: <dir>/<国>/{backdrops,facilities,exclusive,enemies,bosses,landmarks}/<id>.png と <dir>/common/weather/<id>.png
+  backdrops=背景id / facilities=施設のskin / exclusive=限定施設id / enemies=敵のskin / bosses=エクストラid / landmarks=名所id（facts.json）
 """
 import argparse
 import json
@@ -22,7 +22,7 @@ PROTO |= {("de", "bosses", "de_loreley")}
 
 # 種類 -> (説明, 期待する形)。bg=横長16:9・不透明、sprite=正方形・背景透過、overlay=16:9・透過
 KIND = {"backdrops": ("背景", "bg"), "facilities": ("施設", "sprite"), "exclusive": ("限定施設", "sprite"),
-        "enemies": ("敵", "sprite"), "bosses": ("ボス", "sprite"), "weather": ("天候", "overlay")}
+        "enemies": ("敵", "sprite"), "bosses": ("ボス", "sprite"), "landmarks": ("名所カード", "sprite"), "weather": ("天候", "overlay")}
 GEN = {"bg": "1344x768", "sprite": "1024x1024", "overlay": "1344x768"}  # Leonardo の生成サイズ
 FINAL = {"bg": "1344x768", "sprite": "512x512", "overlay": "1344x768"}  # アプリに入れるサイズ
 
@@ -43,6 +43,11 @@ def entries():
             out.append((cc, "enemies", v["skin"], f"{t} / {v['name']['ja']}"))
         for e in pf["extras"]:
             out.append((cc, "bosses", e["id"], e["bossName"]["en"]))
+        facts = ROOT / "packs" / cc / "facts.json"
+        if facts.exists():
+            for l in json.loads(facts.read_text()).get("landmarks", []):
+                if l.get("use", True):
+                    out.append((cc, "landmarks", l["id"], (l.get("name") or {}).get("en", "")))
     out += [("common", "weather", w, "") for w in WEATHER]
     return out
 

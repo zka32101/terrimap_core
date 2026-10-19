@@ -6,7 +6,7 @@ import '../battle/battle_model.dart';
 
 /// バトル画面に出す画像のまとまり。画像が無い要素は null を返し、呼び出し側が図形の描画にフォールバックする。
 ///
-/// 画像は各アプリの assets に `<prefix><種類>/<id>.png` で置く（種類: backdrops / facilities / exclusive / enemies / bosses）。
+/// 画像は各アプリの assets に `<prefix><種類>/<id>.png` で置く（種類: backdrops / facilities / exclusive / enemies / bosses / landmarks）。
 /// 一覧と命名は `tools/art_manifest.py` を参照。
 class ArtSet {
   /// `backdrops/alps` のようなキー → 画像。
@@ -26,6 +26,9 @@ class ArtSet {
   bool get isEmpty => images.isEmpty;
 
   ui.Image? backdrop(String? id) => id == null ? null : images['backdrops/$id'];
+
+  /// 図鑑カードの名所の画像（`landmarks/<名所id>`。facts.json の id）。無ければ null で、呼び出し側が代わりのアイコンを出す。
+  ui.Image? landmark(String id) => images['landmarks/$id'];
 
   ui.Image? facility(Facility f) {
     final ex = f.exclusive;
