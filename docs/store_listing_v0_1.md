@@ -11,7 +11,7 @@
 
 **短い説明**（74/80）: Learn Germany's 16 states and capitals with map quizzes and tower defense.
 
-**長い説明**（1582/4000）:
+**長い説明**（1839/4000）:
 
 ```
 Learn the 16 states of Germany and their capitals – and defend them.
@@ -33,6 +33,11 @@ MORE TO PLAY
 • Regional battles combine several states into one big stage.
 • Extra stages are inspired by German legends such as the Loreley, the Grimm fairy tales and the Nibelungenlied. Each one explains what is real and what is legend.
 
+TRACK YOUR PROGRESS
+• Daily landmark fact and a landmark quiz mode.
+• Weekly accuracy graph, weak-spot ranking and adaptive quizzes that favor what you miss.
+• Share card for your results, optional sound, daily reminder and a color-blind-friendly palette.
+
 HOW IT WORKS
 • Four states are free to play. A one-time purchase unlocks all 16 states and removes ads. No subscription.
 • Available in several languages.
@@ -46,7 +51,7 @@ Map data: see "Data credits" in the app. This app is not affiliated with any gov
 
 **短い説明**（72/80）: Lerne 16 Bundesländer und Hauptstädte mit Karten-Quiz und Tower-Defense.
 
-**長い説明**（1688/4000）:
+**長い説明**（1949/4000）:
 
 ```
 Lerne die 16 Bundesländer und ihre Hauptstädte – und verteidige sie.
@@ -68,6 +73,11 @@ MEHR ZUM SPIELEN
 • Regionalkämpfe verbinden mehrere Länder zu einer großen Stufe.
 • Die Extra-Stufen greifen deutsche Sagen auf, etwa die Loreley, die Märchen der Brüder Grimm und das Nibelungenlied. Jede erklärt, was echt ist und was Sage.
 
+FORTSCHRITT
+• Tägliche Sehenswürdigkeit und ein Quiz-Modus dazu.
+• Wochengrafik der Trefferquote, Rangliste der schwachen Stellen und adaptives Quiz, das Fehler öfter fragt.
+• Teilen-Karte, optionaler Ton, tägliche Erinnerung und farbenblindengerechte Farben.
+
 SO FUNKTIONIERT ES
 • Vier Länder sind kostenlos spielbar. Ein einmaliger Kauf schaltet alle 16 Länder frei und entfernt Werbung. Kein Abo.
 • In mehreren Sprachen verfügbar.
@@ -83,7 +93,7 @@ Kartendaten: siehe „Datenquellen" in der App. Diese App steht in keiner Verbin
 
 **短い説明**（74/80）: Learn the 50 states, D.C. and capitals with map quizzes and tower defense.
 
-**長い説明**（1666/4000）:
+**長い説明**（1923/4000）:
 
 ```
 Learn all 50 states plus Washington, D.C. – and defend their capitals.
@@ -105,6 +115,11 @@ MORE TO PLAY
 • Regional battles combine several states into one big stage: Northeast, Midwest, South and West.
 • Extra stages are inspired by American tall tales and history: Paul Bunyan, the Wright brothers and the Apollo program. Each one explains what is real and what is legend.
 
+TRACK YOUR PROGRESS
+• Daily landmark fact and a landmark quiz mode.
+• Weekly accuracy graph, weak-spot ranking and adaptive quizzes that favor what you miss.
+• Share card for your results, optional sound, daily reminder and a color-blind-friendly palette.
+
 HOW IT WORKS
 • A few states are free to play. A one-time purchase unlocks all 51 and removes ads. No subscription.
 • Available in several languages.
@@ -118,7 +133,7 @@ Map data: see "Data credits" in the app. This app is not affiliated with any gov
 
 **短い説明**（78/80）: Aprende los 50 estados y capitales con quizzes de mapas y batallas de defensa.
 
-**長い説明**（1723/4000）:
+**長い説明**（2006/4000）:
 
 ```
 Aprende los 50 estados y Washington, D.C. – y defiende sus capitales.
@@ -139,6 +154,11 @@ BATALLA
 MÁS PARA JUGAR
 • Las batallas regionales unen varios estados en un nivel enorme: Noreste, Medio Oeste, Sur y Oeste.
 • Los niveles extra se inspiran en leyendas e historia de EE. UU.: Paul Bunyan, los hermanos Wright y el programa Apolo. Cada uno explica qué es real y qué es leyenda.
+
+TU PROGRESO
+• Dato diario de un lugar emblemático y modo de cuestionario de lugares.
+• Gráfico semanal de aciertos, ranking de puntos débiles y cuestionario adaptable que repite lo que fallas.
+• Tarjeta para compartir, sonido opcional, recordatorio diario y paleta para daltonismo.
 
 CÓMO FUNCIONA
 • Algunos estados son gratuitos. Una compra única desbloquea los 51 y quita los anuncios. Sin suscripción.
