@@ -229,6 +229,8 @@
   "reminder.title": "Time for a quick quiz!",
   "reminder.body": "Keep your streak alive with today's challenge.",
   "reminder.denied": "Notifications are turned off for this app in your device settings.",
+  "dailyLandmark.title": "Landmark of the day",
+  "dailyLandmark.in": "{name} · {region}",
   "sound.sfx": "Sound effects",
   "sound.bgm": "Background music",
   "stats.title": "Statistics",
