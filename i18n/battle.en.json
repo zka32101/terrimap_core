@@ -204,5 +204,15 @@
   "ach.cardsAll": "Complete Collection",
   "ach.cardsAll.desc": "Collect every landmark card.",
   "ach.mastered": "Geography Master",
-  "ach.mastered.desc": "Master every state in the quiz."
+  "ach.mastered.desc": "Master every state in the quiz.",
+  "weekly.title": "This week's challenge",
+  "weekly.sub": "Same stage for everyone. One try per week!",
+  "weekly.daysLeft": "{n} days left",
+  "weekly.lastDay": "Last day!",
+  "weekly.done": "Done this week: {mark} ♥{hp}",
+  "weekly.doneHint": "A new challenge starts on Monday (UTC).",
+  "weekly.play": "Play",
+  "weekly.share": "Share result",
+  "weekly.headline": "{app}: This week's challenge is {stage} ({difficulty}). Can you beat it?",
+  "weekly.once": "You can only try once a week. Good luck!"
 }
