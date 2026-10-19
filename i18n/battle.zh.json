@@ -280,5 +280,17 @@
   "stats.winRate": "胜率",
   "stats.playTime": "游玩时间",
   "stats.minutes": "{n}分钟",
-  "stats.hoursMinutes": "{h}小时{m}分钟"
+  "stats.hoursMinutes": "{h}小时{m}分钟",
+  "qinvite.send": "向朋友发起挑战",
+  "qinvite.headline": "你能超过我的测验吗?",
+  "qinvite.result": "我答对了{n}/{total}。",
+  "qinvite.enter": "输入挑战码",
+  "qinvite.hint": "粘贴收到的挑战码",
+  "qinvite.start": "开始测验",
+  "qinvite.invalid": "此挑战码不能用于这个应用。",
+  "qinvite.compare": "朋友 {a}/{n} · 你 {b}/{n}",
+  "goal.title": "每周目标",
+  "goal.progress": "本周已答 {n}/{total} 题",
+  "goal.reached": "目标达成!",
+  "goal.set": "每周题数"
 }

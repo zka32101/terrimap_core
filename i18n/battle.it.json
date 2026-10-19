@@ -280,5 +280,17 @@
   "stats.winRate": "Percentuale di vittorie",
   "stats.playTime": "Tempo di gioco",
   "stats.minutes": "{n} min",
-  "stats.hoursMinutes": "{h} h {m} min"
+  "stats.hoursMinutes": "{h} h {m} min",
+  "qinvite.send": "Sfida un amico",
+  "qinvite.headline": "Riesci a battere il mio quiz?",
+  "qinvite.result": "Ho fatto {n}/{total}.",
+  "qinvite.enter": "Inserisci un codice sfida",
+  "qinvite.hint": "Incolla il codice ricevuto",
+  "qinvite.start": "Inizia il quiz",
+  "qinvite.invalid": "Questo codice non funziona in questa app.",
+  "qinvite.compare": "Amico {a}/{n} · Tu {b}/{n}",
+  "goal.title": "Obiettivo settimanale",
+  "goal.progress": "{n} di {total} domande questa settimana",
+  "goal.reached": "Obiettivo raggiunto!",
+  "goal.set": "Domande a settimana"
 }

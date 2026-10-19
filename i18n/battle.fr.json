@@ -280,5 +280,17 @@
   "stats.winRate": "Taux de victoire",
   "stats.playTime": "Temps de jeu",
   "stats.minutes": "{n} min",
-  "stats.hoursMinutes": "{h} h {m} min"
+  "stats.hoursMinutes": "{h} h {m} min",
+  "qinvite.send": "Défier un ami",
+  "qinvite.headline": "Saurez-vous battre mon quiz ?",
+  "qinvite.result": "J'ai obtenu {n}/{total}.",
+  "qinvite.enter": "Saisir un code de défi",
+  "qinvite.hint": "Collez le code reçu",
+  "qinvite.start": "Commencer le quiz",
+  "qinvite.invalid": "Ce code ne fonctionne pas dans cette application.",
+  "qinvite.compare": "Ami {a}/{n} · Vous {b}/{n}",
+  "goal.title": "Objectif de la semaine",
+  "goal.progress": "{n} questions sur {total} cette semaine",
+  "goal.reached": "Objectif atteint !",
+  "goal.set": "Questions par semaine"
 }

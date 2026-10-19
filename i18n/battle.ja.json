@@ -280,5 +280,17 @@
   "stats.winRate": "勝率",
   "stats.playTime": "プレイ時間",
   "stats.minutes": "{n} 分",
-  "stats.hoursMinutes": "{h} 時間 {m} 分"
+  "stats.hoursMinutes": "{h} 時間 {m} 分",
+  "qinvite.send": "友だちに挑戦状を送る",
+  "qinvite.headline": "私のクイズ、解ける？",
+  "qinvite.result": "{total}問中{n}問正解でした。",
+  "qinvite.enter": "挑戦コードを入力",
+  "qinvite.hint": "受け取ったコードを貼り付けてください",
+  "qinvite.start": "クイズを始める",
+  "qinvite.invalid": "このコードは、このアプリでは使えません。",
+  "qinvite.compare": "友だち {a}/{n} ・ あなた {b}/{n}",
+  "goal.title": "今週の目標",
+  "goal.progress": "今週は{total}問中{n}問",
+  "goal.reached": "目標達成！",
+  "goal.set": "1週間の問題数"
 }

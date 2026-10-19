@@ -280,5 +280,17 @@
   "stats.winRate": "Kazanma oranı",
   "stats.playTime": "Oynama süresi",
   "stats.minutes": "{n} dk",
-  "stats.hoursMinutes": "{h} sa {m} dk"
+  "stats.hoursMinutes": "{h} sa {m} dk",
+  "qinvite.send": "Arkadaşına meydan oku",
+  "qinvite.headline": "Quizimi geçebilir misin?",
+  "qinvite.result": "{n}/{total} yaptım.",
+  "qinvite.enter": "Meydan okuma kodu gir",
+  "qinvite.hint": "Aldığın kodu yapıştır",
+  "qinvite.start": "Quizi başlat",
+  "qinvite.invalid": "Bu kod bu uygulamada çalışmıyor.",
+  "qinvite.compare": "Arkadaş {a}/{n} · Sen {b}/{n}",
+  "goal.title": "Haftalık hedef",
+  "goal.progress": "Bu hafta {total} sorudan {n}",
+  "goal.reached": "Hedefe ulaşıldı!",
+  "goal.set": "Haftalık soru sayısı"
 }
