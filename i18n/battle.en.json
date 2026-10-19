@@ -214,5 +214,14 @@
   "weekly.play": "Play",
   "weekly.share": "Share result",
   "weekly.headline": "{app}: This week's challenge is {stage} ({difficulty}). Can you beat it?",
-  "weekly.once": "You can only try once a week. Good luck!"
+  "weekly.once": "You can only try once a week. Good luck!",
+  "tutorial.placeSlot": "Tap a build spot on the map to place a facility.",
+  "tutorial.placeFacility": "Pick a facility. Each one costs coins (●), so choose wisely.",
+  "tutorial.startWave": "Ready? Press “Start wave”. Enemies walk the path to your base ♥.",
+  "tutorial.defend": "Defend your base! Facilities attack enemies in range automatically.",
+  "tutorial.skill": "Choose a skill. Answering a question correctly gives you a bonus.",
+  "tutorial.skip": "Skip tutorial",
+  "tutorial.done": "Nice! You know the basics.",
+  "tutorial.replay": "Show the tutorial again",
+  "tutorial.replayHelp": "Hints appear in your next battle."
 }
