@@ -82,4 +82,12 @@ void main() {
     expect(find.byType(BattleView), findsOneWidget);
     expect(t.takeException(), isNull);
   });
+
+  testWidgets('名所の画像: landmarks/<id> を返す。無い名所は null（図鑑カードは代わりのアイコン）', (t) async {
+    final img = (await t.runAsync(() => solid(8, 8, Colors.blue)))!;
+    final art = ArtSet(images: {'landmarks/heidelberg_castle': img});
+    expect(art.landmark('heidelberg_castle'), same(img));
+    expect(art.landmark('europa_park'), isNull);
+    expect(const ArtSet().landmark('heidelberg_castle'), isNull);
+  });
 }

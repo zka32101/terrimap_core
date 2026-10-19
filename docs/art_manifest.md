@@ -5,7 +5,7 @@
 - 生成サイズは Leonardo の設定、最終サイズはアプリに入れるサイズ（施設・敵・ボスは背景除去後に 512x512 へ縮小、PNG）。
 - ★ = 試作13枚（ドイツ）。
 
-## DE（33枚）
+## DE（53枚）
 
 | 試作 | 種類 | id | 備考 | 生成 | 最終 | ファイル | 状態 |
 |---|---|---|---|---|---|---|---|
@@ -42,8 +42,28 @@
 | ★ | ボス | de_loreley | Water Nymph of the Rhine | 1024x1024 | 512x512 | `de/bosses/de_loreley.png` | 未作成 |
 |  | ボス | de_grimm | The Great Grey Wolf | 1024x1024 | 512x512 | `de/bosses/de_grimm.png` | 未作成 |
 |  | ボス | de_nibelung | The Cave Dragon | 1024x1024 | 512x512 | `de/bosses/de_nibelung.png` | 未作成 |
+|  | 名所カード | heidelberg_castle | Heidelberg Castle | 1024x1024 | 512x512 | `de/landmarks/heidelberg_castle.png` | 未作成 |
+|  | 名所カード | europa_park | Europa-Park (Rust) | 1024x1024 | 512x512 | `de/landmarks/europa_park.png` | 未作成 |
+|  | 名所カード | neuschwanstein | Neuschwanstein Castle | 1024x1024 | 512x512 | `de/landmarks/neuschwanstein.png` | 未作成 |
+|  | 名所カード | zugspitze | Zugspitze (highest mountain in Germany) | 1024x1024 | 512x512 | `de/landmarks/zugspitze.png` | 未作成 |
+|  | 名所カード | brandenburg_gate | Brandenburg Gate | 1024x1024 | 512x512 | `de/landmarks/brandenburg_gate.png` | 未作成 |
+|  | 名所カード | reichstag | Reichstag building | 1024x1024 | 512x512 | `de/landmarks/reichstag.png` | 未作成 |
+|  | 名所カード | sanssouci | Sanssouci Palace (Potsdam) | 1024x1024 | 512x512 | `de/landmarks/sanssouci.png` | 未作成 |
+|  | 名所カード | bremen_roland | Roland statue of Bremen | 1024x1024 | 512x512 | `de/landmarks/bremen_roland.png` | 未作成 |
+|  | 名所カード | elbphilharmonie | Elbphilharmonie | 1024x1024 | 512x512 | `de/landmarks/elbphilharmonie.png` | 未作成 |
+|  | 名所カード | bergpark_wilhelmshoehe | Bergpark Wilhelmshöhe (Kassel) | 1024x1024 | 512x512 | `de/landmarks/bergpark_wilhelmshoehe.png` | 未作成 |
+|  | 名所カード | koenigsstuhl | Königsstuhl chalk cliff (Rügen) | 1024x1024 | 512x512 | `de/landmarks/koenigsstuhl.png` | 未作成 |
+|  | 名所カード | hildesheim_cathedral | Hildesheim Cathedral | 1024x1024 | 512x512 | `de/landmarks/hildesheim_cathedral.png` | 未作成 |
+|  | 名所カード | cologne_cathedral | Cologne Cathedral | 1024x1024 | 512x512 | `de/landmarks/cologne_cathedral.png` | 未作成 |
+|  | 名所カード | zollverein | Zollverein Coal Mine (Essen) | 1024x1024 | 512x512 | `de/landmarks/zollverein.png` | 未作成 |
+|  | 名所カード | porta_nigra | Porta Nigra (Trier) | 1024x1024 | 512x512 | `de/landmarks/porta_nigra.png` | 未作成 |
+|  | 名所カード | saarschleife | Saarschleife (Saar Loop) | 1024x1024 | 512x512 | `de/landmarks/saarschleife.png` | 未作成 |
+|  | 名所カード | dresden_frauenkirche | Dresden Frauenkirche | 1024x1024 | 512x512 | `de/landmarks/dresden_frauenkirche.png` | 未作成 |
+|  | 名所カード | quedlinburg | Old town of Quedlinburg | 1024x1024 | 512x512 | `de/landmarks/quedlinburg.png` | 未作成 |
+|  | 名所カード | holstentor | Holstentor (Lübeck) | 1024x1024 | 512x512 | `de/landmarks/holstentor.png` | 未作成 |
+|  | 名所カード | wartburg | Wartburg Castle | 1024x1024 | 512x512 | `de/landmarks/wartburg.png` | 未作成 |
 
-## US（34枚）
+## US（70枚）
 
 | 試作 | 種類 | id | 備考 | 生成 | 最終 | ファイル | 状態 |
 |---|---|---|---|---|---|---|---|
@@ -81,6 +101,42 @@
 |  | ボス | us_bunyan | The Giant Blue Ox | 1024x1024 | 512x512 | `us/bosses/us_bunyan.png` | 未作成 |
 |  | ボス | us_wright | The Gale Spirit | 1024x1024 | 512x512 | `us/bosses/us_wright.png` | 未作成 |
 |  | ボス | us_moon | The Moon Keeper | 1024x1024 | 512x512 | `us/bosses/us_moon.png` | 未作成 |
+|  | 名所カード | grand_canyon | Grand Canyon | 1024x1024 | 512x512 | `us/landmarks/grand_canyon.png` | 未作成 |
+|  | 名所カード | golden_gate_bridge | Golden Gate Bridge | 1024x1024 | 512x512 | `us/landmarks/golden_gate_bridge.png` | 未作成 |
+|  | 名所カード | mesa_verde | Mesa Verde National Park | 1024x1024 | 512x512 | `us/landmarks/mesa_verde.png` | 未作成 |
+|  | 名所カード | kennedy_space_center | Kennedy Space Center | 1024x1024 | 512x512 | `us/landmarks/kennedy_space_center.png` | 未作成 |
+|  | 名所カード | diamond_head | Diamond Head (Oahu) | 1024x1024 | 512x512 | `us/landmarks/diamond_head.png` | 未作成 |
+|  | 名所カード | empire_state_building | Empire State Building | 1024x1024 | 512x512 | `us/landmarks/empire_state_building.png` | 未作成 |
+|  | 名所カード | lincoln_memorial | Lincoln Memorial | 1024x1024 | 512x512 | `us/landmarks/lincoln_memorial.png` | 未作成 |
+|  | 名所カード | willis_tower | Willis Tower | 1024x1024 | 512x512 | `us/landmarks/willis_tower.png` | 未作成 |
+|  | 名所カード | fenway_park | Fenway Park | 1024x1024 | 512x512 | `us/landmarks/fenway_park.png` | 未作成 |
+|  | 名所カード | las_vegas_strip | Las Vegas Strip | 1024x1024 | 512x512 | `us/landmarks/las_vegas_strip.png` | 未作成 |
+|  | 名所カード | devils_tower | Devils Tower | 1024x1024 | 512x512 | `us/landmarks/devils_tower.png` | 未作成 |
+|  | 名所カード | mount_rushmore | Mount Rushmore | 1024x1024 | 512x512 | `us/landmarks/mount_rushmore.png` | 未作成 |
+|  | 名所カード | space_needle | Space Needle | 1024x1024 | 512x512 | `us/landmarks/space_needle.png` | 未作成 |
+|  | 名所カード | johnson_space_center | Johnson Space Center (Houston) | 1024x1024 | 512x512 | `us/landmarks/johnson_space_center.png` | 未作成 |
+|  | 名所カード | arches_np | Arches National Park | 1024x1024 | 512x512 | `us/landmarks/arches_np.png` | 未作成 |
+|  | 名所カード | theodore_roosevelt_np | Theodore Roosevelt National Park | 1024x1024 | 512x512 | `us/landmarks/theodore_roosevelt_np.png` | 未作成 |
+|  | 名所カード | acadia_np | Acadia National Park | 1024x1024 | 512x512 | `us/landmarks/acadia_np.png` | 未作成 |
+|  | 名所カード | denali | Denali | 1024x1024 | 512x512 | `us/landmarks/denali.png` | 未作成 |
+|  | 名所カード | french_quarter | French Quarter (New Orleans) | 1024x1024 | 512x512 | `us/landmarks/french_quarter.png` | 未作成 |
+|  | 名所カード | liberty_bell | Liberty Bell (Philadelphia) | 1024x1024 | 512x512 | `us/landmarks/liberty_bell.png` | 未作成 |
+|  | 名所カード | gateway_arch | Gateway Arch (St. Louis) | 1024x1024 | 512x512 | `us/landmarks/gateway_arch.png` | 未作成 |
+|  | 名所カード | grand_ole_opry | Grand Ole Opry (Nashville) | 1024x1024 | 512x512 | `us/landmarks/grand_ole_opry.png` | 未作成 |
+|  | 名所カード | mammoth_cave | Mammoth Cave National Park | 1024x1024 | 512x512 | `us/landmarks/mammoth_cave.png` | 未作成 |
+|  | 名所カード | crater_lake | Crater Lake | 1024x1024 | 512x512 | `us/landmarks/crater_lake.png` | 未作成 |
+|  | 名所カード | carlsbad_caverns | Carlsbad Caverns National Park | 1024x1024 | 512x512 | `us/landmarks/carlsbad_caverns.png` | 未作成 |
+|  | 名所カード | mackinac_island | Mackinac Island | 1024x1024 | 512x512 | `us/landmarks/mackinac_island.png` | 未作成 |
+|  | 名所カード | rock_hall | Rock and Roll Hall of Fame (Cleveland) | 1024x1024 | 512x512 | `us/landmarks/rock_hall.png` | 未作成 |
+|  | 名所カード | indy_speedway | Indianapolis Motor Speedway | 1024x1024 | 512x512 | `us/landmarks/indy_speedway.png` | 未作成 |
+|  | 名所カード | mall_of_america | Mall of America | 1024x1024 | 512x512 | `us/landmarks/mall_of_america.png` | 未作成 |
+|  | 名所カード | chimney_rock | Chimney Rock | 1024x1024 | 512x512 | `us/landmarks/chimney_rock.png` | 未作成 |
+|  | 名所カード | georgia_aquarium | Georgia Aquarium (Atlanta) | 1024x1024 | 512x512 | `us/landmarks/georgia_aquarium.png` | 未作成 |
+|  | 名所カード | glacier_np | Glacier National Park | 1024x1024 | 512x512 | `us/landmarks/glacier_np.png` | 未作成 |
+|  | 名所カード | mount_washington | Mount Washington | 1024x1024 | 512x512 | `us/landmarks/mount_washington.png` | 未作成 |
+|  | 名所カード | lambeau_field | Lambeau Field (Green Bay) | 1024x1024 | 512x512 | `us/landmarks/lambeau_field.png` | 未作成 |
+|  | 名所カード | space_rocket_center | U.S. Space & Rocket Center (Huntsville) | 1024x1024 | 512x512 | `us/landmarks/space_rocket_center.png` | 未作成 |
+|  | 名所カード | biltmore | Biltmore Estate (Asheville) | 1024x1024 | 512x512 | `us/landmarks/biltmore.png` | 未作成 |
 
 ## 共通（8枚）
 

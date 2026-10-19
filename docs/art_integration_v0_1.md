@@ -20,6 +20,12 @@
 | 限定施設 | exclusive | `exclusiveFacility` の id | 512x512 透過 |
 | 敵 | enemies | `enemySkins.*.skin` | 512x512 透過 |
 | ボス | bosses | `extras[].id`（例 `de_loreley`） | 512x512 透過 |
+| 名所カード | landmarks | `facts.json` の名所 id（例 `heidelberg_castle`。DE 20・US 36） | 512x512 透過 |
+
+## 図鑑カードの名所画像
+
+- `ArtSet.landmark(id)` が `assets/art/landmarks/<id>.png` を返す。図鑑（コレクション画面）のカードは、解放済みで画像があれば画像を、なければ 📍 のアイコンを出す（1枚ずつ判定。画像が無くても落ちない）。
+- アプリの `pubspec.yaml` に `assets/art/landmarks/` を宣言する（フォルダが空でも宣言できるよう `.gitkeep` を置く）。
 
 ## 差し替え設計（実装済み: コアの `ArtSet` と `BattleView(art:)`）
 
