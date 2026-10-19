@@ -10,3 +10,10 @@ Map<String, double> battleReviewWeights(RegionProgress progress) => {
           RegionState.mastered => 0.4,
         },
     };
+
+/// 復習モード（クイズだけの練習）で出す州: 間違えて、まだ習得していない州。[allowed] を渡すと、その中だけ（無料の間は解放済みの州に絞る、など）。
+/// 正解すると習得済みになるので、練習するほど減っていく。何もなければ空。
+Set<String> reviewPool(RegionProgress progress, {Set<String>? allowed}) => {
+      for (final e in progress.states.entries)
+        if (e.value == RegionState.missed && (allowed == null || allowed.contains(e.key))) e.key,
+    };

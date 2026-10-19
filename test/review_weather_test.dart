@@ -9,6 +9,7 @@ import 'package:terrimap_core/battle/stage_generator.dart';
 import 'package:terrimap_core/battle_ui/battle_view.dart';
 import 'package:terrimap_core/pack/region_pack.dart';
 import 'package:terrimap_core/progress/region_progress.dart';
+import 'package:terrimap_core/quiz/quiz_engine.dart';
 
 RegionPack load(String id) {
   String r(String f) => File('packs/$id/$f').readAsStringSync();
@@ -25,6 +26,23 @@ void main() {
   test('復習の重み: 間違えた州>未習得>習得済み', () {
     final w = battleReviewWeights(const RegionProgress({'a': RegionState.missed, 'b': RegionState.unseen, 'c': RegionState.mastered}));
     expect(w['a']! > w['b']! && w['b']! > w['c']!, true);
+  });
+
+  test('復習モードの出題範囲: 間違えて未習得の州だけ。許可した州に絞れる。何もなければ空', () {
+    const p = RegionProgress({'a': RegionState.missed, 'b': RegionState.unseen, 'c': RegionState.mastered, 'd': RegionState.missed});
+    expect(reviewPool(p), {'a', 'd'});
+    expect(reviewPool(p, allowed: {'a', 'b', 'c'}), {'a'});
+    expect(reviewPool(p, allowed: <String>{}), isEmpty);
+    expect(reviewPool(const RegionProgress({'a': RegionState.mastered, 'b': RegionState.unseen})), isEmpty);
+    // 正解して習得済みになると、範囲から外れる
+    expect(reviewPool(const RegionProgress({'a': RegionState.mastered, 'd': RegionState.missed})), {'d'});
+  });
+
+  test('復習モードの出題: 範囲の州だけが問題の対象になる（選択肢の誤答には全州が使われる）', () {
+    final pool = {'DE-BY', 'DE-NW'};
+    final qs = QuizEngine(de, seed: 5).generate(count: 10, types: QuestionType.values, pool: pool);
+    expect(qs, isNotEmpty);
+    expect(qs.every((q) => pool.contains(q.targetId)), isTrue);
   });
 
   test('復習: 重みを渡すと、間違えた州が出やすくなる。問題は決定的で、重みなしの出題は変わらない', () {
