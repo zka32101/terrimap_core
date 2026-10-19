@@ -241,5 +241,12 @@
   "stats.days": "{n} days",
   "stats.collect": "Collection",
   "stats.cards": "Landmark cards",
-  "stats.achievements": "Achievements"
+  "stats.achievements": "Achievements",
+  "stats.record": "Record",
+  "stats.wins": "Wins",
+  "stats.losses": "Losses",
+  "stats.winRate": "Win rate",
+  "stats.playTime": "Play time",
+  "stats.minutes": "{n} min",
+  "stats.hoursMinutes": "{h} h {m} min"
 }

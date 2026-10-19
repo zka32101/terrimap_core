@@ -1,13 +1,14 @@
 import '../daily/daily_streak.dart';
 import '../progress/region_progress.dart';
 import 'achievements.dart';
+import 'battle_log.dart';
 import 'battle_progress.dart';
 import 'collection.dart';
 import 'difficulty.dart';
 import 'grid.dart';
 
 /// 統計画面の数字（画面にも保存先にも依存しない）。今ある記録から、毎回計算する。
-/// 勝敗の回数やプレイ時間は記録していないので、出さない（クリアの記録・学習の進み・連続日数・図鑑・実績から作る）。
+/// 勝敗の回数・プレイ時間は、[BattleLog]（アプリが保存する）があるときに出す。なければ 0。
 class Stats {
   // クイズ（学習の進み）
   final int quizMastered, quizMissed, quizUnseen, quizTotal;
@@ -18,6 +19,11 @@ class Stats {
   final int statesClearedAny; // どの難易度でも
   final int regionalCleared, regionalTotal;
   final int extraCleared, extraTotal;
+
+  // 勝敗・プレイ時間（BattleLog から）
+  final int wins, losses;
+  final int? winRatePercent; // まだ決まったバトルがなければ null
+  final int playMinutes;
 
   // 毎日のバトル
   final int streakCurrent, streakBest;
@@ -38,6 +44,10 @@ class Stats {
     required this.regionalTotal,
     required this.extraCleared,
     required this.extraTotal,
+    required this.wins,
+    required this.losses,
+    required this.winRatePercent,
+    required this.playMinutes,
     required this.streakCurrent,
     required this.streakBest,
     required this.cardsUnlocked,
@@ -56,6 +66,7 @@ class Stats {
     required String today,
     int regionalTotal = 0,
     int extraTotal = 0,
+    BattleLog log = const BattleLog(),
   }) {
     final ach = Achievements(regionIds: regionIds, progress: battle, collection: collection, bestStreak: streak.best, regions: regions);
     int count(RegionState s) => regions.states.values.where((v) => v == s).length;
@@ -71,6 +82,10 @@ class Stats {
       regionalTotal: regionalTotal,
       extraCleared: battle.clearedCountOf(StageKind.extra),
       extraTotal: extraTotal,
+      wins: log.wins,
+      losses: log.losses,
+      winRatePercent: log.winRatePercent,
+      playMinutes: (log.playSeconds / 60).floor(),
       streakCurrent: streak.currentOn(today),
       streakBest: streak.best,
       cardsUnlocked: collection.unlockedCount,
