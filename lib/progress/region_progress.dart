@@ -48,6 +48,17 @@ Color defaultRegionColor(RegionState s) => switch (s) {
       RegionState.unseen => const Color(0xFFECEFF1),
     };
 
+/// 色覚に配慮した配色（赤と緑を使わない）。習得=青、ミス=オレンジ、未出題=グレー。
+Color colorBlindRegionColor(RegionState s) => switch (s) {
+      RegionState.mastered => const Color(0xFF1E88E5),
+      RegionState.missed => const Color(0xFFFB8C00),
+      RegionState.unseen => const Color(0xFFECEFF1),
+    };
+
+/// クイズの「正解」「不正解」の強調色。[colorBlind] なら青とオレンジ（赤と緑を使わない）。
+Color answerCorrectColor({bool colorBlind = false}) => colorBlind ? const Color(0xFF1E88E5) : const Color(0xFF66BB6A);
+Color answerWrongColor({bool colorBlind = false}) => colorBlind ? const Color(0xFFFB8C00) : const Color(0xFFEF9A9A);
+
 /// JSONで保存・復元できる進捗ストア。保存先(Hive/SharedPreferences等)はアプリ側が選ぶ。
 class JsonProgressStore implements ProgressStore {
   final _mastered = <String, Set<String>>{};
