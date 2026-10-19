@@ -249,6 +249,8 @@
   "share.send": "Share as image",
   "share.progressTitle": "My progress",
   "share.close": "Close",
+  "adaptive.setting": "Smart quiz",
+  "adaptive.help": "Questions you miss come up more often in the quiz.",
   "sound.sfx": "Sound effects",
   "sound.bgm": "Background music",
   "stats.title": "Statistics",
