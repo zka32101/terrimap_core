@@ -280,5 +280,17 @@
   "stats.winRate": "Win rate",
   "stats.playTime": "Play time",
   "stats.minutes": "{n} min",
-  "stats.hoursMinutes": "{h} h {m} min"
+  "stats.hoursMinutes": "{h} h {m} min",
+  "qinvite.send": "Challenge a friend",
+  "qinvite.headline": "Can you beat my quiz?",
+  "qinvite.result": "I got {n}/{total}.",
+  "qinvite.enter": "Enter a challenge code",
+  "qinvite.hint": "Paste the code you received",
+  "qinvite.start": "Start the quiz",
+  "qinvite.invalid": "This code does not work for this app.",
+  "qinvite.compare": "Friend {a}/{n} · You {b}/{n}",
+  "goal.title": "Weekly goal",
+  "goal.progress": "{n} of {total} questions this week",
+  "goal.reached": "Goal reached!",
+  "goal.set": "Questions per week"
 }

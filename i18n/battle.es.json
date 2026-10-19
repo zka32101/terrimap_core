@@ -280,5 +280,17 @@
   "stats.winRate": "Porcentaje de victorias",
   "stats.playTime": "Tiempo de juego",
   "stats.minutes": "{n} min",
-  "stats.hoursMinutes": "{h} h {m} min"
+  "stats.hoursMinutes": "{h} h {m} min",
+  "qinvite.send": "Retar a un amigo",
+  "qinvite.headline": "¿Puedes superar mi cuestionario?",
+  "qinvite.result": "Obtuve {n}/{total}.",
+  "qinvite.enter": "Introducir un código de reto",
+  "qinvite.hint": "Pega el código que recibiste",
+  "qinvite.start": "Empezar el cuestionario",
+  "qinvite.invalid": "Este código no sirve para esta app.",
+  "qinvite.compare": "Amigo {a}/{n} · Tú {b}/{n}",
+  "goal.title": "Meta semanal",
+  "goal.progress": "{n} de {total} preguntas esta semana",
+  "goal.reached": "¡Meta alcanzada!",
+  "goal.set": "Preguntas por semana"
 }

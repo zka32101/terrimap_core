@@ -280,5 +280,17 @@
   "stats.winRate": "Winstpercentage",
   "stats.playTime": "Speeltijd",
   "stats.minutes": "{n} min",
-  "stats.hoursMinutes": "{h} u {m} min"
+  "stats.hoursMinutes": "{h} u {m} min",
+  "qinvite.send": "Daag een vriend uit",
+  "qinvite.headline": "Kun jij mijn quiz verslaan?",
+  "qinvite.result": "Ik had {n}/{total}.",
+  "qinvite.enter": "Voer een uitdagingscode in",
+  "qinvite.hint": "Plak de code die je kreeg",
+  "qinvite.start": "Start de quiz",
+  "qinvite.invalid": "Deze code werkt niet in deze app.",
+  "qinvite.compare": "Vriend {a}/{n} · Jij {b}/{n}",
+  "goal.title": "Weekdoel",
+  "goal.progress": "{n} van {total} vragen deze week",
+  "goal.reached": "Doel bereikt!",
+  "goal.set": "Vragen per week"
 }

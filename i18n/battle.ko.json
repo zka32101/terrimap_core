@@ -280,5 +280,17 @@
   "stats.winRate": "승률",
   "stats.playTime": "플레이 시간",
   "stats.minutes": "{n}분",
-  "stats.hoursMinutes": "{h}시간 {m}분"
+  "stats.hoursMinutes": "{h}시간 {m}분",
+  "qinvite.send": "친구에게 도전장 보내기",
+  "qinvite.headline": "내 퀴즈, 풀 수 있어?",
+  "qinvite.result": "{total}문제 중 {n}문제 맞혔어요.",
+  "qinvite.enter": "도전 코드 입력",
+  "qinvite.hint": "받은 코드를 붙여 넣으세요",
+  "qinvite.start": "퀴즈 시작",
+  "qinvite.invalid": "이 코드는 이 앱에서 사용할 수 없습니다.",
+  "qinvite.compare": "친구 {a}/{n} · 나 {b}/{n}",
+  "goal.title": "주간 목표",
+  "goal.progress": "이번 주 {total}문제 중 {n}문제",
+  "goal.reached": "목표 달성!",
+  "goal.set": "주간 문제 수"
 }
