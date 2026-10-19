@@ -141,10 +141,15 @@ Datos del mapa: consulta «Créditos de datos» en la app. Esta app no está afi
         ),
     },
 }
+import glob, json, os
+for _f in sorted(glob.glob(os.path.join(os.path.dirname(__file__), "store_listing", "*.json"))):
+    _d = json.load(open(_f, encoding="utf-8"))
+    for _app in L:
+        L[_app][_d["locale"]] = tuple(_d[_app])
 LIM = (30, 80, 4000)
 bad = []
 out = ["# ストア掲載文 下書き v0.1", "",
-       "`tools/make_store_listing.py` が作る。文字数は自動検査（タイトル30・短い説明80・長い説明4000）。**ネイティブの確認が必要**（特に de・es）。",
+       "`tools/make_store_listing.py` が作る。文字数は自動検査（タイトル30・短い説明80・長い説明4000）。**ネイティブの確認が必要**（機械翻訳。特に de・es・ja・ko・zh）。他言語は `tools/store_listing/<言語>.json` から取り込む。",
        "ルール: `yourwish/docs/aso-rules.md`（タイトル等に「無料」「ベスト」「今すぐ」・絵文字・全大文字を入れない／機能と説明を一致させる／実績の数字は自アプリの事実だけ）。", ""]
 for app, langs in L.items():
     out += [f"## {app}", ""]
