@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:terrimap_core/battle/battle_log.dart';
 import 'package:terrimap_core/battle/battle_progress.dart';
 import 'package:terrimap_core/battle/collection.dart';
 import 'package:terrimap_core/battle/difficulty.dart';
@@ -14,7 +15,7 @@ void main() {
   final facts = PackFacts.parse(File('packs/de/facts.json').readAsStringSync());
   final ids = [for (final l in facts.usable) l.regionId].toSet().toList()..sort();
 
-  Stats make(BattleProgress p, {RegionProgress? rp, DailyStreak streak = const DailyStreak(), String today = '2026-10-19'}) => Stats.compute(
+  Stats make(BattleProgress p, {RegionProgress? rp, DailyStreak streak = const DailyStreak(), String today = '2026-10-19', BattleLog log = const BattleLog()}) => Stats.compute(
         regionIds: ids,
         regions: rp ?? RegionProgress({for (final r in ids) r: RegionState.unseen}),
         battle: p,
@@ -23,6 +24,7 @@ void main() {
         today: today,
         regionalTotal: 3,
         extraTotal: 2,
+        log: log,
       );
 
   test('空のデータでは、すべて0（総数だけが出る）', () {
@@ -37,6 +39,13 @@ void main() {
     expect((s.cardsUnlocked, s.achievementsUnlocked), (0, 0));
     expect(s.cardsTotal, greaterThan(0));
     expect(s.achievementsTotal, greaterThan(0));
+  });
+
+  test('勝敗とプレイ時間: 記録がなければ0・勝率なし。あれば、回数・勝率・分（切り捨て）が出る', () {
+    final none = make(BattleProgress());
+    expect((none.wins, none.losses, none.winRatePercent, none.playMinutes), (0, 0, null, 0));
+    final s = make(BattleProgress(), log: const BattleLog(wins: 3, losses: 1, playSeconds: 3725));
+    expect((s.wins, s.losses, s.winRatePercent, s.playMinutes), (3, 1, 75, 62));
   });
 
   test('クイズ: 習得・間違い・未学習が数えられる', () {
