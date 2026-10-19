@@ -27,6 +27,11 @@ MORE TO PLAY
 • Regional battles combine several states into one big stage.
 • Extra stages are inspired by German legends such as the Loreley, the Grimm fairy tales and the Nibelungenlied. Each one explains what is real and what is legend.
 
+TRACK YOUR PROGRESS
+• Daily landmark fact and a landmark quiz mode.
+• Weekly accuracy graph, weak-spot ranking and adaptive quizzes that favor what you miss.
+• Share card for your results, optional sound, daily reminder and a color-blind-friendly palette.
+
 HOW IT WORKS
 • Four states are free to play. A one-time purchase unlocks all 16 states and removes ads. No subscription.
 • Available in several languages.
@@ -54,6 +59,11 @@ KAMPF
 MEHR ZUM SPIELEN
 • Regionalkämpfe verbinden mehrere Länder zu einer großen Stufe.
 • Die Extra-Stufen greifen deutsche Sagen auf, etwa die Loreley, die Märchen der Brüder Grimm und das Nibelungenlied. Jede erklärt, was echt ist und was Sage.
+
+FORTSCHRITT
+• Tägliche Sehenswürdigkeit und ein Quiz-Modus dazu.
+• Wochengrafik der Trefferquote, Rangliste der schwachen Stellen und adaptives Quiz, das Fehler öfter fragt.
+• Teilen-Karte, optionaler Ton, tägliche Erinnerung und farbenblindengerechte Farben.
 
 SO FUNKTIONIERT ES
 • Vier Länder sind kostenlos spielbar. Ein einmaliger Kauf schaltet alle 16 Länder frei und entfernt Werbung. Kein Abo.
@@ -85,6 +95,11 @@ MORE TO PLAY
 • Regional battles combine several states into one big stage: Northeast, Midwest, South and West.
 • Extra stages are inspired by American tall tales and history: Paul Bunyan, the Wright brothers and the Apollo program. Each one explains what is real and what is legend.
 
+TRACK YOUR PROGRESS
+• Daily landmark fact and a landmark quiz mode.
+• Weekly accuracy graph, weak-spot ranking and adaptive quizzes that favor what you miss.
+• Share card for your results, optional sound, daily reminder and a color-blind-friendly palette.
+
 HOW IT WORKS
 • A few states are free to play. A one-time purchase unlocks all 51 and removes ads. No subscription.
 • Available in several languages.
@@ -112,6 +127,11 @@ BATALLA
 MÁS PARA JUGAR
 • Las batallas regionales unen varios estados en un nivel enorme: Noreste, Medio Oeste, Sur y Oeste.
 • Los niveles extra se inspiran en leyendas e historia de EE. UU.: Paul Bunyan, los hermanos Wright y el programa Apolo. Cada uno explica qué es real y qué es leyenda.
+
+TU PROGRESO
+• Dato diario de un lugar emblemático y modo de cuestionario de lugares.
+• Gráfico semanal de aciertos, ranking de puntos débiles y cuestionario adaptable que repite lo que fallas.
+• Tarjeta para compartir, sonido opcional, recordatorio diario y paleta para daltonismo.
 
 CÓMO FUNCIONA
 • Algunos estados son gratuitos. Una compra única desbloquea los 51 y quita los anuncios. Sin suscripción.
