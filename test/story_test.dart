@@ -26,7 +26,8 @@ void main() {
     expect(s.validate(de), isEmpty);
     final c = s.forStage(StageKind.extra, 'de_loreley')!;
     expect(c.title.of('ja'), 'ラインの歌');
-    expect(c.title.of('fr'), 'The Song on the Rhine'); // 訳がない言語は英語
+    expect(c.title.of('fr'), 'Le chant du Rhin');
+    expect(c.title.of('xx'), 'The Song on the Rhine'); // 訳がない言語は英語
     expect(c.outro.any((l) => l.speaker == Speaker.note), true); // 伝説の章には、実在と伝説の注記
   });
 
@@ -47,6 +48,22 @@ void main() {
     for (final c in s.chapters) {
       expect(c.outro.any((l) => l.speaker == Speaker.note), true, reason: c.id); // 創作のボスも、実在と創作を分けて書く
       expect(c.title.of('ja'), isNot(c.title.of('en')));
+    }
+  });
+
+  test('物語: 全言語の訳がそろっている（DE は 11 言語、US は de を除く 10 言語）', () {
+    for (final (pack, langs) in [
+      ('de', ['en', 'de', 'ja', 'fr', 'es', 'it', 'pt', 'nl', 'tr', 'ko', 'zh']),
+      ('us', ['en', 'ja', 'fr', 'es', 'it', 'pt', 'nl', 'tr', 'ko', 'zh']),
+    ]) {
+      final s = Story.parse(File('packs/$pack/story.json').readAsStringSync());
+      for (final c in s.chapters) {
+        for (final t in [c.title, for (final l in [...c.intro, ...c.beforeBoss, ...c.outro]) l.text]) {
+          for (final lang in langs) {
+            expect(t.languages, contains(lang), reason: '$pack ${c.id} $lang');
+          }
+        }
+      }
     }
   });
 
