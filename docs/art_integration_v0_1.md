@@ -9,7 +9,7 @@
 3. `art/<国>/<種類>/<id>.png` に置き、`python3 tools/art_manifest.py --check` で検査（形式・サイズ・背景は9:16・スプライトは透過・四隅・余白）。NG が出たら直す。
 4. OK になった画像を、アプリ（`terrimap_ge` / `terrimap_us`）の `assets/art/<種類>/<id>.png` にコピー。`pubspec.yaml` の assets に各フォルダを追加（`assets/art/backdrops/` など）。
 
-置き場所は国ごとの画像がアプリ側（画像はコアに入れない）。`art/` と `art_raw/` は `.gitignore`。天候は国共通（`common/weather/`）で、組み込みは未対応。
+置き場所は国ごとの画像がアプリ側（画像はコアに入れない）。`art/` と `art_raw/` は `.gitignore`。天候は国共通（検査用の置き場所は `common/weather/`）。**組み込みは対応済み**: アプリの `assets/art/weather/<天候>.png`（8種類）に置き、`pubspec.yaml` に `assets/art/weather/` を宣言すると、`ArtSet.weather(type)` が返し、`BattleView` が重ね画像として出す（ゆっくり揺れて濃さが呼吸する）。画像が無い天候は、従来の図形の演出で出る。
 
 ## 命名
 
