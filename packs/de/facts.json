@@ -221,5 +221,410 @@
    "check": "unchecked",
    "source": "UNESCO World Heritage List / 各施設・自治体の公式ページ"
   }
+ ],
+ "knowledge": [
+  {
+   "id": "cuckoo_clock",
+   "region": "DE-BW",
+   "kind": "product",
+   "name": {
+    "en": "Black Forest cuckoo clock",
+    "de": "Schwarzwälder Kuckucksuhr",
+    "ja": "シュヴァルツヴァルトの鳩時計"
+   },
+   "use": true,
+   "check": "unchecked",
+   "source": "州の観光局・業界団体・百科事典などの公式な説明(要確認)"
+  },
+  {
+   "id": "black_forest_cake",
+   "region": "DE-BW",
+   "kind": "food",
+   "name": {
+    "en": "Black Forest cake",
+    "de": "Schwarzwälder Kirschtorte",
+    "ja": "シュヴァルツヴァルト風チェリーケーキ"
+   },
+   "use": true,
+   "check": "unchecked",
+   "source": "州の観光局・業界団体・百科事典などの公式な説明(要確認)"
+  },
+  {
+   "id": "weisswurst",
+   "region": "DE-BY",
+   "kind": "food",
+   "name": {
+    "en": "Weißwurst (white sausage)",
+    "de": "Weißwurst",
+    "ja": "ヴァイスヴルスト(白ソーセージ)"
+   },
+   "use": true,
+   "check": "unchecked",
+   "source": "州の観光局・業界団体・百科事典などの公式な説明(要確認)"
+  },
+  {
+   "id": "oktoberfest",
+   "region": "DE-BY",
+   "kind": "culture",
+   "name": {
+    "en": "Oktoberfest",
+    "de": "Oktoberfest",
+    "ja": "オクトーバーフェスト"
+   },
+   "use": true,
+   "check": "unchecked",
+   "source": "州の観光局・業界団体・百科事典などの公式な説明(要確認)"
+  },
+  {
+   "id": "currywurst",
+   "region": "DE-BE",
+   "kind": "food",
+   "name": {
+    "en": "Currywurst",
+    "de": "Currywurst",
+    "ja": "カリーヴルスト"
+   },
+   "use": true,
+   "check": "unchecked",
+   "source": "州の観光局・業界団体・百科事典などの公式な説明(要確認)"
+  },
+  {
+   "id": "ampelmann",
+   "region": "DE-BE",
+   "kind": "culture",
+   "name": {
+    "en": "Ampelmännchen (pedestrian-signal figure)",
+    "de": "Ampelmännchen",
+    "ja": "アンペルマン"
+   },
+   "use": true,
+   "check": "unchecked",
+   "source": "州の観光局・業界団体・百科事典などの公式な説明(要確認)"
+  },
+  {
+   "id": "spreewald_gherkins",
+   "region": "DE-BB",
+   "kind": "food",
+   "name": {
+    "en": "Spreewald gherkins",
+    "de": "Spreewälder Gurken",
+    "ja": "シュプレーヴァルトのピクルス"
+   },
+   "use": true,
+   "check": "unchecked",
+   "source": "州の観光局・業界団体・百科事典などの公式な説明(要確認)"
+  },
+  {
+   "id": "becks",
+   "region": "DE-HB",
+   "kind": "product",
+   "name": {
+    "en": "Beck's beer",
+    "de": "Beck's Bier",
+    "ja": "ベックスビール"
+   },
+   "use": true,
+   "check": "unchecked",
+   "source": "州の観光局・業界団体・百科事典などの公式な説明(要確認)"
+  },
+  {
+   "id": "bremen_musicians",
+   "region": "DE-HB",
+   "kind": "culture",
+   "name": {
+    "en": "The Town Musicians of Bremen",
+    "de": "Die Bremer Stadtmusikanten",
+    "ja": "ブレーメンの音楽隊"
+   },
+   "use": true,
+   "check": "unchecked",
+   "source": "州の観光局・業界団体・百科事典などの公式な説明(要確認)"
+  },
+  {
+   "id": "fischbroetchen",
+   "region": "DE-HH",
+   "kind": "food",
+   "name": {
+    "en": "Fischbrötchen (fish sandwich)",
+    "de": "Fischbrötchen",
+    "ja": "フィッシュブレートヒェン(魚のサンド)"
+   },
+   "use": true,
+   "check": "unchecked",
+   "source": "州の観光局・業界団体・百科事典などの公式な説明(要確認)"
+  },
+  {
+   "id": "fish_market",
+   "region": "DE-HH",
+   "kind": "culture",
+   "name": {
+    "en": "Sunday fish market",
+    "de": "Fischmarkt (sonntags)",
+    "ja": "日曜の魚市場"
+   },
+   "use": true,
+   "check": "unchecked",
+   "source": "州の観光局・業界団体・百科事典などの公式な説明(要確認)"
+  },
+  {
+   "id": "apfelwein",
+   "region": "DE-HE",
+   "kind": "food",
+   "name": {
+    "en": "Apfelwein (apple wine)",
+    "de": "Apfelwein (Ebbelwoi)",
+    "ja": "アプフェルヴァイン(りんご酒)"
+   },
+   "use": true,
+   "check": "unchecked",
+   "source": "州の観光局・業界団体・百科事典などの公式な説明(要確認)"
+  },
+  {
+   "id": "green_sauce",
+   "region": "DE-HE",
+   "kind": "food",
+   "name": {
+    "en": "Frankfurt green sauce",
+    "de": "Frankfurter Grüne Soße",
+    "ja": "フランクフルトのグリーンソース"
+   },
+   "use": true,
+   "check": "unchecked",
+   "source": "州の観光局・業界団体・百科事典などの公式な説明(要確認)"
+  },
+  {
+   "id": "hanse_sail",
+   "region": "DE-MV",
+   "kind": "culture",
+   "name": {
+    "en": "Hanse Sail (Rostock)",
+    "de": "Hanse Sail Rostock",
+    "ja": "ハンザ・セイル(ロストック)"
+   },
+   "use": true,
+   "check": "unchecked",
+   "source": "州の観光局・業界団体・百科事典などの公式な説明(要確認)"
+  },
+  {
+   "id": "mueritz",
+   "region": "DE-MV",
+   "kind": "nature",
+   "name": {
+    "en": "Müritz (lake)",
+    "de": "Müritz",
+    "ja": "ミューリッツ湖"
+   },
+   "use": true,
+   "check": "unchecked",
+   "source": "州の観光局・業界団体・百科事典などの公式な説明(要確認)"
+  },
+  {
+   "id": "volkswagen",
+   "region": "DE-NI",
+   "kind": "product",
+   "name": {
+    "en": "Volkswagen (Wolfsburg)",
+    "de": "Volkswagen (Wolfsburg)",
+    "ja": "フォルクスワーゲン(ヴォルフスブルク)"
+   },
+   "use": true,
+   "check": "unchecked",
+   "source": "州の観光局・業界団体・百科事典などの公式な説明(要確認)"
+  },
+  {
+   "id": "lueneburg_heath",
+   "region": "DE-NI",
+   "kind": "nature",
+   "name": {
+    "en": "Lüneburg Heath",
+    "de": "Lüneburger Heide",
+    "ja": "リューネブルガー・ハイデ"
+   },
+   "use": true,
+   "check": "unchecked",
+   "source": "州の観光局・業界団体・百科事典などの公式な説明(要確認)"
+  },
+  {
+   "id": "koelsch",
+   "region": "DE-NW",
+   "kind": "food",
+   "name": {
+    "en": "Kölsch beer",
+    "de": "Kölsch",
+    "ja": "ケルシュ(ビール)"
+   },
+   "use": true,
+   "check": "unchecked",
+   "source": "州の観光局・業界団体・百科事典などの公式な説明(要確認)"
+  },
+  {
+   "id": "aachener_printen",
+   "region": "DE-NW",
+   "kind": "food",
+   "name": {
+    "en": "Aachener Printen (spiced cookies)",
+    "de": "Aachener Printen",
+    "ja": "アーヘナー・プリンテン"
+   },
+   "use": true,
+   "check": "unchecked",
+   "source": "州の観光局・業界団体・百科事典などの公式な説明(要確認)"
+  },
+  {
+   "id": "mosel_riesling",
+   "region": "DE-RP",
+   "kind": "food",
+   "name": {
+    "en": "Mosel Riesling wine",
+    "de": "Mosel-Riesling",
+    "ja": "モーゼルのリースリング"
+   },
+   "use": true,
+   "check": "unchecked",
+   "source": "州の観光局・業界団体・百科事典などの公式な説明(要確認)"
+  },
+  {
+   "id": "nuerburgring",
+   "region": "DE-RP",
+   "kind": "culture",
+   "name": {
+    "en": "Nürburgring racetrack",
+    "de": "Nürburgring",
+    "ja": "ニュルブルクリンク"
+   },
+   "use": true,
+   "check": "unchecked",
+   "source": "州の観光局・業界団体・百科事典などの公式な説明(要確認)"
+  },
+  {
+   "id": "schwenker",
+   "region": "DE-SL",
+   "kind": "food",
+   "name": {
+    "en": "Schwenker (grilled meat)",
+    "de": "Schwenker",
+    "ja": "シュヴェンカー(焼き肉)"
+   },
+   "use": true,
+   "check": "unchecked",
+   "source": "州の観光局・業界団体・百科事典などの公式な説明(要確認)"
+  },
+  {
+   "id": "dibbelabbes",
+   "region": "DE-SL",
+   "kind": "food",
+   "name": {
+    "en": "Dibbelabbes (potato dish)",
+    "de": "Dibbelabbes",
+    "ja": "ディッベラベス(じゃがいも料理)"
+   },
+   "use": true,
+   "check": "unchecked",
+   "source": "州の観光局・業界団体・百科事典などの公式な説明(要確認)"
+  },
+  {
+   "id": "dresden_stollen",
+   "region": "DE-SN",
+   "kind": "food",
+   "name": {
+    "en": "Dresden Stollen",
+    "de": "Dresdner Christstollen",
+    "ja": "ドレスデンのシュトレン"
+   },
+   "use": true,
+   "check": "unchecked",
+   "source": "州の観光局・業界団体・百科事典などの公式な説明(要確認)"
+  },
+  {
+   "id": "meissen_porcelain",
+   "region": "DE-SN",
+   "kind": "product",
+   "name": {
+    "en": "Meissen porcelain",
+    "de": "Meissener Porzellan",
+    "ja": "マイセンの磁器"
+   },
+   "use": true,
+   "check": "unchecked",
+   "source": "州の観光局・業界団体・百科事典などの公式な説明(要確認)"
+  },
+  {
+   "id": "salzwedel_baumkuchen",
+   "region": "DE-ST",
+   "kind": "food",
+   "name": {
+    "en": "Salzwedel Baumkuchen",
+    "de": "Salzwedeler Baumkuchen",
+    "ja": "ザルツヴェーデルのバウムクーヘン"
+   },
+   "use": true,
+   "check": "unchecked",
+   "source": "州の観光局・業界団体・百科事典などの公式な説明(要確認)"
+  },
+  {
+   "id": "bauhaus_dessau",
+   "region": "DE-ST",
+   "kind": "culture",
+   "name": {
+    "en": "Bauhaus (Dessau)",
+    "de": "Bauhaus Dessau",
+    "ja": "バウハウス(デッサウ)"
+   },
+   "use": true,
+   "check": "unchecked",
+   "source": "州の観光局・業界団体・百科事典などの公式な説明(要確認)"
+  },
+  {
+   "id": "luebeck_marzipan",
+   "region": "DE-SH",
+   "kind": "food",
+   "name": {
+    "en": "Lübeck marzipan",
+    "de": "Lübecker Marzipan",
+    "ja": "リューベックのマジパン"
+   },
+   "use": true,
+   "check": "unchecked",
+   "source": "州の観光局・業界団体・百科事典などの公式な説明(要確認)"
+  },
+  {
+   "id": "kiel_week",
+   "region": "DE-SH",
+   "kind": "culture",
+   "name": {
+    "en": "Kiel Week (sailing event)",
+    "de": "Kieler Woche",
+    "ja": "キール・ウィーク(ヨットの祭典)"
+   },
+   "use": true,
+   "check": "unchecked",
+   "source": "州の観光局・業界団体・百科事典などの公式な説明(要確認)"
+  },
+  {
+   "id": "thuringian_bratwurst",
+   "region": "DE-TH",
+   "kind": "food",
+   "name": {
+    "en": "Thuringian Bratwurst",
+    "de": "Thüringer Rostbratwurst",
+    "ja": "テューリンガー・ブラートヴルスト"
+   },
+   "use": true,
+   "check": "unchecked",
+   "source": "州の観光局・業界団体・百科事典などの公式な説明(要確認)"
+  },
+  {
+   "id": "thuringian_dumplings",
+   "region": "DE-TH",
+   "kind": "food",
+   "name": {
+    "en": "Thuringian dumplings",
+    "de": "Thüringer Klöße",
+    "ja": "テューリンガー・クネーデル(じゃがいものだんご)"
+   },
+   "use": true,
+   "check": "unchecked",
+   "source": "州の観光局・業界団体・百科事典などの公式な説明(要確認)"
+  }
  ]
 }
