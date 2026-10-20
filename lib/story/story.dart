@@ -24,15 +24,15 @@ class LocalizedText {
 enum Speaker { narrator, boss, note, hero }
 
 /// その国の主人公。名前は言語によらず同じでよい（訳がなければ英語）。role は一言の紹介。
-class Hero {
+class StoryHero {
   final String id;
   final LocalizedText name;
   final LocalizedText role;
-  const Hero({required this.id, required this.name, required this.role});
+  const StoryHero({required this.id, required this.name, required this.role});
 
-  static Hero? fromJson(Object? j) {
+  static StoryHero? fromJson(Object? j) {
     if (j is! Map || j['id'] is! String) return null;
-    return Hero(id: j['id'] as String, name: LocalizedText.fromJson(j['name']), role: LocalizedText.fromJson(j['role']));
+    return StoryHero(id: j['id'] as String, name: LocalizedText.fromJson(j['name']), role: LocalizedText.fromJson(j['role']));
   }
 }
 
@@ -97,14 +97,14 @@ class Story {
   final List<StoryChapter> chapters;
 
   /// 主人公（なければ null。その国の物語に主人公の文は入れられない）。
-  final Hero? hero;
+  final StoryHero? hero;
   const Story(this.chapters, {this.hero});
 
   factory Story.parse(String json) {
     final m = jsonDecode(json) as Map;
     return Story(
       [for (final c in (m['chapters'] as List? ?? const [])) StoryChapter.fromJson(c)].whereType<StoryChapter>().toList(),
-      hero: Hero.fromJson(m['hero']),
+      hero: StoryHero.fromJson(m['hero']),
     );
   }
 
