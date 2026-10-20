@@ -21,12 +21,12 @@ RegionPack load(String id) {
 void main() {
   final packs = {'de': load('de'), 'us': load('us')};
 
-  test('各国に3つのエクストラ。波は8〜10で段階的に増え、題材は伝説・伝記・歴史のどれか', () {
+  test('各国に4つのエクストラ。波は8〜10で段階的に増え、題材は伝説・伝記・歴史のどれか', () {
     for (final e in packs.entries) {
       final xs = e.value.profile!.extras;
-      expect(xs.length, 3, reason: e.key);
-      expect([for (final x in xs) x.waves], [8, 9, 10], reason: e.key);
-      expect(xs.map((x) => x.id).toSet().length, 3);
+      expect(xs.length, 4, reason: e.key);
+      expect([for (final x in xs) x.waves], [8, 9, 10, 10], reason: e.key);
+      expect(xs.map((x) => x.id).toSet().length, 4);
       for (final x in xs) {
         expect(x.seasons.length, 4, reason: x.id); // 4季が巡る
         expect(x.seasons.toSet().length, 4, reason: x.id);
