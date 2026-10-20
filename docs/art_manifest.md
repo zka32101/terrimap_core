@@ -42,6 +42,7 @@
 | ★ | ボス | de_loreley | Water Nymph of the Rhine | 1024x1024 | 512x512 | `de/bosses/de_loreley.png` | 未作成 |
 |  | ボス | de_grimm | The Great Grey Wolf | 1024x1024 | 512x512 | `de/bosses/de_grimm.png` | 未作成 |
 |  | ボス | de_nibelung | The Cave Dragon | 1024x1024 | 512x512 | `de/bosses/de_nibelung.png` | 未作成 |
+|  | ボス | de_gutenberg | The Ink Keeper | 1024x1024 | 512x512 | `de/bosses/de_gutenberg.png` | 未作成 |
 |  | 名所カード | heidelberg_castle | Heidelberg Castle | 1024x1024 | 512x512 | `de/landmarks/heidelberg_castle.png` | 未作成 |
 |  | 名所カード | europa_park | Europa-Park (Rust) | 1024x1024 | 512x512 | `de/landmarks/europa_park.png` | 未作成 |
 |  | 名所カード | neuschwanstein | Neuschwanstein Castle | 1024x1024 | 512x512 | `de/landmarks/neuschwanstein.png` | 未作成 |
@@ -101,6 +102,7 @@
 |  | ボス | us_bunyan | The Giant Blue Ox | 1024x1024 | 512x512 | `us/bosses/us_bunyan.png` | 未作成 |
 |  | ボス | us_wright | The Gale Spirit | 1024x1024 | 512x512 | `us/bosses/us_wright.png` | 未作成 |
 |  | ボス | us_moon | The Moon Keeper | 1024x1024 | 512x512 | `us/bosses/us_moon.png` | 未作成 |
+|  | ボス | us_pony | The Dust Devil | 1024x1024 | 512x512 | `us/bosses/us_pony.png` | 未作成 |
 |  | 名所カード | grand_canyon | Grand Canyon | 1024x1024 | 512x512 | `us/landmarks/grand_canyon.png` | 未作成 |
 |  | 名所カード | golden_gate_bridge | Golden Gate Bridge | 1024x1024 | 512x512 | `us/landmarks/golden_gate_bridge.png` | 未作成 |
 |  | 名所カード | mesa_verde | Mesa Verde National Park | 1024x1024 | 512x512 | `us/landmarks/mesa_verde.png` | 未作成 |

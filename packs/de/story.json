@@ -349,6 +349,111 @@
       ]
     },
     {
+      "id": "de_ch_gutenberg",
+      "kind": "extra",
+      "stageId": "de_gutenberg",
+      "requires": null,
+      "title": {
+        "en": "The Printer of Mainz",
+        "de": "Der Drucker von Mainz",
+        "ja": "マインツの印刷工",
+        "es": "La imprenta de Maguncia",
+        "fr": "L'Imprimeur de Mayence",
+        "it": "Il tipografo di Magonza",
+        "ko": "마인츠의 프린터",
+        "nl": "De drukker van Mainz",
+        "pt": "A impressora de Mainz",
+        "tr": "Mainz Yazıcısı",
+        "zh": "美因茨印刷厂"
+      },
+      "intro": [
+        {
+          "speaker": "narrator",
+          "text": {
+            "en": "Around 1450, in the city of Mainz, a goldsmith named Johannes Gutenberg works on a new way to make books.",
+            "de": "Um 1450 arbeitet in Mainz der Goldschmied Johannes Gutenberg an einer neuen Art, Bücher herzustellen.",
+            "ja": "1450年ごろ、マインツの町で、金細工師のヨハネス・グーテンベルクが、本を作る新しい方法に取り組んでいます。",
+            "es": "Hacia 1450, en la ciudad de Maguncia, un orfebre llamado Johannes Gutenberg trabaja en una nueva forma de hacer libros.",
+            "fr": "Vers 1450, dans la ville de Mayence, un orfèvre nommé Johannes Gutenberg travaille à une nouvelle façon de fabriquer des livres.",
+            "it": "Intorno al 1450, nella città di Magonza, un orafo di nome Johannes Gutenberg lavora a un nuovo modo di realizzare libri.",
+            "ko": "1450년경, 마인츠 시에서 요하네스 구텐베르그(Johannes Gutenberg)라는 금세공인이 책을 만드는 새로운 방법을 연구하고 있습니다.",
+            "nl": "Rond 1450 werkt goudsmid Johannes Gutenberg in de stad Mainz aan een nieuwe manier om boeken te maken.",
+            "pt": "Por volta de 1450, na cidade de Mainz, um ourives chamado Johannes Gutenberg trabalha numa nova forma de fazer livros.",
+            "tr": "1450 civarında, Mainz şehrinde Johannes Gutenberg adlı bir kuyumcu, kitap yapmanın yeni bir yolu üzerinde çalışıyor.",
+            "zh": "1450 年左右，在美因茨市，一位名叫约翰内斯·古腾堡的金匠正在研究一种新的书籍制作方法。"
+          }
+        },
+        {
+          "speaker": "narrator",
+          "text": {
+            "en": "Keep his workshop safe while the first pages come off the press.",
+            "de": "Beschütze seine Werkstatt, solange die ersten Seiten aus der Presse kommen.",
+            "ja": "最初のページが刷り上がるまで、工房を守りましょう。",
+            "es": "Mantenga su taller a salvo mientras las primeras páginas salen de la imprenta.",
+            "fr": "Protégez son atelier pendant que les premières pages sortent des presses.",
+            "it": "Mantieni il suo laboratorio al sicuro mentre le prime pagine escono dalla macchina da stampa.",
+            "ko": "첫 페이지가 인쇄되는 동안 작업장을 안전하게 보호하세요.",
+            "nl": "Houd zijn werkplaats veilig terwijl de eerste pagina's van de pers komen.",
+            "pt": "Mantenha sua oficina segura enquanto as primeiras páginas saem da impressora.",
+            "tr": "İlk sayfalar baskıdan çıkana kadar atölyesini güvende tutun.",
+            "zh": "当第一页出版时，请确保他的工作室安全。"
+          }
+        }
+      ],
+      "beforeBoss": [
+        {
+          "speaker": "boss",
+          "text": {
+            "en": "So many letters in neat little rows. May I smudge just one?",
+            "de": "So viele Buchstaben in ordentlichen Reihen. Darf ich nur einen verwischen?",
+            "ja": "きれいに並んだ文字がこんなにたくさん。ひとつだけ、にじませてもいいかな?",
+            "es": "Tantas letras en pequeñas filas ordenadas. ¿Puedo difuminar sólo uno?",
+            "fr": "Tant de lettres disposées en petites rangées bien rangées. Puis-je en tacher un seul ?",
+            "it": "Così tante lettere in piccole file ordinate. Posso sbavarne solo uno?",
+            "ko": "깔끔한 작은 줄에 너무 많은 글자가 있습니다. 하나만 발라도 될까요?",
+            "nl": "Zoveel letters in nette kleine rijen. Mag ik er maar één uitvegen?",
+            "pt": "Tantas letras em pequenas fileiras. Posso borrar apenas um?",
+            "tr": "Düzgün küçük sıralar halinde pek çok harf. Sadece bir tanesini lekeleyebilir miyim?",
+            "zh": "这么多字母排成整齐的小行。我可以只涂抹一个吗？"
+          }
+        }
+      ],
+      "outro": [
+        {
+          "speaker": "narrator",
+          "text": {
+            "en": "Around the mid-1450s, the Gutenberg Bible was printed in Mainz, one of the first large books printed with movable type in Europe.",
+            "de": "Um die Mitte der 1450er-Jahre entstand in Mainz die Gutenberg-Bibel, eines der ersten großen Bücher, die in Europa mit beweglichen Lettern gedruckt wurden.",
+            "ja": "1450年代なかばごろ、マインツでグーテンベルク聖書が刷られました。ヨーロッパで、活字を使って印刷された最初期の大きな本のひとつです。",
+            "es": "A mediados de la década de 1450 se imprimió en Maguncia la Biblia de Gutenberg, uno de los primeros libros de gran tamaño impresos con tipos móviles en Europa.",
+            "fr": "Vers le milieu des années 1450, la Bible de Gutenberg fut imprimée à Mayence, l'un des premiers grands livres imprimés à caractères mobiles en Europe.",
+            "it": "Intorno alla metà degli anni Cinquanta del Quattrocento fu stampata a Magonza la Bibbia di Gutenberg, uno dei primi libri di grandi dimensioni stampati con caratteri mobili in Europa.",
+            "ko": "1450년대 중반, 구텐베르크 성경이 마인츠에서 인쇄되었는데, 이는 유럽에서 활자로 인쇄된 최초의 대형 책 중 하나입니다.",
+            "nl": "Rond het midden van de jaren 1450 werd in Mainz de Gutenbergbijbel gedrukt, een van de eerste grote boeken gedrukt met losse letters in Europa.",
+            "pt": "Por volta de meados da década de 1450, a Bíblia de Gutenberg foi impressa em Mainz, um dos primeiros grandes livros impressos em tipos móveis na Europa.",
+            "tr": "1450'lerin ortalarında, Avrupa'da hareketli harflerle basılan ilk büyük kitaplardan biri olan Gutenberg İncili Mainz'da basıldı.",
+            "zh": "1450 年代中期左右，《古腾堡圣经》在美因茨印刷，这是欧洲最早用活字印刷术印刷的大型书籍之一。"
+          }
+        },
+        {
+          "speaker": "note",
+          "text": {
+            "en": "Gutenberg's printing is real history. The Ink Keeper is a character made for this game.",
+            "de": "Gutenbergs Buchdruck ist echte Geschichte. Der Tintenwächter ist eine Figur, die für dieses Spiel erfunden wurde.",
+            "ja": "グーテンベルクの印刷は実際の歴史です。インクの番人は、このゲームのために作られたキャラクターです。",
+            "es": "La imprenta de Gutenberg es historia real. Ink Keeper es un personaje creado para este juego.",
+            "fr": "L'impression de Gutenberg est une véritable histoire. The Ink Keeper est un personnage créé pour ce jeu.",
+            "it": "La stampa di Gutenberg è una vera storia. The Ink Keeper è un personaggio creato per questo gioco.",
+            "ko": "구텐베르크의 인쇄는 실제 역사입니다. Ink Keeper는 이 게임을 위해 만들어진 캐릭터입니다.",
+            "nl": "Gutenbergs drukwerk is echte geschiedenis. De Ink Keeper is een personage gemaakt voor dit spel.",
+            "pt": "A impressão de Gutenberg é história real. O Ink Keeper é um personagem feito para este jogo.",
+            "tr": "Gutenberg'in matbaası gerçek tarihtir. Mürekkep Tutucu bu oyun için yaratılmış bir karakterdir.",
+            "zh": "古腾堡的印刷术是真实的历史。墨水守护者是为本游戏制作的角色。"
+          }
+        }
+      ]
+    },
+    {
       "id": "de_ch_north",
       "kind": "regional",
       "stageId": "north",

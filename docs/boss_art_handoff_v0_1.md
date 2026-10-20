@@ -3,7 +3,7 @@
 物語の章（`packs/<国>/story.json`）に結びつくボスの画像。画像が無い間は図形で描かれて動く。
 共通の手順・規格は `docs/art_integration_v0_1.md`、画風の共通設定は `docs/art_prompts_v0_2.md` を参照。
 
-## 対象（5体）
+## 対象（7体。末尾2体は4本目のエクストラで追加）
 
 | 国 | ボスid | ボス名 | 元ネタ | 章 | 画像の置き場所 |
 |---|---|---|---|---|---|
@@ -12,6 +12,8 @@
 | US | `us_bunyan` | 巨大な青い牛 | 民話（バニヤン） | `us_ch_bunyan` | `terrimap_us/assets/art/bosses/us_bunyan.png` |
 | US | `us_wright` | 疾風の精霊 | ゲームの創作（ライト兄弟の話の演出） | `us_ch_wright` | `terrimap_us/assets/art/bosses/us_wright.png` |
 | US | `us_moon` | 月の番人 | ゲームの創作（アポロ11号の話の演出） | `us_ch_moon` | `terrimap_us/assets/art/bosses/us_moon.png` |
+| DE | `de_gutenberg` | インクの番人 | ゲームの創作（グーテンベルクの印刷の演出） | `de_ch_gutenberg` | `terrimap_ge/assets/art/bosses/de_gutenberg.png` |
+| US | `us_pony` | 砂ぼこりの精 | ゲームの創作（ポニー・エクスプレスの演出） | `us_ch_pony` | `terrimap_us/assets/art/bosses/us_pony.png` |
 
 作成済み: `de_loreley`（ドイツ版）。**これを Style Reference に入れると画風がそろう。**
 優先: 米国の3体（章がある）→ ドイツの2体。
@@ -47,6 +49,15 @@
 5. **de_nibelung**（洞窟の竜）
    ```
    a big round cave dragon with small wings curled around a pile of golden coins, chibi, big eyes, friendly, smiling, cartoon style, single game boss sprite, large, front view, plain white background, cute flat vector illustration, soft pastel colors, clean shapes, mobile tower-defense game art, no text, no people, no weapons
+   ```
+
+6. **de_gutenberg**（インクの番人）
+   ```
+   a round friendly ink blob creature with a small quill-feather tuft on top and tiny ink drops around it, chibi, big eyes, smiling, single game boss sprite, large, front view, plain white background, cute flat vector illustration, soft pastel colors, clean shapes, mobile tower-defense game art, no text, no people, no weapons
+   ```
+7. **us_pony**（砂ぼこりの精）
+   ```
+   a small swirling dust whirlwind spirit in warm sand colors with a tiny horseshoe-shaped tail, chibi, round shape, big eyes, friendly, smiling, single game boss sprite, large, front view, plain white background, cute flat vector illustration, soft pastel colors, clean shapes, mobile tower-defense game art, no text, no people, no weapons
    ```
 
 ## 気をつけること

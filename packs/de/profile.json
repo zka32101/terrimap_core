@@ -614,6 +614,42 @@
     "de": "Der Höhlendrache",
     "ja": "洞窟の竜"
    }
+  },
+ {
+  "id": "de_gutenberg",
+  "basis": "history",
+  "regions": [
+   "DE-RP"
+  ],
+  "center": "DE-RP",
+  "seasons": [
+   "spring",
+   "summer",
+   "autumn",
+   "winter"
+  ],
+  "weatherEvent": "storm",
+  "backdrop": "city",
+  "bossSkill": "speedBurst",
+  "waves": 10,
+  "title": {
+   "en": "The Printer of Mainz",
+   "de": "Der Drucker von Mainz",
+   "ja": "マインツの印刷工"
+  },
+  "summary": {
+   "en": "In Mainz, a printer set metal letters in rows to make books faster. Defend the workshop from ink creatures.",
+   "de": "In Mainz setzte ein Drucker Metallbuchstaben in Reihen, um Bücher schneller herzustellen. Verteidige die Werkstatt gegen Tintenwesen.",
+   "ja": "マインツでは、ある印刷工が金属の活字を並べて、本をすばやく作りました。インクの生き物たちから、工房を守りましょう。"
+  },
+  "fact": {
+   "en": "Johannes Gutenberg of Mainz developed printing with movable metal type in Europe around 1450. The Gutenberg Bible, printed in Mainz in the mid-1450s, is among the first major books made this way. The Ink Keeper is a fantasy figure."
+  },
+  "bossName": {
+   "en": "The Ink Keeper",
+   "de": "Der Tintenwächter",
+   "ja": "インクの番人"
   }
+ }
  ]
 }
