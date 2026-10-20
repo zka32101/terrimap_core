@@ -220,7 +220,7 @@ def render(country, size=1024, td=False, label=False, mark=False, flag=False):
 
 def render_adaptive(country, out_dir, size=1024, fit=None):
     """Android のアダプティブアイコン用の3枚を書き出す。
-    background.png: 背景色 + うっすら国旗（全面）、foreground.png: 地図だけ（透明背景。中央の安全領域 66/108 に収める）、
+    background.png: 背景色 + うっすら国旗（全面）、foreground.png: 地図だけ（透明背景。flutter_launcher_icons が前景を内側に16%ずつ縮めて入れるので、その分大きめに描いて、結果が中央の安全領域 66/108 に収まるようにする）、
     monochrome.png: 地図の輪郭を1色で（Android 13 のテーマアイコン用。塗る地域は同じ色で区別しない）。
     国の略称バッジとマークのバッジは、丸く切り抜かれると隅が欠けるので入れない（従来の正方形アイコンにだけ入る）。"""
     cfg = CONFIG[country]
@@ -238,7 +238,7 @@ def render_adaptive(country, out_dir, size=1024, fit=None):
     ys = [y for _, rs in regions for r in rs for _, y in r]
     minx, maxx, miny, maxy = min(xs), max(xs), min(ys), max(ys)
     w, h = maxx - minx, maxy - miny
-    fit = fit or {"de": 0.60, "us": 0.56}[country]
+    fit = fit or {"de": 0.84, "us": 0.80}[country]
     ss = 2
     S = size * ss
     scale = fit * S / max(w, h)

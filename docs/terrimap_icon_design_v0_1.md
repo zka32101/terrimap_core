@@ -36,7 +36,7 @@
 
 ## Android アダプティブアイコン
 - 生成: `python3 tools/make_icon.py <de|us> x --adaptive <出力ディレクトリ>` → `background.png`（背景色 + うっすら国旗）、`foreground.png`（地図だけ・透明背景）、`monochrome.png`（Android 13 のテーマアイコン用・地図の輪郭を1色で）
-- 地図は中央の安全領域（108dp のうち 66dp）に収める。国の略称バッジとマークのバッジは、丸く切り抜かれると隅が欠けるので入れない（従来の正方形アイコン・ストア画像にだけ入る）
+- 地図は中央の安全領域（108dp のうち 66dp）に収める。`flutter_launcher_icons` が前景を内側に16%ずつ縮める（inset 16%）ので、画像の中では大きめ（DE 84%・US 80%）に描く。国の略称バッジとマークのバッジは、丸く切り抜かれると隅が欠けるので入れない（従来の正方形アイコン・ストア画像にだけ入る）
 - アプリ側: `flutter_launcher_icons` の `adaptive_icon_background / foreground / monochrome` に指定する
 - 未確認: 実機のランチャー（丸・角丸・しずく型）での見え方、テーマアイコンの色
 
