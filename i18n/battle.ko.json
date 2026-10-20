@@ -299,5 +299,6 @@
   "story.next": "다음",
   "story.done": "완료",
   "story.locked": "이전 장을 클리어하면 읽을 수 있어요",
-  "story.cleared": "클리어"
+  "story.cleared": "클리어",
+  "synergy.hint": "서로 다른 종류의 시설이 나란히(대각선 포함) 있으면 서로 강해집니다. 종류당 공격력 +8%, 최대 +24%."
 }

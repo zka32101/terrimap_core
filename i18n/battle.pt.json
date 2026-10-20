@@ -299,5 +299,6 @@
   "story.next": "Seguinte",
   "story.done": "Concluir",
   "story.locked": "Conclua o capítulo anterior para ler este",
-  "story.cleared": "Concluído"
+  "story.cleared": "Concluído",
+  "synergy.hint": "Edifícios de tipos diferentes lado a lado (mesmo na diagonal) reforçam-se: +8 % de ataque por tipo, até +24 %."
 }

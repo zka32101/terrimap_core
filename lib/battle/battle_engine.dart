@@ -34,7 +34,12 @@ class BattleEngine {
   /// 復習: 州ごとの出題の重み（[battleReviewWeights]）。渡すと、間違えた州がクイズ連動で出やすくなる。
   /// 問題の中身だけが変わり、戦闘の計算には影響しない（リプレイは正解・不正解の記録だけで再現できる）。
   final Map<String, double>? reviewWeights;
-  BattleEngine(this.stage, {this.profile, this.pack, this.quizAssist = true, this.reviewWeights});
+
+  /// ルールの版。新しい記録は最新（[currentRules]）で作り、保存済みの古い記録は、記録された版（古い版）のまま再生する。
+  /// 1 = 組み合わせボーナスなし／2 = 組み合わせボーナスあり。ルールを変えたら、ここを上げて、古い版の分岐を残す。
+  final int rules;
+  static const currentRules = 2;
+  BattleEngine(this.stage, {this.profile, this.pack, this.quizAssist = true, this.reviewWeights, this.rules = currentRules});
 
   /// クイズ連動が有効か。
   bool get assistEnabled => pack != null && quizAssist;
@@ -93,6 +98,28 @@ class BattleEngine {
   static const breweryRadius = 2.0, breweryDamageRatio = 0.06; // 1秒ごとに、その波の基礎HPの6%
   static const symbolHealInterval = 10.0;
   static const bossSkills = ['speedBurst', 'hpRegen', 'summon', 'stunFacility'];
+  // 組み合わせボーナス（ルール2〜）: 隣り合う（斜めも）異なる種類の施設が多いほど、攻撃が強くなる
+  static const synergyPerType = 0.08, synergyMaxTypes = 3;
+
+  /// [f] の周囲8マスにある、[f] と違う種類の（限定施設でない）施設の種類の数（最大 [synergyMaxTypes]）。ルールの版は見ない（表示用）。
+  static int neighborTypes(Map<GridPos, Facility> facilities, Facility f) {
+    if (f.exclusive != null) return 0;
+    final types = <FacilityType>{};
+    for (var dc = -1; dc <= 1; dc++) {
+      for (var dr = -1; dr <= 1; dr++) {
+        if (dc == 0 && dr == 0) continue;
+        final n = facilities[GridPos(f.pos.col + dc, f.pos.row + dr)];
+        if (n != null && n.exclusive == null && n.type != f.type) types.add(n.type);
+      }
+    }
+    return math.min(types.length, synergyMaxTypes);
+  }
+
+  /// 組み合わせボーナスの対象の種類の数。ルール1では常に 0。
+  int synergyTypes(Map<GridPos, Facility> facilities, Facility f) => rules < 2 ? 0 : neighborTypes(facilities, f);
+
+  /// 組み合わせボーナスの攻撃の倍率の増分（0 なし／0.08 〜 0.24）。
+  double synergyBonus(Map<GridPos, Facility> facilities, Facility f) => synergyTypes(facilities, f) * synergyPerType;
 
   /// [wave]（1始まり）の季節の効果。エクストラは波ごとに季節が巡る。
   SeasonEffect _seasonAt(int wave) => Weather.seasons[stage.seasonAt(wave)]!;
@@ -694,7 +721,7 @@ class BattleEngine {
         }
         if (target != null) {
           final base = f.sabotagedUntil > now ? (fs.damage * sabotageRatio).round() : fs.damage;
-          final power = (base * (boosted ? coreBoost : 1.0) * (st.skill == 'waveAtkBonus' ? skillAtkBonus : 1.0) * we.damage * (we.typeDamage[f.type] ?? 1.0) * (1 + quizBuffBonus(st))).round();
+          final power = (base * (boosted ? coreBoost : 1.0) * (st.skill == 'waveAtkBonus' ? skillAtkBonus : 1.0) * we.damage * (we.typeDamage[f.type] ?? 1.0) * (1 + quizBuffBonus(st)) * (1 + synergyBonus(facilities, f))).round();
           final crit = isCrit(st.tickCount, pos, target.e.id);
           final raw = math.max(1, (power * (crit ? critMultiplier : 1.0)).round());
           int hit(_M m, int amount, {bool c = false, double armorIgnore = 0}) {

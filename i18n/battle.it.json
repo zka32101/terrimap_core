@@ -299,5 +299,6 @@
   "story.next": "Avanti",
   "story.done": "Fine",
   "story.locked": "Completa il capitolo precedente per leggere questo",
-  "story.cleared": "Completato"
+  "story.cleared": "Completato",
+  "synergy.hint": "Gli edifici di tipo diverso vicini (anche in diagonale) si potenziano a vicenda: +8% di attacco per tipo, fino a +24%."
 }

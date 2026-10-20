@@ -299,5 +299,6 @@
   "story.next": "Next",
   "story.done": "Done",
   "story.locked": "Clear the previous chapter to read this",
-  "story.cleared": "Cleared"
+  "story.cleared": "Cleared",
+  "synergy.hint": "Different facility types next to each other (even diagonally) boost each other's attack: +8% per type, up to +24%."
 }

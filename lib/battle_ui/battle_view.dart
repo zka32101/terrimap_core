@@ -57,8 +57,12 @@ class BattleView extends StatelessWidget {
   /// 弾・爆発・ダメージ数字・画面の揺れなどの演出（省略すると出さない）。[BattleSession.fx] / [ReplayPlayer.fx] を渡す。
   final BattleFx? fx;
 
+  /// 組み合わせボーナス（ルール2〜）の表示: 違う種類の施設が隣り合う施設を金色の枠と点で示す。古い記録（ルール1）では false にする。
+  final bool synergy;
+
   const BattleView(
       {super.key,
+      this.synergy = false,
       required this.stage,
       required this.state,
       this.selected,
@@ -100,7 +104,7 @@ class BattleView extends StatelessWidget {
           },
           child: CustomPaint(
             size: size,
-            painter: _BattlePainter(stage, state, selected, selectedRange, facilityMaxHp, art, weather, fx),
+            painter: _BattlePainter(stage, state, selected, selectedRange, facilityMaxHp, art, weather, fx, synergy),
           ),
         ),
       );
@@ -117,7 +121,8 @@ class _BattlePainter extends CustomPainter {
   final ArtSet? art;
   final String? weather;
   final BattleFx? fx;
-  _BattlePainter(this.stage, this.state, this.selected, this.range, this.maxHp, this.art, this.weather, this.fx);
+  final bool synergy;
+  _BattlePainter(this.stage, this.state, this.selected, this.range, this.maxHp, this.art, this.weather, this.fx, this.synergy);
 
   /// [img] を [dst] に収まる最大の大きさで（縦横比を保って）描く。
   static void _sprite(Canvas canvas, ui.Image img, Rect dst, {double opacity = 1}) {
@@ -238,6 +243,21 @@ class _BattlePainter extends CustomPainter {
       } else {
         canvas.drawRRect(RRect.fromRectAndRadius(r, Radius.circular(cell * 0.18)), Paint()..color = stopped ? base.withValues(alpha: 0.4) : base);
       }
+      // 組み合わせボーナス: 違う種類が隣り合っていれば、金色の枠と、種類の数だけの点
+      if (synergy) {
+        final n = BattleEngine.neighborTypes(state.facilities, f);
+        if (n > 0) {
+          canvas.drawRRect(
+              RRect.fromRectAndRadius(rect(f.pos).deflate(cell * 0.03), Radius.circular(cell * 0.2)),
+              Paint()
+                ..color = const Color(0xFFFFC107)
+                ..style = PaintingStyle.stroke
+                ..strokeWidth = math.max(1.5, cell * 0.05));
+          for (var i = 0; i < n; i++) {
+            canvas.drawCircle(Offset(r.right - cell * 0.1 - i * cell * 0.13, r.top + cell * 0.1), cell * 0.045, Paint()..color = const Color(0xFFFFC107));
+          }
+        }
+      }
       // レベル（点）
       for (var i = 0; i < f.level; i++) {
         canvas.drawCircle(Offset(r.left + cell * 0.14 + i * cell * 0.15, r.bottom - cell * 0.12), cell * 0.045, Paint()..color = Colors.white);
@@ -279,5 +299,5 @@ class _BattlePainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant _BattlePainter old) => old.state != state || old.selected != selected || old.range != range || old.stage != stage || old.art != art || old.weather != weather || old.fx != fx;
+  bool shouldRepaint(covariant _BattlePainter old) => old.state != state || old.selected != selected || old.range != range || old.stage != stage || old.art != art || old.weather != weather || old.fx != fx || old.synergy != synergy;
 }

@@ -299,5 +299,6 @@
   "story.next": "Suivant",
   "story.done": "Terminé",
   "story.locked": "Termine le chapitre précédent pour lire celui-ci",
-  "story.cleared": "Terminé"
+  "story.cleared": "Terminé",
+  "synergy.hint": "Des types de bâtiments différents côte à côte (même en diagonale) se renforcent : +8 % d’attaque par type, jusqu’à +24 %."
 }
