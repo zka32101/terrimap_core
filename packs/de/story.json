@@ -1,5 +1,24 @@
 {
   "version": 1,
+  "hero": {
+    "id": "de_hero",
+    "name": {
+      "en": "Mila"
+    },
+    "role": {
+      "en": "Apprentice surveyor with a map notebook",
+      "de": "Vermessungslehrling mit Kartenheft",
+      "ja": "地図帳を持つ見習い測量士",
+      "es": "Aprendiz de topógrafo con un cuaderno de mapas",
+      "fr": "Apprenti géomètre avec un carnet de cartes",
+      "it": "Apprendista geometra con un quaderno di mappe",
+      "ko": "지도 노트를 들고 있는 견습 측량사",
+      "nl": "Leerling-landmeter met een kaartnotitieboekje",
+      "pt": "Topógrafo aprendiz com um caderno de mapas",
+      "tr": "Harita not defteri olan çırak araştırmacı",
+      "zh": "有地图笔记本的学徒测量员"
+    }
+  },
   "chapters": [
     {
       "id": "de_ch_loreley",
@@ -51,6 +70,22 @@
             "tr": "Şarkı sönene kadar nehir vadisini koru.",
             "zh": "守住河谷，直到歌声消失。"
           }
+        },
+        {
+          "speaker": "hero",
+          "text": {
+            "en": "Mist on the river... I'll mark this rock on my map. Stay close!",
+            "de": "Nebel auf dem Fluss … Ich zeichne diesen Felsen in meine Karte. Bleib in der Nähe!",
+            "ja": "川に霧が…。この岩を地図に書きこむね。そばにいて!",
+            "es": "Niebla en el río... Marcaré esta roca en mi mapa. ¡Quédate cerca!",
+            "fr": "Brume sur la rivière... Je marquerai ce rocher sur ma carte. Restez proche !",
+            "it": "Nebbia sul fiume... Segnerò questa roccia sulla mia mappa. Stai vicino!",
+            "ko": "강물에 안개가 낀다... 지도에 이 바위를 표시하겠습니다. 가까이 있어라!",
+            "nl": "Mist op de rivier... Ik markeer deze rots op mijn kaart. Blijf dichtbij!",
+            "pt": "Névoa no rio... Vou marcar esta pedra no meu mapa. Fique perto!",
+            "tr": "Nehirde sis... Bu kayayı haritamda işaretleyeceğim. Yakın dur!",
+            "zh": "河上的雾……我会在地图上标记这块岩石。保持靠近！"
+          }
         }
       ],
       "beforeBoss": [
@@ -86,6 +121,22 @@
             "pt": "A canção desvanece-se com a névoa. O rochedo continua de pé acima do Reno.",
             "tr": "Şarkı sisle birlikte silinir. Kaya hâlâ Ren’in üzerinde dimdik durur.",
             "zh": "歌声随着雾气渐渐消散。那块岩石依然矗立在莱茵河上方。"
+          }
+        },
+        {
+          "speaker": "hero",
+          "text": {
+            "en": "Another spot for my map notebook. The Rhine is full of stories.",
+            "de": "Wieder ein Ort für mein Kartenheft. Der Rhein steckt voller Geschichten.",
+            "ja": "地図帳に、また一か所ふえたよ。ラインは物語でいっぱいだね。",
+            "es": "Otro lugar para mi cuaderno de mapas. El Rin está lleno de historias.",
+            "fr": "Un autre endroit pour mon carnet de cartes. Le Rhin regorge d'histoires.",
+            "it": "Un altro posto per il mio quaderno cartografico. Il Reno è pieno di storie.",
+            "ko": "내 지도 노트를 위한 또 다른 장소입니다. 라인강에는 이야기가 가득합니다.",
+            "nl": "Nog een plekje voor mijn kaartennotitieboekje. De Rijn zit vol verhalen.",
+            "pt": "Outro local para meu caderno de mapas. O Reno está cheio de histórias.",
+            "tr": "Harita defterim için başka bir yer. Ren hikayelerle doludur.",
+            "zh": "我的地图笔记本的另一个地方。莱茵河充满了故事。"
           }
         },
         {
@@ -156,6 +207,22 @@
             "tr": "Hikâye sonuna kadar anlatılana dek orman yolunu güvende tut.",
             "zh": "守住森林小路，直到故事讲完。"
           }
+        },
+        {
+          "speaker": "hero",
+          "text": {
+            "en": "A forest full of tales! I hope none of them bite.",
+            "de": "Ein Wald voller Märchen! Hoffentlich beißt keines davon.",
+            "ja": "お話だらけの森だね! かみつくお話はいませんように。",
+            "es": "¡Un bosque lleno de cuentos! Espero que ninguno muerda.",
+            "fr": "Une forêt pleine de contes ! J'espère qu'aucun d'entre eux ne mordra.",
+            "it": "Una foresta piena di storie! Spero che nessuno di loro morda.",
+            "ko": "이야기가 가득한 숲! 그들 중 아무도 물지 않기를 바랍니다.",
+            "nl": "Een bos vol verhalen! Ik hoop dat geen van hen bijt.",
+            "pt": "Uma floresta cheia de histórias! Espero que nenhum deles morda.",
+            "tr": "Masallarla dolu bir orman! Umarım hiçbiri ısırmaz.",
+            "zh": "充满故事的森林！我希望它们都不会咬人。"
+          }
         }
       ],
       "beforeBoss": [
@@ -191,6 +258,22 @@
             "pt": "O conto termina e a floresta fica em silêncio. Algures, um livro espera para ser impresso.",
             "tr": "Masal sona erer ve orman sessizliğe bürünür. Bir yerlerde, basılmayı bekleyen bir kitap vardır.",
             "zh": "童话讲完了，森林安静下来。在某个地方，一本书正等着被印刷。"
+          }
+        },
+        {
+          "speaker": "hero",
+          "text": {
+            "en": "I'll draw the forest paths so the next traveler won't get lost.",
+            "de": "Ich zeichne die Waldwege ein, damit sich der nächste Wanderer nicht verirrt.",
+            "ja": "次に来る人が迷わないように、森の道を書いておくね。",
+            "es": "Dibujaré los senderos del bosque para que el próximo viajero no se pierda.",
+            "fr": "Je dessinerai les chemins forestiers pour que le prochain voyageur ne se perde pas.",
+            "it": "Disegnerò i sentieri del bosco in modo che il prossimo viaggiatore non si perda.",
+            "ko": "다음 여행자가 길을 잃지 않도록 숲길을 그려 놓겠습니다.",
+            "nl": "Ik teken de bospaden zodat de volgende reiziger niet verdwaalt.",
+            "pt": "Desenharei os caminhos da floresta para que o próximo viajante não se perca.",
+            "tr": "Bir sonraki gezgin kaybolmasın diye orman yollarını çizeceğim.",
+            "zh": "我会画出森林小路，这样下一个旅行者就不会迷路。"
           }
         },
         {
@@ -277,6 +360,22 @@
             "tr": "Hikâye sona erene kadar mağaranın ağzını koru.",
             "zh": "守住洞口，直到故事讲完。"
           }
+        },
+        {
+          "speaker": "hero",
+          "text": {
+            "en": "Caves are hard to map. Hold the entrance, and I'll be right behind you!",
+            "de": "Höhlen sind schwer zu kartieren. Halt den Eingang, ich bin gleich hinter dir!",
+            "ja": "洞窟は地図にしにくいんだ。入り口をお願い、すぐ後ろにいるよ!",
+            "es": "Las cuevas son difíciles de cartografiar. ¡Mantén la entrada y estaré justo detrás de ti!",
+            "fr": "Les grottes sont difficiles à cartographier. Gardez l'entrée et je serai juste derrière vous !",
+            "it": "Le grotte sono difficili da mappare. Tieni l'ingresso e io sarò proprio dietro di te!",
+            "ko": "동굴은 지도 작성이 어렵습니다. 입구를 지켜주세요. 제가 바로 뒤에 있을게요!",
+            "nl": "Grotten zijn moeilijk in kaart te brengen. Houd de ingang vast, dan sta ik vlak achter je!",
+            "pt": "As cavernas são difíceis de mapear. Segure a entrada e estarei logo atrás de você!",
+            "tr": "Mağaraların haritasını çıkarmak zordur. Girişi tutun, ben de tam arkanızda olacağım!",
+            "zh": "洞穴很难绘制地图。守住入口，我就在你身后！"
+          }
         }
       ],
       "beforeBoss": [
@@ -312,6 +411,22 @@
             "pt": "O dragão volta a enroscar-se e a caverna fica às escuras. A história vive num livro, não num tesouro.",
             "tr": "Ejderha yeniden kıvrılır ve mağara kararır. Hikâye bir hazinede değil, bir kitapta yaşar.",
             "zh": "龙再次蜷起身子，洞穴重归黑暗。故事活在一本书里，而不是在宝藏里。"
+          }
+        },
+        {
+          "speaker": "hero",
+          "text": {
+            "en": "A dragon that only guards treasure... I think it just wanted some quiet.",
+            "de": "Ein Drache, der nur einen Schatz hütet … ich glaube, er wollte nur seine Ruhe.",
+            "ja": "宝を守るだけの竜かあ…。静かにしていたかっただけかも。",
+            "es": "Un dragón que sólo guarda tesoros... Creo que sólo quería un poco de tranquilidad.",
+            "fr": "Un dragon qui ne garde que des trésors... Je pense qu'il voulait juste un peu de calme.",
+            "it": "Un drago che custodisce solo tesori... penso che volesse solo un po' di silenzio.",
+            "ko": "보물만 지키는 용... 그냥 조용히 지내고 싶었던 것 같아요.",
+            "nl": "Een draak die alleen schatten bewaakt... Ik denk dat hij gewoon wat rust wilde.",
+            "pt": "Um dragão que só guarda tesouros... Acho que ele só queria um pouco de silêncio.",
+            "tr": "Yalnızca hazineyi koruyan bir ejderha... Sanırım sadece biraz sessizlik istiyordu.",
+            "zh": "一条只守卫宝藏的龙……我想它只是想要一些安静。"
           }
         },
         {
@@ -398,6 +513,22 @@
             "tr": "İlk sayfalar baskıdan çıkana kadar atölyesini güvende tutun.",
             "zh": "当第一页出版时，请确保他的工作室安全。"
           }
+        },
+        {
+          "speaker": "hero",
+          "text": {
+            "en": "So many tiny metal letters! Let's keep the workshop safe.",
+            "de": "So viele kleine Metallbuchstaben! Lass uns die Werkstatt beschützen.",
+            "ja": "小さな金属の文字がいっぱい! 工房を守ろうね。",
+            "es": "¡Tantas letras diminutas de metal! Mantengamos el taller seguro.",
+            "fr": "Tant de petites lettres métalliques ! Gardons la sécurité de l'atelier.",
+            "it": "Quante minuscole lettere di metallo! Teniamo l'officina al sicuro.",
+            "ko": "작은 금속 글자가 너무 많아요! 작업장을 안전하게 지키자.",
+            "nl": "Zoveel kleine metalen letters! Laten we de werkplaats veilig houden.",
+            "pt": "Tantas minúsculas letras de metal! Vamos manter a oficina segura.",
+            "tr": "O kadar çok küçük metal harf var ki! Atölyeyi güvende tutalım.",
+            "zh": "这么多小金属字母！让我们保证车间安全。"
+          }
         }
       ],
       "beforeBoss": [
@@ -433,6 +564,22 @@
             "pt": "Por volta de meados da década de 1450, a Bíblia de Gutenberg foi impressa em Mainz, um dos primeiros grandes livros impressos em tipos móveis na Europa.",
             "tr": "1450'lerin ortalarında, Avrupa'da hareketli harflerle basılan ilk büyük kitaplardan biri olan Gutenberg İncili Mainz'da basıldı.",
             "zh": "1450 年代中期左右，《古腾堡圣经》在美因茨印刷，这是欧洲最早用活字印刷术印刷的大型书籍之一。"
+          }
+        },
+        {
+          "speaker": "hero",
+          "text": {
+            "en": "Books for everyone... maps, too! I'd love to print one someday.",
+            "de": "Bücher für alle … und Karten auch! Ich würde gern einmal eine drucken.",
+            "ja": "みんなに本が届くなんて…。いつか地図も刷ってみたいな。",
+            "es": "Libros para todos... ¡mapas también! Me encantaría imprimir uno algún día.",
+            "fr": "Des livres pour tous... des cartes aussi ! J'adorerais en imprimer un un jour.",
+            "it": "Libri per tutti... anche mappe! Mi piacerebbe stamparne uno un giorno.",
+            "ko": "모두를 위한 책... 지도도 마찬가지입니다! 언젠가 꼭 한 번 인쇄해보고 싶습니다.",
+            "nl": "Boeken voor iedereen... ook kaarten! Ik zou er graag ooit een willen afdrukken.",
+            "pt": "Livros para todos... mapas também! Eu adoraria imprimir um algum dia.",
+            "tr": "Herkes için kitaplar... haritalar da! Bir gün bir tane basmayı çok isterim.",
+            "zh": "适合所有人的书籍...还有地图！我很想有一天打印一份。"
           }
         },
         {
@@ -487,6 +634,22 @@
             "tr": "Tuzlu rüzgâr, geniş gelgitler ve işlek limanlar. Almanya’nın denizle buluştuğu kuzey kıyısını koru.",
             "zh": "咸咸的海风、宽阔的潮汐、繁忙的港口。守住德国与大海相遇的北部海岸。"
           }
+        },
+        {
+          "speaker": "hero",
+          "text": {
+            "en": "Salt wind and big tides! My map needs more blue.",
+            "de": "Salzwind und große Gezeiten! Meine Karte braucht mehr Blau.",
+            "ja": "潮風と大きな潮の満ち引き! 地図にもっと青をたさなきゃ。",
+            "es": "¡Viento salado y grandes mareas! Mi mapa necesita más azul.",
+            "fr": "Vent salin et grandes marées ! Ma carte a besoin de plus de bleu.",
+            "it": "Vento salato e grandi maree! La mia mappa ha bisogno di più blu.",
+            "ko": "바닷바람과 큰 파도! 내 지도에는 파란색이 더 필요해요.",
+            "nl": "Zoute wind en grote getijden! Mijn kaart heeft meer blauw nodig.",
+            "pt": "Vento salgado e marés grandes! Meu mapa precisa de mais azul.",
+            "tr": "Tuz rüzgarı ve büyük gelgitler! Haritamın daha fazla maviye ihtiyacı var.",
+            "zh": "咸风和大潮！我的地图需要更多蓝色。"
+          }
         }
       ],
       "beforeBoss": [],
@@ -505,6 +668,22 @@
             "pt": "As marés do Mar do Norte sobem e descem duas vezes por dia, e o porto de Hamburgo é um dos mais movimentados da Europa.",
             "tr": "Kuzey Denizi’nin gelgiti günde iki kez yükselip alçalır; Hamburg Limanı da Avrupa’nın en işlek limanlarından biridir.",
             "zh": "北海的潮水每天涨落两次，汉堡港是欧洲最繁忙的港口之一。"
+          }
+        },
+        {
+          "speaker": "hero",
+          "text": {
+            "en": "The coast is safe. Next stop: the Elbe!",
+            "de": "Die Küste ist sicher. Nächster Halt: die Elbe!",
+            "ja": "海岸は守れたよ。次はエルベ川だね!",
+            "es": "La costa es segura. Próxima parada: ¡el Elba!",
+            "fr": "La côte est sûre. Prochaine étape : l'Elbe !",
+            "it": "La costa è sicura. Prossima tappa: l'Elba!",
+            "ko": "해안은 안전합니다. 다음 정거장: 엘베!",
+            "nl": "De kust is veilig. Volgende stop: de Elbe!",
+            "pt": "A costa está segura. Próxima parada: o Elba!",
+            "tr": "Sahil güvenli. Sonraki durak: Elbe!",
+            "zh": "海岸很安全。下一站：易北河！"
           }
         }
       ]
@@ -543,6 +722,22 @@
             "tr": "Eski kasabalar, geniş gökyüzü ve denize doğru kıvrılan bir nehir. Elbe boyunca doğuyu koru.",
             "zh": "古老的城镇、辽阔的天空，还有一条蜿蜒流向大海的河。沿着易北河守住东部。"
           }
+        },
+        {
+          "speaker": "hero",
+          "text": {
+            "en": "Wide skies over the Elbe. A river is the best line to draw!",
+            "de": "Weiter Himmel über der Elbe. Ein Fluss ist die schönste Linie zum Zeichnen!",
+            "ja": "エルベ川の上には広い空。川は、いちばん描きたくなる線だね!",
+            "es": "Cielos amplios sobre el Elba. ¡Un río es la mejor línea para trazar!",
+            "fr": "Un ciel large au-dessus de l'Elbe. Une rivière est la meilleure ligne à tracer !",
+            "it": "Cieli ampi sull'Elba. Un fiume è la linea migliore da tracciare!",
+            "ko": "엘베강의 넓은 하늘. 강은 그리기에 가장 좋은 선입니다!",
+            "nl": "Brede luchten boven de Elbe. Een rivier is de beste lijn om te tekenen!",
+            "pt": "Céus amplos sobre o Elba. Um rio é a melhor linha para traçar!",
+            "tr": "Elbe üzerinde geniş gökyüzü. Bir nehir çizilecek en iyi çizgidir!",
+            "zh": "易北河上空广阔。河流是最好的画线！"
+          }
         }
       ],
       "beforeBoss": [],
@@ -561,6 +756,22 @@
             "pt": "O Elba atravessa a Saxónia e segue até ao Mar do Norte.",
             "tr": "Elbe, Saksonya’dan geçip Kuzey Denizi’ne ulaşır.",
             "zh": "易北河流经萨克森，一路汇入北海。"
+          }
+        },
+        {
+          "speaker": "hero",
+          "text": {
+            "en": "I followed the river all the way. My notebook is filling up!",
+            "de": "Ich bin dem Fluss ganz gefolgt. Mein Heft füllt sich!",
+            "ja": "川をずっとたどってきたよ。手帳がうまってきた!",
+            "es": "Seguí el río todo el camino. ¡Mi cuaderno se está llenando!",
+            "fr": "J'ai suivi la rivière jusqu'au bout. Mon carnet se remplit !",
+            "it": "Ho seguito il fiume fino in fondo. Il mio taccuino si sta riempiendo!",
+            "ko": "나는 강을 따라 끝까지 갔다. 내 노트가 꽉 차고 있어요!",
+            "nl": "Ik heb de rivier helemaal gevolgd. Mijn notitieboekje raakt vol!",
+            "pt": "Acompanhei o rio até o fim. Meu caderno está cheio!",
+            "tr": "Bütün yol boyunca nehri takip ettim. Defterim doluyor!",
+            "zh": "我一路顺着河走。我的笔记本快满了！"
           }
         }
       ]
@@ -599,6 +810,22 @@
             "tr": "Hareketli şehirler, katedral kuleleri ve yanlarından akan Ren. Batıyı koru.",
             "zh": "熙熙攘攘的城市、大教堂的塔楼，还有从它们身旁流过的莱茵河。守住西部。"
           }
+        },
+        {
+          "speaker": "hero",
+          "text": {
+            "en": "Cathedral towers, busy cities... so much to measure!",
+            "de": "Domtürme und belebte Städte … so viel zu vermessen!",
+            "ja": "大聖堂の塔に、にぎやかな町…。測るものがいっぱいだ!",
+            "es": "Torres de catedrales, ciudades bulliciosas... ¡tanto para medir!",
+            "fr": "Tours de cathédrales, villes animées... tant de choses sur mesure !",
+            "it": "Torri delle cattedrali, città frenetiche... così tanto da misurare!",
+            "ko": "대성당 타워, 분주한 도시... 측정할 것이 너무 많습니다!",
+            "nl": "Kathedraaltorens, drukke steden... zoveel te meten!",
+            "pt": "Torres de catedrais, cidades movimentadas... tanta coisa para medir!",
+            "tr": "Katedral kuleleri, kalabalık şehirler... Ölçülecek o kadar çok şey var ki!",
+            "zh": "大教堂塔楼、繁忙的城市……有太多值得测量的东西！"
+          }
         }
       ],
       "beforeBoss": [],
@@ -617,6 +844,22 @@
             "pt": "A Catedral de Colónia demorou mais de 600 anos a ser concluída.",
             "tr": "Köln Katedrali’nin tamamlanması 600 yıldan fazla sürdü.",
             "zh": "科隆大教堂花了600多年才建成。"
+          }
+        },
+        {
+          "speaker": "hero",
+          "text": {
+            "en": "Six hundred years to finish a cathedral. I can wait for one more map!",
+            "de": "Sechshundert Jahre für einen Dom. Da kann ich auf eine Karte schon warten!",
+            "ja": "大聖堂は600年かかったんだって。地図ひとつぐらい、待てるよ!",
+            "es": "Seiscientos años para terminar una catedral. ¡Puedo esperar por un mapa más!",
+            "fr": "Six cents ans pour achever une cathédrale. J'ai hâte d'avoir une autre carte !",
+            "it": "Seicento anni per finire una cattedrale. Posso aspettare per un'altra mappa!",
+            "ko": "대성당을 완공하는 데 600년이 걸립니다. 지도 하나 더 기다릴 수 있어요!",
+            "nl": "Zeshonderd jaar om een ​​kathedraal af te maken. Ik kan wachten op nog een kaart!",
+            "pt": "Seiscentos anos para terminar uma catedral. Posso esperar por mais um mapa!",
+            "tr": "Bir katedralin bitirilmesi altı yüz yıl aldı. Bir harita daha bekleyebilirim!",
+            "zh": "六百年才完成一座大教堂。我可以再等一张地图！"
           }
         }
       ]
@@ -655,6 +898,22 @@
             "tr": "Ormanlar, göller ve karlı Alpler. Kara Orman’dan Bavyera zirvelerine kadar güneyi koru.",
             "zh": "森林、湖泊和白雪覆盖的阿尔卑斯山。从黑森林到巴伐利亚的山峰，守住南部。"
           }
+        },
+        {
+          "speaker": "hero",
+          "text": {
+            "en": "Mountains ahead! I brought my warmest scarf.",
+            "de": "Berge voraus! Ich habe meinen wärmsten Schal mitgebracht.",
+            "ja": "前には山! いちばん暖かいマフラーを持ってきたよ。",
+            "es": "¡Montañas por delante! Traje mi bufanda más abrigada.",
+            "fr": "Des montagnes en perspective ! J'ai apporté mon écharpe la plus chaude.",
+            "it": "Montagne avanti! Ho portato la mia sciarpa più calda.",
+            "ko": "앞으로 산이 있습니다! 가장 따뜻한 스카프를 가져왔습니다.",
+            "nl": "Bergen vooruit! Ik heb mijn warmste sjaal meegenomen.",
+            "pt": "Montanhas à frente! Trouxe meu cachecol mais quente.",
+            "tr": "Mountains ahead! En sıcak atkımı getirdim.",
+            "zh": "前方有山！我带了我最温暖的围巾。"
+          }
         }
       ],
       "beforeBoss": [],
@@ -673,6 +932,22 @@
             "pt": "A Zugspitze, com 2962 metros, é a montanha mais alta da Alemanha.",
             "tr": "2.962 metre yüksekliğiyle Zugspitze, Almanya’nın en yüksek dağıdır.",
             "zh": "楚格峰海拔2962米，是德国最高的山。"
+          }
+        },
+        {
+          "speaker": "hero",
+          "text": {
+            "en": "Germany, from the coast to the Alps. My map is nearly done!",
+            "de": "Deutschland, von der Küste bis zu den Alpen. Meine Karte ist fast fertig!",
+            "ja": "海辺からアルプスまで。地図もうすぐ完成だよ!",
+            "es": "Alemania, desde la costa hasta los Alpes. ¡Mi mapa está casi terminado!",
+            "fr": "L'Allemagne, de la côte aux Alpes. Ma carte est presque terminée !",
+            "it": "La Germania, dalla costa alle Alpi. La mia mappa è quasi pronta!",
+            "ko": "독일, 해안에서 알프스까지. 내 지도가 거의 완성되었습니다!",
+            "nl": "Duitsland, van de kust tot aan de Alpen. Mijn kaart is bijna klaar!",
+            "pt": "Alemanha, da costa aos Alpes. Meu mapa está quase pronto!",
+            "tr": "Almanya, kıyılardan Alplere kadar. Haritam neredeyse bitti!",
+            "zh": "德国，从海岸到阿尔卑斯山。我的地图快完成了！"
           }
         }
       ]

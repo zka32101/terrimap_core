@@ -182,7 +182,9 @@ if (p/'story.json').exists():
         except Exception: prof = {}
     extras = {e.get("id"): e for e in (prof.get("extras") or [])}
     groups = set((prof.get("groups") or {}).keys())
-    SPEAKERS = ("narrator", "boss", "note")
+    SPEAKERS = ("narrator", "boss", "note", "hero")
+    hero = story.get("hero")
+    if hero is not None and not (hero.get("name") or {}).get("en"): err.append("story.json: hero の名前の英語がない")
     seen_ch = set(); seen_all = set()
     for c in (story.get("chapters") or []):
         cid = c.get("id")
@@ -193,6 +195,7 @@ if (p/'story.json').exists():
         for l in lines:
             if l.get("speaker") not in SPEAKERS: err.append(f"story.json: {cid} の語り手が不正 {l.get('speaker')}")
             if not (l.get("text") or {}).get("en"): err.append(f"story.json: {cid} に英語のない文がある")
+            if l.get("speaker") == "hero" and not hero: err.append(f"story.json: {cid} に主人公の文があるが、hero が定義されていない")
         kind, sid = c.get("kind"), c.get("stageId")
         if kind == "normal":
             if sid not in set(ids): err.append(f"story.json: {cid} の未知の州 {sid}")
