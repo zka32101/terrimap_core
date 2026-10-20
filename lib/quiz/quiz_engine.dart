@@ -15,6 +15,10 @@ enum QuestionType {
   neighborOf,
   /// 名所: 「この名所はどの州にある？」を4択で答える（名所は `packs/<国>/facts.json`）。名所のデータがない州は、地図から州名の問題になる。
   landmarkOf,
+
+  /// 深い知識: 「この名物・特産品・企業・行事はどの州のもの？」を4択で答える（題材は `facts.json` の `knowledge`）。
+  /// 題材のない州は、地図から州名の問題になる。
+  knowledgeOf,
 }
 
 class Question {
@@ -64,6 +68,18 @@ class QuizEngine {
         }
         final distract = _rng.shuffled(all.where((x) => x != t)).take(3);
         out.add(Question(QuestionType.nameFromMap, t, _rng.shuffled([t, ...distract]), t));
+        continue;
+      }
+      if (type == QuestionType.knowledgeOf) {
+        final items = pack.facts?.knowledgeIn(t) ?? const <KnowledgeItem>[];
+        final distract = _rng.shuffled(all.where((x) => x != t)).take(3);
+        if (items.isNotEmpty) {
+          final ordered = [...items]..sort((a, b) => a.id.compareTo(b.id));
+          final it = ordered[_rng.nextInt(ordered.length)];
+          out.add(Question(type, t, _rng.shuffled([t, ...distract]), t, subjectId: it.id));
+        } else {
+          out.add(Question(QuestionType.nameFromMap, t, _rng.shuffled([t, ...distract]), t));
+        }
         continue;
       }
       if (type == QuestionType.neighborOf) {

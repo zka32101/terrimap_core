@@ -172,6 +172,15 @@ if (p/'facts.json').exists():
         if l.get("region") not in set(ids): err.append(f"facts.json: {lid} の未知の地域 {l.get('region')}")
         if not (l.get("name") or {}).get("en"): err.append(f"facts.json: {lid} に英語の名前がない")
         if l.get("check", "unchecked") not in ("unchecked", "checked"): err.append(f"facts.json: {lid} の check が不正")
+    seen_k = set()
+    for k in (facts.get("knowledge") or []):
+        kid = k.get("id")
+        if kid in seen_k: err.append(f"facts.json: 知識 id の重複 {kid}")
+        seen_k.add(kid)
+        if k.get("region") not in set(ids): err.append(f"facts.json: {kid} の未知の地域 {k.get('region')}")
+        if not (k.get("name") or {}).get("en"): err.append(f"facts.json: {kid} に英語の名前がない")
+        if k.get("kind") not in ("food", "product", "culture", "nature"): err.append(f"facts.json: {kid} の kind が不正 {k.get('kind')}")
+        if k.get("check", "unchecked") not in ("unchecked", "checked"): err.append(f"facts.json: {kid} の check が不正")
 # story.json（任意）: 章の id・ステージの参照・前提の章の順番・英語の文・伝説の章の注記（Dart の Story.validate と同じ規則）
 if (p/'story.json').exists():
     try: story = json.loads((p/'story.json').read_text())
