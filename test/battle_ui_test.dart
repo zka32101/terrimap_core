@@ -132,6 +132,36 @@ void main() {
       await t.tapAt(box.topLeft + Offset(l.dx + (slot.col + 0.5) * l.cell, l.dy + (slot.row + 0.5) * l.cell));
       expect(tapped, slot);
     });
+    testWidgets('ピンチで拡大でき、拡大後もタップが同じマスに届く', (t) async {
+      final s = session();
+      GridPos? tapped;
+      await t.pumpWidget(MaterialApp(
+        home: Center(
+          child: SizedBox(
+            width: 400,
+            height: 400,
+            child: BattleView(stage: s.engine.stage, state: s.state, onCellTap: (c) => tapped = c),
+          ),
+        ),
+      ));
+      final box = t.getRect(find.byType(BattleView));
+      final c = box.center;
+      final g1 = await t.startGesture(c - const Offset(20, 0), pointer: 1);
+      final g2 = await t.startGesture(c + const Offset(20, 0), pointer: 2);
+      await g1.moveBy(const Offset(-60, 0));
+      await g2.moveBy(const Offset(60, 0));
+      await g1.up();
+      await g2.up();
+      await t.pump();
+      final m = t.widget<InteractiveViewer>(find.byType(InteractiveViewer));
+      expect(m.maxScale, 3);
+      // 拡大後、中央のタップは盤面の中央のマスに届く
+      await t.tapAt(c);
+      final cols = s.engine.stage.cols, rows = s.engine.stage.rows;
+      expect(tapped, isNotNull);
+      expect((tapped!.col - cols / 2).abs(), lessThanOrEqualTo(1));
+      expect((tapped!.row - rows / 2).abs(), lessThanOrEqualTo(1));
+    });
     testWidgets('施設・敵・選択・射程があっても描ける', (t) async {
       final s = session(d: Difficulty.hard);
       final slot = s.engine.stage.slots.first;

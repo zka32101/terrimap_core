@@ -87,15 +87,21 @@ class BattleView extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, box) {
       final size = Size(box.maxWidth, box.maxHeight);
-      return GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        onTapUp: (d) {
-          final c = cellAt(d.localPosition, size, stage.cols, stage.rows);
-          if (c != null) onCellTap?.call(c);
-        },
-        child: CustomPaint(
-          size: size,
-          painter: _BattlePainter(stage, state, selected, selectedRange, facilityMaxHp, art, weather, fx),
+      // 2本指（ピンチ）で拡大、拡大中は指スワイプで盤面を動かす。タップの座標は拡大後も盤面基準になる。
+      return InteractiveViewer(
+        minScale: 1,
+        maxScale: 3,
+        clipBehavior: Clip.hardEdge,
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTapUp: (d) {
+            final c = cellAt(d.localPosition, size, stage.cols, stage.rows);
+            if (c != null) onCellTap?.call(c);
+          },
+          child: CustomPaint(
+            size: size,
+            painter: _BattlePainter(stage, state, selected, selectedRange, facilityMaxHp, art, weather, fx),
+          ),
         ),
       );
     });
