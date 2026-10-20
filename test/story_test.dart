@@ -30,6 +30,15 @@ void main() {
     expect(c.outro.any((l) => l.speaker == Speaker.note), true); // 伝説の章には、実在と伝説の注記
   });
 
+  test('ドイツの物語: グリム・ニーベルンゲンの章があり、伝説の章には注記がある', () {
+    final s = story();
+    expect(s.chapters.map((c) => c.stageId), ['de_loreley', 'de_grimm', 'de_nibelung']);
+    for (final c in s.chapters) {
+      expect(c.outro.any((l) => l.speaker == Speaker.note), true, reason: c.id);
+      expect(c.title.of('de'), isNot(c.title.of('en')), reason: c.id); // ドイツ語がある
+    }
+  });
+
   test('米国の物語: 3章が読めて、データに問題がない。伝説・創作のボスには注記がある', () {
     final us = load('us');
     final s = Story.parse(File('packs/us/story.json').readAsStringSync());

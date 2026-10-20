@@ -12,30 +12,180 @@
         "ja": "ラインの歌"
       },
       "intro": [
-        {"speaker": "narrator", "text": {
-          "en": "Mist drifts along the Rhine at dusk. From a high rock, a song is said to carry across the water.",
-          "de": "Am Abend zieht Nebel über den Rhein. Von einem hohen Felsen soll ein Lied über das Wasser klingen.",
-          "ja": "夕暮れのライン川に霧が流れます。高い岩の上から、歌声が水面を渡ると伝えられています。"}},
-        {"speaker": "narrator", "text": {
-          "en": "Hold the river valley until the song fades.",
-          "de": "Halte das Flusstal, bis das Lied verklingt.",
-          "ja": "歌声が消えるまで、川の谷を守りましょう。"}}
+        {
+          "speaker": "narrator",
+          "text": {
+            "en": "Mist drifts along the Rhine at dusk. From a high rock, a song is said to carry across the water.",
+            "de": "Am Abend zieht Nebel über den Rhein. Von einem hohen Felsen soll ein Lied über das Wasser klingen.",
+            "ja": "夕暮れのライン川に霧が流れます。高い岩の上から、歌声が水面を渡ると伝えられています。"
+          }
+        },
+        {
+          "speaker": "narrator",
+          "text": {
+            "en": "Hold the river valley until the song fades.",
+            "de": "Halte das Flusstal, bis das Lied verklingt.",
+            "ja": "歌声が消えるまで、川の谷を守りましょう。"
+          }
+        }
       ],
       "beforeBoss": [
-        {"speaker": "boss", "text": {
-          "en": "Do you hear it? The river remembers every sailor.",
-          "de": "Hörst du es? Der Fluss erinnert sich an jeden Schiffer.",
-          "ja": "聞こえますか。川は、すべての船乗りを覚えています。"}}
+        {
+          "speaker": "boss",
+          "text": {
+            "en": "Do you hear it? The river remembers every sailor.",
+            "de": "Hörst du es? Der Fluss erinnert sich an jeden Schiffer.",
+            "ja": "聞こえますか。川は、すべての船乗りを覚えています。"
+          }
+        }
       ],
       "outro": [
-        {"speaker": "narrator", "text": {
-          "en": "The song fades with the mist. The rock still stands above the Rhine.",
-          "de": "Das Lied verklingt mit dem Nebel. Der Fels steht noch immer über dem Rhein.",
-          "ja": "歌は霧とともに消えます。岩は今も、ラインの上にそびえています。"}},
-        {"speaker": "note", "text": {
-          "en": "The rock is real. The singing siren is a legend, told since the early 1800s.",
-          "de": "Der Fels ist echt. Die singende Nixe ist eine Sage, die seit dem frühen 19. Jahrhundert erzählt wird.",
-          "ja": "岩は実在します。歌う妖精は伝説で、19世紀のはじめから語られてきました。"}}
+        {
+          "speaker": "narrator",
+          "text": {
+            "en": "The song fades with the mist. The rock still stands above the Rhine.",
+            "de": "Das Lied verklingt mit dem Nebel. Der Fels steht noch immer über dem Rhein.",
+            "ja": "歌は霧とともに消えます。岩は今も、ラインの上にそびえています。"
+          }
+        },
+        {
+          "speaker": "note",
+          "text": {
+            "en": "The rock is real. The singing siren is a legend, told since the early 1800s.",
+            "de": "Der Fels ist echt. Die singende Nixe ist eine Sage, die seit dem frühen 19. Jahrhundert erzählt wird.",
+            "ja": "岩は実在します。歌う妖精は伝説で、19世紀のはじめから語られてきました。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "de_ch_grimm",
+      "kind": "extra",
+      "stageId": "de_grimm",
+      "requires": null,
+      "title": {
+        "en": "Tales from the Old Forest",
+        "de": "Märchen aus dem alten Wald",
+        "ja": "古い森のおとぎ話"
+      },
+      "intro": [
+        {
+          "speaker": "narrator",
+          "text": {
+            "en": "Two brothers walk from village to village, writing down the tales that people tell by the fire.",
+            "de": "Zwei Brüder wandern von Dorf zu Dorf und schreiben die Märchen auf, die die Leute am Feuer erzählen.",
+            "ja": "二人の兄弟が村から村へ歩き、人々が暖炉のそばで語るおとぎ話を書き留めます。"
+          }
+        },
+        {
+          "speaker": "narrator",
+          "text": {
+            "en": "Keep the forest path safe until the story is told to the end.",
+            "de": "Halte den Waldweg sicher, bis die Geschichte zu Ende erzählt ist.",
+            "ja": "お話が最後まで語られるまで、森の道を守りましょう。"
+          }
+        }
+      ],
+      "beforeBoss": [
+        {
+          "speaker": "boss",
+          "text": {
+            "en": "What big ears you have! Do not worry, I only wish to hear the story, too.",
+            "de": "Was hast du für große Ohren! Keine Sorge, ich möchte die Geschichte auch nur hören.",
+            "ja": "なんて大きな耳でしょう。心配しないで。私も、お話を聞きたいだけなのです。"
+          }
+        }
+      ],
+      "outro": [
+        {
+          "speaker": "narrator",
+          "text": {
+            "en": "The tale ends, and the forest grows quiet. Somewhere, a book is waiting to be printed.",
+            "de": "Das Märchen endet, und der Wald wird still. Irgendwo wartet ein Buch darauf, gedruckt zu werden.",
+            "ja": "お話は終わり、森は静かになります。どこかで、一冊の本が出版を待っています。"
+          }
+        },
+        {
+          "speaker": "narrator",
+          "text": {
+            "en": "Jacob and Wilhelm Grimm published the first volume of their collection of tales in 1812.",
+            "de": "Jacob und Wilhelm Grimm veröffentlichten 1812 den ersten Band ihrer Märchensammlung.",
+            "ja": "ヤーコプとヴィルヘルムのグリム兄弟は、1812年に、おとぎ話集の第1巻を出版しました。"
+          }
+        },
+        {
+          "speaker": "note",
+          "text": {
+            "en": "The Brothers Grimm and their book are real. The talking wolf comes from fairy tales, which are fiction.",
+            "de": "Die Brüder Grimm und ihr Buch sind echt. Der sprechende Wolf stammt aus Märchen, die erfunden sind.",
+            "ja": "グリム兄弟と、その本は実在します。話すオオカミはおとぎ話に出てくる存在で、作り話です。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "de_ch_nibelung",
+      "kind": "extra",
+      "stageId": "de_nibelung",
+      "requires": null,
+      "title": {
+        "en": "The Hoard in the Cave",
+        "de": "Der Hort in der Höhle",
+        "ja": "洞窟の宝"
+      },
+      "intro": [
+        {
+          "speaker": "narrator",
+          "text": {
+            "en": "A medieval poet tells of a hero, a hidden treasure and a dragon deep in a cave.",
+            "de": "Ein mittelalterlicher Dichter erzählt von einem Helden, einem verborgenen Schatz und einem Drachen tief in einer Höhle.",
+            "ja": "中世の詩人が、英雄と、隠された宝と、洞窟の奥にいる竜の物語を語ります。"
+          }
+        },
+        {
+          "speaker": "narrator",
+          "text": {
+            "en": "Guard the cave mouth until the tale reaches its end.",
+            "de": "Bewache den Höhleneingang, bis die Erzählung an ihr Ende kommt.",
+            "ja": "お話が終わりまで進むあいだ、洞窟の入り口を守りましょう。"
+          }
+        }
+      ],
+      "beforeBoss": [
+        {
+          "speaker": "boss",
+          "text": {
+            "en": "This gold has slept for a very long time. Please do not wake it all at once.",
+            "de": "Dieses Gold schläft schon sehr lange. Bitte weck es nicht auf einmal auf.",
+            "ja": "この金貨は、とても長いあいだ眠っています。いっぺんに起こさないでください。"
+          }
+        }
+      ],
+      "outro": [
+        {
+          "speaker": "narrator",
+          "text": {
+            "en": "The dragon curls up again, and the cave goes dark. The story lives on in a book, not in a hoard.",
+            "de": "Der Drache rollt sich wieder zusammen, und die Höhle wird dunkel. Die Geschichte lebt in einem Buch weiter, nicht in einem Hort.",
+            "ja": "竜はふたたび丸くなり、洞窟は暗くなります。物語は宝ではなく、一冊の本の中で生き続けます。"
+          }
+        },
+        {
+          "speaker": "narrator",
+          "text": {
+            "en": "The Nibelungenlied is a medieval German epic poem, written down around the year 1200 by an unknown poet.",
+            "de": "Das Nibelungenlied ist ein mittelalterliches deutsches Heldenepos, das um das Jahr 1200 von einem unbekannten Dichter aufgeschrieben wurde.",
+            "ja": "『ニーベルンゲンの歌』は中世ドイツの英雄叙事詩で、1200年ごろに、名前の分からない詩人によって書かれました。"
+          }
+        },
+        {
+          "speaker": "note",
+          "text": {
+            "en": "The poem is real. The dragon and the cursed hoard are legend, not history.",
+            "de": "Das Gedicht ist echt. Der Drache und der verfluchte Hort sind Sage, keine Geschichte.",
+            "ja": "詩は実在します。竜と呪われた宝は伝説であり、史実ではありません。"
+          }
+        }
       ]
     }
   ]
