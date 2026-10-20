@@ -9,7 +9,15 @@
       "title": {
         "en": "The Song on the Rhine",
         "de": "Das Lied am Rhein",
-        "ja": "ラインの歌"
+        "ja": "ラインの歌",
+        "es": "El canto del Rin",
+        "fr": "Le chant du Rhin",
+        "it": "Il canto del Reno",
+        "ko": "라인강의 노래",
+        "nl": "Het lied van de Rijn",
+        "pt": "A canção do Reno",
+        "tr": "Ren’in Şarkısı",
+        "zh": "莱茵河之歌"
       },
       "intro": [
         {
@@ -17,7 +25,15 @@
           "text": {
             "en": "Mist drifts along the Rhine at dusk. From a high rock, a song is said to carry across the water.",
             "de": "Am Abend zieht Nebel über den Rhein. Von einem hohen Felsen soll ein Lied über das Wasser klingen.",
-            "ja": "夕暮れのライン川に霧が流れます。高い岩の上から、歌声が水面を渡ると伝えられています。"
+            "ja": "夕暮れのライン川に霧が流れます。高い岩の上から、歌声が水面を渡ると伝えられています。",
+            "es": "Al anochecer, la niebla se desliza sobre el Rin. Dicen que, desde una roca alta, un canto cruza el agua.",
+            "fr": "La brume flotte sur le Rhin au crépuscule. Du haut d’un rocher, on dit qu’un chant traverse l’eau.",
+            "it": "Al tramonto la nebbia scivola lungo il Reno. Si dice che da una roccia alta un canto attraversi l’acqua.",
+            "ko": "해 질 녘 라인강 위로 안개가 흘러갑니다. 높은 바위 위에서 노랫소리가 물 위로 퍼져 나간다고 전해집니다.",
+            "nl": "’s Avonds drijft de mist over de Rijn. Vanaf een hoge rots zou een lied over het water klinken.",
+            "pt": "Ao entardecer, a névoa desliza pelo Reno. Diz-se que, de um rochedo alto, uma canção atravessa as águas.",
+            "tr": "Alacakaranlıkta Ren Nehri’nin üzerinde sis dolaşır. Yüksek bir kayanın tepesinden suyun üzerine bir şarkı yayıldığı anlatılır.",
+            "zh": "黄昏时，雾气在莱茵河上飘荡。相传在一块高高的岩石上，有歌声越过水面传来。"
           }
         },
         {
@@ -25,7 +41,15 @@
           "text": {
             "en": "Hold the river valley until the song fades.",
             "de": "Halte das Flusstal, bis das Lied verklingt.",
-            "ja": "歌声が消えるまで、川の谷を守りましょう。"
+            "ja": "歌声が消えるまで、川の谷を守りましょう。",
+            "es": "Defiende el valle del río hasta que el canto se apague.",
+            "fr": "Tiens la vallée jusqu’à ce que le chant s’éteigne.",
+            "it": "Difendi la valle del fiume finché il canto non svanisce.",
+            "ko": "노랫소리가 사라질 때까지 강가 골짜기를 지켜 주세요.",
+            "nl": "Verdedig het rivierdal tot het lied verstomt.",
+            "pt": "Defende o vale do rio até a canção se calar.",
+            "tr": "Şarkı sönene kadar nehir vadisini koru.",
+            "zh": "守住河谷，直到歌声消失。"
           }
         }
       ],
@@ -35,7 +59,15 @@
           "text": {
             "en": "Do you hear it? The river remembers every sailor.",
             "de": "Hörst du es? Der Fluss erinnert sich an jeden Schiffer.",
-            "ja": "聞こえますか。川は、すべての船乗りを覚えています。"
+            "ja": "聞こえますか。川は、すべての船乗りを覚えています。",
+            "es": "¿Lo oyes? El río recuerda a cada marinero.",
+            "fr": "L’entends-tu ? Le fleuve se souvient de chaque batelier.",
+            "it": "Lo senti? Il fiume ricorda ogni marinaio.",
+            "ko": "들리나요? 강은 모든 뱃사람을 기억하고 있어요.",
+            "nl": "Hoor je het? De rivier herinnert zich elke schipper.",
+            "pt": "Ouves isso? O rio lembra-se de cada marinheiro.",
+            "tr": "Duyuyor musun? Nehir her gemiciyi hatırlar.",
+            "zh": "你听见了吗？河水记得每一位船夫。"
           }
         }
       ],
@@ -45,7 +77,15 @@
           "text": {
             "en": "The song fades with the mist. The rock still stands above the Rhine.",
             "de": "Das Lied verklingt mit dem Nebel. Der Fels steht noch immer über dem Rhein.",
-            "ja": "歌は霧とともに消えます。岩は今も、ラインの上にそびえています。"
+            "ja": "歌は霧とともに消えます。岩は今も、ラインの上にそびえています。",
+            "es": "El canto se desvanece con la niebla. La roca sigue en pie sobre el Rin.",
+            "fr": "Le chant s’efface avec la brume. Le rocher se dresse toujours au-dessus du Rhin.",
+            "it": "Il canto si dissolve con la nebbia. La roccia sorge ancora sopra il Reno.",
+            "ko": "노래는 안개와 함께 사라집니다. 바위는 지금도 라인강 위에 우뚝 서 있습니다.",
+            "nl": "Het lied verdwijnt met de mist. De rots staat nog steeds boven de Rijn.",
+            "pt": "A canção desvanece-se com a névoa. O rochedo continua de pé acima do Reno.",
+            "tr": "Şarkı sisle birlikte silinir. Kaya hâlâ Ren’in üzerinde dimdik durur.",
+            "zh": "歌声随着雾气渐渐消散。那块岩石依然矗立在莱茵河上方。"
           }
         },
         {
@@ -53,7 +93,15 @@
           "text": {
             "en": "The rock is real. The singing siren is a legend, told since the early 1800s.",
             "de": "Der Fels ist echt. Die singende Nixe ist eine Sage, die seit dem frühen 19. Jahrhundert erzählt wird.",
-            "ja": "岩は実在します。歌う妖精は伝説で、19世紀のはじめから語られてきました。"
+            "ja": "岩は実在します。歌う妖精は伝説で、19世紀のはじめから語られてきました。",
+            "es": "La roca es real. La sirena que canta es una leyenda, contada desde principios del siglo XIX.",
+            "fr": "Le rocher est réel. La sirène qui chante est une légende, racontée depuis le début du XIXᵉ siècle.",
+            "it": "La roccia è reale. La sirena che canta è una leggenda, raccontata fin dai primi dell’Ottocento.",
+            "ko": "바위는 실제로 있습니다. 노래하는 세이렌은 1800년대 초부터 전해 내려온 전설입니다.",
+            "nl": "De rots is echt. De zingende sirene is een legende, die sinds het begin van de negentiende eeuw wordt verteld.",
+            "pt": "O rochedo é real. A sereia que canta é uma lenda, contada desde o início do século XIX.",
+            "tr": "Kaya gerçektir. Şarkı söyleyen deniz kızı ise 1800’lerin başından beri anlatılan bir efsanedir.",
+            "zh": "岩石是真实存在的。唱歌的海妖则是传说，从19世纪初起就被人们讲述。"
           }
         }
       ]
@@ -66,7 +114,15 @@
       "title": {
         "en": "Tales from the Old Forest",
         "de": "Märchen aus dem alten Wald",
-        "ja": "古い森のおとぎ話"
+        "ja": "古い森のおとぎ話",
+        "es": "Cuentos del viejo bosque",
+        "fr": "Contes de la vieille forêt",
+        "it": "Racconti dell’antico bosco",
+        "ko": "오래된 숲의 옛이야기",
+        "nl": "Verhalen uit het oude bos",
+        "pt": "Contos da floresta antiga",
+        "tr": "Eski Ormanın Masalları",
+        "zh": "古老森林的童话"
       },
       "intro": [
         {
@@ -74,7 +130,15 @@
           "text": {
             "en": "Two brothers walk from village to village, writing down the tales that people tell by the fire.",
             "de": "Zwei Brüder wandern von Dorf zu Dorf und schreiben die Märchen auf, die die Leute am Feuer erzählen.",
-            "ja": "二人の兄弟が村から村へ歩き、人々が暖炉のそばで語るおとぎ話を書き留めます。"
+            "ja": "二人の兄弟が村から村へ歩き、人々が暖炉のそばで語るおとぎ話を書き留めます。",
+            "es": "Dos hermanos van de pueblo en pueblo anotando los cuentos que la gente cuenta junto al fuego.",
+            "fr": "Deux frères vont de village en village et notent les contes que l’on raconte au coin du feu.",
+            "it": "Due fratelli vanno di villaggio in villaggio e annotano le fiabe che la gente racconta accanto al fuoco.",
+            "ko": "두 형제가 마을에서 마을로 걸으며, 사람들이 난롯가에서 들려주는 옛이야기를 받아 적습니다.",
+            "nl": "Twee broers lopen van dorp naar dorp en schrijven de verhalen op die mensen bij het vuur vertellen.",
+            "pt": "Dois irmãos vão de aldeia em aldeia, anotando os contos que as pessoas contam junto ao fogo.",
+            "tr": "İki kardeş köy köy dolaşıp insanların ateşin başında anlattığı masalları yazıya geçirir.",
+            "zh": "两兄弟走过一个又一个村庄，记下人们围着炉火讲述的童话。"
           }
         },
         {
@@ -82,7 +146,15 @@
           "text": {
             "en": "Keep the forest path safe until the story is told to the end.",
             "de": "Halte den Waldweg sicher, bis die Geschichte zu Ende erzählt ist.",
-            "ja": "お話が最後まで語られるまで、森の道を守りましょう。"
+            "ja": "お話が最後まで語られるまで、森の道を守りましょう。",
+            "es": "Mantén seguro el sendero del bosque hasta que la historia llegue a su fin.",
+            "fr": "Garde le sentier de la forêt jusqu’à la fin de l’histoire.",
+            "it": "Proteggi il sentiero del bosco finché la storia non è raccontata fino alla fine.",
+            "ko": "이야기가 끝까지 전해질 때까지 숲길을 지켜 주세요.",
+            "nl": "Houd het bospad veilig tot het verhaal tot het einde is verteld.",
+            "pt": "Mantém o caminho da floresta seguro até a história ser contada até ao fim.",
+            "tr": "Hikâye sonuna kadar anlatılana dek orman yolunu güvende tut.",
+            "zh": "守住森林小路，直到故事讲完。"
           }
         }
       ],
@@ -92,7 +164,15 @@
           "text": {
             "en": "What big ears you have! Do not worry, I only wish to hear the story, too.",
             "de": "Was hast du für große Ohren! Keine Sorge, ich möchte die Geschichte auch nur hören.",
-            "ja": "なんて大きな耳でしょう。心配しないで。私も、お話を聞きたいだけなのです。"
+            "ja": "なんて大きな耳でしょう。心配しないで。私も、お話を聞きたいだけなのです。",
+            "es": "¡Qué orejas tan grandes tienes! No te preocupes, yo solo quiero escuchar la historia también.",
+            "fr": "Quelles grandes oreilles tu as ! Ne t’inquiète pas, je veux seulement entendre l’histoire, moi aussi.",
+            "it": "Che grandi orecchie che hai! Non preoccuparti, anch’io voglio solo ascoltare la storia.",
+            "ko": "귀가 정말 크구나! 걱정하지 마, 나도 이야기가 듣고 싶을 뿐이야.",
+            "nl": "Wat heb je grote oren! Maak je geen zorgen, ik wil het verhaal ook alleen maar horen.",
+            "pt": "Que orelhas tão grandes tu tens! Não te preocupes, eu só quero ouvir a história também.",
+            "tr": "Ne kadar büyük kulakların var! Merak etme, ben de sadece hikâyeyi dinlemek istiyorum.",
+            "zh": "你的耳朵好大呀！别担心，我也只是想听听这个故事。"
           }
         }
       ],
@@ -102,7 +182,15 @@
           "text": {
             "en": "The tale ends, and the forest grows quiet. Somewhere, a book is waiting to be printed.",
             "de": "Das Märchen endet, und der Wald wird still. Irgendwo wartet ein Buch darauf, gedruckt zu werden.",
-            "ja": "お話は終わり、森は静かになります。どこかで、一冊の本が出版を待っています。"
+            "ja": "お話は終わり、森は静かになります。どこかで、一冊の本が出版を待っています。",
+            "es": "El cuento termina y el bosque se queda en silencio. En algún lugar, un libro espera ser impreso.",
+            "fr": "Le conte se termine et la forêt retrouve le silence. Quelque part, un livre attend d’être imprimé.",
+            "it": "La fiaba finisce e il bosco torna silenzioso. Da qualche parte, un libro aspetta di essere stampato.",
+            "ko": "이야기는 끝나고 숲은 고요해집니다. 어딘가에서 한 권의 책이 출판을 기다리고 있습니다.",
+            "nl": "Het sprookje is uit en het bos wordt stil. Ergens wacht een boek om gedrukt te worden.",
+            "pt": "O conto termina e a floresta fica em silêncio. Algures, um livro espera para ser impresso.",
+            "tr": "Masal sona erer ve orman sessizliğe bürünür. Bir yerlerde, basılmayı bekleyen bir kitap vardır.",
+            "zh": "童话讲完了，森林安静下来。在某个地方，一本书正等着被印刷。"
           }
         },
         {
@@ -110,7 +198,15 @@
           "text": {
             "en": "Jacob and Wilhelm Grimm published the first volume of their collection of tales in 1812.",
             "de": "Jacob und Wilhelm Grimm veröffentlichten 1812 den ersten Band ihrer Märchensammlung.",
-            "ja": "ヤーコプとヴィルヘルムのグリム兄弟は、1812年に、おとぎ話集の第1巻を出版しました。"
+            "ja": "ヤーコプとヴィルヘルムのグリム兄弟は、1812年に、おとぎ話集の第1巻を出版しました。",
+            "es": "Jacob y Wilhelm Grimm publicaron en 1812 el primer volumen de su colección de cuentos.",
+            "fr": "Jacob et Wilhelm Grimm ont publié le premier volume de leur recueil de contes en 1812.",
+            "it": "Jacob e Wilhelm Grimm pubblicarono nel 1812 il primo volume della loro raccolta di fiabe.",
+            "ko": "야코프와 빌헬름 그림 형제는 1812년에 옛이야기 모음집의 첫 번째 권을 펴냈습니다.",
+            "nl": "Jacob en Wilhelm Grimm publiceerden in 1812 het eerste deel van hun sprookjesverzameling.",
+            "pt": "Jacob e Wilhelm Grimm publicaram, em 1812, o primeiro volume da sua coletânea de contos.",
+            "tr": "Jacob ve Wilhelm Grimm, masal derlemelerinin ilk cildini 1812’de yayımladı.",
+            "zh": "雅各布·格林和威廉·格林于1812年出版了他们童话集的第一卷。"
           }
         },
         {
@@ -118,7 +214,15 @@
           "text": {
             "en": "The Brothers Grimm and their book are real. The talking wolf comes from fairy tales, which are fiction.",
             "de": "Die Brüder Grimm und ihr Buch sind echt. Der sprechende Wolf stammt aus Märchen, die erfunden sind.",
-            "ja": "グリム兄弟と、その本は実在します。話すオオカミはおとぎ話に出てくる存在で、作り話です。"
+            "ja": "グリム兄弟と、その本は実在します。話すオオカミはおとぎ話に出てくる存在で、作り話です。",
+            "es": "Los hermanos Grimm y su libro son reales. El lobo que habla viene de los cuentos de hadas, que son ficción.",
+            "fr": "Les frères Grimm et leur livre sont réels. Le loup qui parle vient des contes de fées, qui sont une fiction.",
+            "it": "I fratelli Grimm e il loro libro sono reali. Il lupo che parla viene dalle fiabe, che sono finzione.",
+            "ko": "그림 형제와 그들의 책은 실제로 있습니다. 말하는 늑대는 동화에 나오는 존재로, 지어낸 이야기입니다.",
+            "nl": "De gebroeders Grimm en hun boek zijn echt. De pratende wolf komt uit sprookjes, en die zijn verzonnen.",
+            "pt": "Os irmãos Grimm e o seu livro são reais. O lobo que fala vem dos contos de fadas, que são ficção.",
+            "tr": "Grimm Kardeşler ve kitapları gerçektir. Konuşan kurt ise kurgu olan masallardan gelir.",
+            "zh": "格林兄弟和他们的书是真实的。会说话的狼出自童话，是虚构的。"
           }
         }
       ]
@@ -131,7 +235,15 @@
       "title": {
         "en": "The Hoard in the Cave",
         "de": "Der Hort in der Höhle",
-        "ja": "洞窟の宝"
+        "ja": "洞窟の宝",
+        "es": "El tesoro de la cueva",
+        "fr": "Le trésor de la grotte",
+        "it": "Il tesoro nella caverna",
+        "ko": "동굴 속의 보물",
+        "nl": "De schat in de grot",
+        "pt": "O tesouro da caverna",
+        "tr": "Mağaradaki Hazine",
+        "zh": "洞穴里的宝藏"
       },
       "intro": [
         {
@@ -139,7 +251,15 @@
           "text": {
             "en": "A medieval poet tells of a hero, a hidden treasure and a dragon deep in a cave.",
             "de": "Ein mittelalterlicher Dichter erzählt von einem Helden, einem verborgenen Schatz und einem Drachen tief in einer Höhle.",
-            "ja": "中世の詩人が、英雄と、隠された宝と、洞窟の奥にいる竜の物語を語ります。"
+            "ja": "中世の詩人が、英雄と、隠された宝と、洞窟の奥にいる竜の物語を語ります。",
+            "es": "Un poeta medieval cuenta la historia de un héroe, un tesoro oculto y un dragón en lo más profundo de una cueva.",
+            "fr": "Un poète du Moyen Âge raconte l’histoire d’un héros, d’un trésor caché et d’un dragon tapi au fond d’une grotte.",
+            "it": "Un poeta medievale racconta di un eroe, di un tesoro nascosto e di un drago nel profondo di una caverna.",
+            "ko": "중세의 시인이 영웅과 숨겨진 보물, 그리고 동굴 깊은 곳의 용에 대한 이야기를 들려줍니다.",
+            "nl": "Een middeleeuwse dichter vertelt over een held, een verborgen schat en een draak diep in een grot.",
+            "pt": "Um poeta medieval conta a história de um herói, de um tesouro escondido e de um dragão no fundo de uma caverna.",
+            "tr": "Orta Çağ’dan bir şair, bir kahramanı, saklı bir hazineyi ve bir mağaranın derinliklerindeki ejderhayı anlatır.",
+            "zh": "一位中世纪的诗人讲述了一位英雄、一批隐藏的宝藏，以及藏在洞穴深处的一条龙。"
           }
         },
         {
@@ -147,7 +267,15 @@
           "text": {
             "en": "Guard the cave mouth until the tale reaches its end.",
             "de": "Bewache den Höhleneingang, bis die Erzählung an ihr Ende kommt.",
-            "ja": "お話が終わりまで進むあいだ、洞窟の入り口を守りましょう。"
+            "ja": "お話が終わりまで進むあいだ、洞窟の入り口を守りましょう。",
+            "es": "Vigila la entrada de la cueva hasta que el relato llegue a su fin.",
+            "fr": "Garde l’entrée de la grotte jusqu’à la fin du récit.",
+            "it": "Sorveglia l’ingresso della caverna finché il racconto non giunge al termine.",
+            "ko": "이야기가 끝날 때까지 동굴 입구를 지켜 주세요.",
+            "nl": "Bewaak de ingang van de grot tot het verhaal ten einde komt.",
+            "pt": "Vigia a entrada da caverna até o relato chegar ao fim.",
+            "tr": "Hikâye sona erene kadar mağaranın ağzını koru.",
+            "zh": "守住洞口，直到故事讲完。"
           }
         }
       ],
@@ -157,7 +285,15 @@
           "text": {
             "en": "This gold has slept for a very long time. Please do not wake it all at once.",
             "de": "Dieses Gold schläft schon sehr lange. Bitte weck es nicht auf einmal auf.",
-            "ja": "この金貨は、とても長いあいだ眠っています。いっぺんに起こさないでください。"
+            "ja": "この金貨は、とても長いあいだ眠っています。いっぺんに起こさないでください。",
+            "es": "Este oro lleva dormido mucho tiempo. Por favor, no lo despiertes todo de golpe.",
+            "fr": "Cet or dort depuis très longtemps. S’il te plaît, ne le réveille pas d’un seul coup.",
+            "it": "Quest’oro dorme da moltissimo tempo. Ti prego, non svegliarlo tutto in una volta.",
+            "ko": "이 금은 아주 오랫동안 잠들어 있었어요. 한꺼번에 깨우지 말아 주세요.",
+            "nl": "Dit goud slaapt al heel lang. Maak het alsjeblieft niet in één keer wakker.",
+            "pt": "Este ouro dorme há muito tempo. Por favor, não o acordes todo de uma vez.",
+            "tr": "Bu altın çok uzun zamandır uyuyor. Lütfen hepsini bir anda uyandırma.",
+            "zh": "这些黄金已经沉睡了很久。请不要一下子把它们全部唤醒。"
           }
         }
       ],
@@ -167,7 +303,15 @@
           "text": {
             "en": "The dragon curls up again, and the cave goes dark. The story lives on in a book, not in a hoard.",
             "de": "Der Drache rollt sich wieder zusammen, und die Höhle wird dunkel. Die Geschichte lebt in einem Buch weiter, nicht in einem Hort.",
-            "ja": "竜はふたたび丸くなり、洞窟は暗くなります。物語は宝ではなく、一冊の本の中で生き続けます。"
+            "ja": "竜はふたたび丸くなり、洞窟は暗くなります。物語は宝ではなく、一冊の本の中で生き続けます。",
+            "es": "El dragón vuelve a enroscarse y la cueva se queda a oscuras. La historia sigue viva en un libro, no en un tesoro.",
+            "fr": "Le dragon se roule de nouveau en boule et la grotte retombe dans l’obscurité. L’histoire vit dans un livre, pas dans un trésor.",
+            "it": "Il drago si riavvolge su se stesso e la caverna torna buia. La storia vive in un libro, non in un tesoro.",
+            "ko": "용은 다시 몸을 둥글게 말고, 동굴은 어두워집니다. 이야기는 보물이 아니라 한 권의 책 속에 살아 있습니다.",
+            "nl": "De draak rolt zich weer op en de grot wordt donker. Het verhaal leeft voort in een boek, niet in een schat.",
+            "pt": "O dragão volta a enroscar-se e a caverna fica às escuras. A história vive num livro, não num tesouro.",
+            "tr": "Ejderha yeniden kıvrılır ve mağara kararır. Hikâye bir hazinede değil, bir kitapta yaşar.",
+            "zh": "龙再次蜷起身子，洞穴重归黑暗。故事活在一本书里，而不是在宝藏里。"
           }
         },
         {
@@ -175,7 +319,15 @@
           "text": {
             "en": "The Nibelungenlied is a medieval German epic poem, written down around the year 1200 by an unknown poet.",
             "de": "Das Nibelungenlied ist ein mittelalterliches deutsches Heldenepos, das um das Jahr 1200 von einem unbekannten Dichter aufgeschrieben wurde.",
-            "ja": "『ニーベルンゲンの歌』は中世ドイツの英雄叙事詩で、1200年ごろに、名前の分からない詩人によって書かれました。"
+            "ja": "『ニーベルンゲンの歌』は中世ドイツの英雄叙事詩で、1200年ごろに、名前の分からない詩人によって書かれました。",
+            "es": "El cantar de los nibelungos es un poema épico alemán medieval, puesto por escrito hacia el año 1200 por un poeta desconocido.",
+            "fr": "La Chanson des Nibelungen est un poème épique allemand du Moyen Âge, mis par écrit vers l’an 1200 par un poète inconnu.",
+            "it": "Il Canto dei Nibelunghi è un poema epico tedesco medievale, messo per iscritto intorno all’anno 1200 da un poeta ignoto.",
+            "ko": "『니벨룽겐의 노래』는 중세 독일의 영웅 서사시로, 1200년경 이름 모를 시인이 글로 남겼습니다.",
+            "nl": "Het Nibelungenlied is een middeleeuws Duits heldendicht, rond het jaar 1200 opgeschreven door een onbekende dichter.",
+            "pt": "A Canção dos Nibelungos é um poema épico alemão medieval, posto por escrito por volta do ano 1200 por um poeta desconhecido.",
+            "tr": "Nibelungenlied, Orta Çağ’dan kalma Alman destansı bir şiirdir; 1200 yıllarında, adı bilinmeyen bir şair tarafından yazıya geçirilmiştir.",
+            "zh": "《尼伯龙根之歌》是中世纪德国的英雄史诗，约在1200年由一位不知名的诗人写成。"
           }
         },
         {
@@ -183,7 +335,15 @@
           "text": {
             "en": "The poem is real. The dragon and the cursed hoard are legend, not history.",
             "de": "Das Gedicht ist echt. Der Drache und der verfluchte Hort sind Sage, keine Geschichte.",
-            "ja": "詩は実在します。竜と呪われた宝は伝説であり、史実ではありません。"
+            "ja": "詩は実在します。竜と呪われた宝は伝説であり、史実ではありません。",
+            "es": "El poema es real. El dragón y el tesoro maldito son leyenda, no historia.",
+            "fr": "Le poème est réel. Le dragon et le trésor maudit relèvent de la légende, pas de l’histoire.",
+            "it": "Il poema è reale. Il drago e il tesoro maledetto sono leggenda, non storia.",
+            "ko": "이 시는 실제로 있습니다. 용과 저주받은 보물은 전설이며 역사가 아닙니다.",
+            "nl": "Het gedicht is echt. De draak en de vervloekte schat zijn legende, geen geschiedenis.",
+            "pt": "O poema é real. O dragão e o tesouro amaldiçoado são lenda, não história.",
+            "tr": "Şiir gerçektir. Ejderha ve lanetli hazine efsanedir, tarih değil.",
+            "zh": "这首诗是真实存在的。龙和被诅咒的宝藏是传说，不是历史。"
           }
         }
       ]
