@@ -30,6 +30,17 @@ void main() {
     expect(c.outro.any((l) => l.speaker == Speaker.note), true); // 伝説の章には、実在と伝説の注記
   });
 
+  test('米国の物語: 3章が読めて、データに問題がない。伝説・創作のボスには注記がある', () {
+    final us = load('us');
+    final s = Story.parse(File('packs/us/story.json').readAsStringSync());
+    expect(s.chapters.map((c) => c.stageId), ['us_bunyan', 'us_wright', 'us_moon']);
+    expect(s.validate(us), isEmpty);
+    for (final c in s.chapters) {
+      expect(c.outro.any((l) => l.speaker == Speaker.note), true, reason: c.id); // 創作のボスも、実在と創作を分けて書く
+      expect(c.title.of('ja'), isNot(c.title.of('en')));
+    }
+  });
+
   test('検査: 未知のステージ・伝説の注記なし・前提の章の順番・重複・英語なしを見つける', () {
     LocalizedText t(String en) => LocalizedText({'en': en});
     final line = DialogueLine(Speaker.narrator, t('x'));
