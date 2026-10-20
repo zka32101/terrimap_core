@@ -1,4 +1,4 @@
-# ホーム画面ウィジェット 設計 v0.1（未実装）
+# ホーム画面ウィジェット 設計 v0.1（Android 実装済み・iOS はソースと導入手順まで）
 
 ネイティブ（Kotlin/XML、iOSはSwiftUI）が必要で、開発環境にAndroid SDK/Xcodeが無くビルド検証できないため、実装は手元の環境で行う。
 
@@ -21,3 +21,6 @@
 ## 手元での確認
 - ホームに追加→表示、アプリでクイズ後に更新、言語切替、ダークテーマ、再起動後も残る。
 - 実装後は `docs/device_check_battle_v0_1.md` に項目を追加。
+
+## iOS の状況
+SwiftUI のソース（各アプリの `ios/StreakWidget/StreakWidget.swift`）と、Dart 側の書き出しは用意した。Xcode での拡張ターゲットの作成・App Group の設定は手元で行う: [`ios_widget_setup_v0_1.md`](ios_widget_setup_v0_1.md)。
