@@ -172,5 +172,40 @@ if (p/'facts.json').exists():
         if l.get("region") not in set(ids): err.append(f"facts.json: {lid} の未知の地域 {l.get('region')}")
         if not (l.get("name") or {}).get("en"): err.append(f"facts.json: {lid} に英語の名前がない")
         if l.get("check", "unchecked") not in ("unchecked", "checked"): err.append(f"facts.json: {lid} の check が不正")
+# story.json（任意）: 章の id・ステージの参照・前提の章の順番・英語の文・伝説の章の注記（Dart の Story.validate と同じ規則）
+if (p/'story.json').exists():
+    try: story = json.loads((p/'story.json').read_text())
+    except Exception as e: story = {}; err.append(f"story.json: 読込失敗 {e}")
+    prof = {}
+    if (p/'profile.json').exists():
+        try: prof = json.loads((p/'profile.json').read_text())
+        except Exception: prof = {}
+    extras = {e.get("id"): e for e in (prof.get("extras") or [])}
+    groups = set((prof.get("groups") or {}).keys())
+    SPEAKERS = ("narrator", "boss", "note")
+    seen_ch = set(); seen_all = set()
+    for c in (story.get("chapters") or []):
+        cid = c.get("id")
+        if cid in seen_all: err.append(f"story.json: 章の id が重複 {cid}")
+        seen_all.add(cid)
+        if not (c.get("title") or {}).get("en"): err.append(f"story.json: {cid} の題名の英語がない")
+        lines = [l for k in ("intro", "beforeBoss", "outro") for l in (c.get(k) or [])]
+        for l in lines:
+            if l.get("speaker") not in SPEAKERS: err.append(f"story.json: {cid} の語り手が不正 {l.get('speaker')}")
+            if not (l.get("text") or {}).get("en"): err.append(f"story.json: {cid} に英語のない文がある")
+        kind, sid = c.get("kind"), c.get("stageId")
+        if kind == "normal":
+            if sid not in set(ids): err.append(f"story.json: {cid} の未知の州 {sid}")
+        elif kind == "regional":
+            if sid not in groups: err.append(f"story.json: {cid} の未知の地方 {sid}")
+        elif kind == "extra":
+            e = extras.get(sid)
+            if e is None: err.append(f"story.json: {cid} の未知のエクストラ {sid}")
+            elif e.get("basis") == "legend" and not any(l.get("speaker") == "note" for l in (c.get("outro") or [])):
+                err.append(f"story.json: {cid} は伝説の章なので、実在と伝説を分ける注記（note）が要る")
+        else: err.append(f"story.json: {cid} の kind が不正 {kind}")
+        r = c.get("requires")
+        if r is not None and r not in seen_ch: err.append(f"story.json: {cid} の前提の章 {r} が先にない")
+        seen_ch.add(cid)
 print("\n".join(err) if err else f"OK {pack.get('packId')}: {len(ids)}地域")
 sys.exit(1 if err else 0)

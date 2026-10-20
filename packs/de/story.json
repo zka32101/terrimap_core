@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "chapters": [
+    {
+      "id": "de_ch_loreley",
+      "kind": "extra",
+      "stageId": "de_loreley",
+      "requires": null,
+      "title": {
+        "en": "The Song on the Rhine",
+        "de": "Das Lied am Rhein",
+        "ja": "ラインの歌"
+      },
+      "intro": [
+        {"speaker": "narrator", "text": {
+          "en": "Mist drifts along the Rhine at dusk. From a high rock, a song is said to carry across the water.",
+          "de": "Am Abend zieht Nebel über den Rhein. Von einem hohen Felsen soll ein Lied über das Wasser klingen.",
+          "ja": "夕暮れのライン川に霧が流れます。高い岩の上から、歌声が水面を渡ると伝えられています。"}},
+        {"speaker": "narrator", "text": {
+          "en": "Hold the river valley until the song fades.",
+          "de": "Halte das Flusstal, bis das Lied verklingt.",
+          "ja": "歌声が消えるまで、川の谷を守りましょう。"}}
+      ],
+      "beforeBoss": [
+        {"speaker": "boss", "text": {
+          "en": "Do you hear it? The river remembers every sailor.",
+          "de": "Hörst du es? Der Fluss erinnert sich an jeden Schiffer.",
+          "ja": "聞こえますか。川は、すべての船乗りを覚えています。"}}
+      ],
+      "outro": [
+        {"speaker": "narrator", "text": {
+          "en": "The song fades with the mist. The rock still stands above the Rhine.",
+          "de": "Das Lied verklingt mit dem Nebel. Der Fels steht noch immer über dem Rhein.",
+          "ja": "歌は霧とともに消えます。岩は今も、ラインの上にそびえています。"}},
+        {"speaker": "note", "text": {
+          "en": "The rock is real. The singing siren is a legend, told since the early 1800s.",
+          "de": "Der Fels ist echt. Die singende Nixe ist eine Sage, die seit dem frühen 19. Jahrhundert erzählt wird.",
+          "ja": "岩は実在します。歌う妖精は伝説で、19世紀のはじめから語られてきました。"}}
+      ]
+    }
+  ]
+}
