@@ -142,12 +142,12 @@
 
 | 試作 | 種類 | id | 備考 | 生成 | 最終 | ファイル | 状態 |
 |---|---|---|---|---|---|---|---|
-|  | 天候 | hurricane |  | 1344x768 | 1344x768 | `common/weather/hurricane.png` | 未作成 |
-|  | 天候 | tornado |  | 1344x768 | 1344x768 | `common/weather/tornado.png` | 未作成 |
-|  | 天候 | blizzard |  | 1344x768 | 1344x768 | `common/weather/blizzard.png` | 未作成 |
-|  | 天候 | heatwave |  | 1344x768 | 1344x768 | `common/weather/heatwave.png` | 未作成 |
-|  | 天候 | wildfire |  | 1344x768 | 1344x768 | `common/weather/wildfire.png` | 未作成 |
-|  | 天候 | flood |  | 1344x768 | 1344x768 | `common/weather/flood.png` | 未作成 |
-|  | 天候 | earthquake |  | 1344x768 | 1344x768 | `common/weather/earthquake.png` | 未作成 |
-|  | 天候 | storm |  | 1344x768 | 1344x768 | `common/weather/storm.png` | 未作成 |
+|  | 天候 | hurricane |  | 768x1344 | 768x1344 | `common/weather/hurricane.png` | 未作成 |
+|  | 天候 | tornado |  | 768x1344 | 768x1344 | `common/weather/tornado.png` | 未作成 |
+|  | 天候 | blizzard |  | 768x1344 | 768x1344 | `common/weather/blizzard.png` | 未作成 |
+|  | 天候 | heatwave |  | 768x1344 | 768x1344 | `common/weather/heatwave.png` | 未作成 |
+|  | 天候 | wildfire |  | 768x1344 | 768x1344 | `common/weather/wildfire.png` | 未作成 |
+|  | 天候 | flood |  | 768x1344 | 768x1344 | `common/weather/flood.png` | 未作成 |
+|  | 天候 | earthquake |  | 768x1344 | 768x1344 | `common/weather/earthquake.png` | 未作成 |
+|  | 天候 | storm |  | 768x1344 | 768x1344 | `common/weather/storm.png` | 未作成 |
 

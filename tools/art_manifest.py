@@ -20,11 +20,11 @@ PROTO |= {("de", "facilities", s) for s in ["farm_windmill", "harbor_cutter", "a
 PROTO |= {("de", "enemies", s) for s in ["rust_sprite", "dash_gremlin", "iron_golem", "forest_sprite"]}
 PROTO |= {("de", "bosses", "de_loreley")}
 
-# 種類 -> (説明, 期待する形)。bg=縦長9:16(俯瞰)・不透明、sprite=正方形・背景透過、overlay=16:9・透過
+# 種類 -> (説明, 期待する形)。bg=縦長9:16(俯瞰)・不透明、sprite=正方形・背景透過、overlay=縦長9:16(盤面と同じ向き)・透過
 KIND = {"backdrops": ("背景", "bg"), "facilities": ("施設", "sprite"), "exclusive": ("限定施設", "sprite"),
         "enemies": ("敵", "sprite"), "bosses": ("ボス", "sprite"), "landmarks": ("名所カード", "sprite"), "weather": ("天候", "overlay")}
-GEN = {"bg": "768x1344", "sprite": "1024x1024", "overlay": "1344x768"}  # Leonardo の生成サイズ
-FINAL = {"bg": "768x1344", "sprite": "512x512", "overlay": "1344x768"}  # アプリに入れるサイズ
+GEN = {"bg": "768x1344", "sprite": "1024x1024", "overlay": "768x1344"}  # Leonardo の生成サイズ
+FINAL = {"bg": "768x1344", "sprite": "512x512", "overlay": "768x1344"}  # アプリに入れるサイズ
 
 
 def entries():
@@ -73,8 +73,8 @@ def inspect(p):
     else:
         if shape == "sprite" and w != h:
             bad.append(f"正方形ではない({w}x{h})")
-        if shape == "overlay" and abs(w / h - 16 / 9) > 0.05:
-            bad.append(f"16:9ではない({w}x{h})")
+        if shape == "overlay" and abs(w / h - 9 / 16) > 0.05:
+            bad.append(f"9:16ではない({w}x{h})")
         if shape == "sprite" and w < 256:
             bad.append(f"小さい({w}x{h}、256以上)")
         rgba = im.convert("RGBA")
