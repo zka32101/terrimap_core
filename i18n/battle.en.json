@@ -292,5 +292,7 @@
   "goal.title": "Weekly goal",
   "goal.progress": "{n} of {total} questions this week",
   "goal.reached": "Goal reached!",
-  "goal.set": "Questions per week"
+  "goal.set": "Questions per week",
+  "fx.setting": "Battle effects",
+  "fx.help": "Shots, explosions, damage numbers and screen shake during battles."
 }

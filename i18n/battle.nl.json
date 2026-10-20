@@ -292,5 +292,7 @@
   "goal.title": "Weekdoel",
   "goal.progress": "{n} van {total} vragen deze week",
   "goal.reached": "Doel bereikt!",
-  "goal.set": "Vragen per week"
+  "goal.set": "Vragen per week",
+  "fx.setting": "Gevechtseffecten",
+  "fx.help": "Schoten, explosies, schadegetallen en schermschudden tijdens gevechten."
 }

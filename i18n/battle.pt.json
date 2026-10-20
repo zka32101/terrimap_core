@@ -292,5 +292,7 @@
   "goal.title": "Meta semanal",
   "goal.progress": "{n} de {total} perguntas esta semana",
   "goal.reached": "Meta atingida!",
-  "goal.set": "Perguntas por semana"
+  "goal.set": "Perguntas por semana",
+  "fx.setting": "Efeitos de batalha",
+  "fx.help": "Tiros, explosões, números de dano e tremores de tela durante as batalhas."
 }

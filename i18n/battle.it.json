@@ -292,5 +292,7 @@
   "goal.title": "Obiettivo settimanale",
   "goal.progress": "{n} di {total} domande questa settimana",
   "goal.reached": "Obiettivo raggiunto!",
-  "goal.set": "Domande a settimana"
+  "goal.set": "Domande a settimana",
+  "fx.setting": "Effetti di battaglia",
+  "fx.help": "Colpi, esplosioni, numeri dei danni e scosse dello schermo durante le battaglie."
 }

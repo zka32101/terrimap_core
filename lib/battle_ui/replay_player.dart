@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 
 import '../battle/battle_engine.dart';
 import '../battle/replay.dart';
+import 'battle_fx.dart';
 
 /// リプレイの再生役（設計書 §6.13）。[BattleSession] と同じく、時間は画面のフレームから [tick] で渡す。
 /// 記録の操作を、記録された刻み（`tickCount`）で適用するので、遊んだときと同じ結果になる。
@@ -19,6 +20,9 @@ class ReplayPlayer extends ChangeNotifier {
   /// 直近のイベント（新しい順に最大 [maxLog] 件）。
   final List<BattleEvent> log = [];
   static const maxLog = 40;
+
+  /// 演出（弾・爆発・ダメージ数字・揺れ）。画面の [BattleView.fx] に渡す。
+  final BattleFx fx = BattleFx();
 
   int _next = 0; // 次に適用する操作
   double _acc = 0; // 刻みに満たない残りの時間
@@ -80,6 +84,7 @@ class ReplayPlayer extends ChangeNotifier {
     }
     if (finished) _acc = 0;
     _add(events);
+    fx.consume(state, events, engine.stage);
     notifyListeners();
   }
 
@@ -93,6 +98,7 @@ class ReplayPlayer extends ChangeNotifier {
     }
     _acc = 0;
     _add(events);
+    fx.clear();
     notifyListeners();
   }
 
@@ -103,6 +109,7 @@ class ReplayPlayer extends ChangeNotifier {
     _acc = 0;
     corrupt = false;
     log.clear();
+    fx.clear();
     paused = false;
     _applyDue(const []);
     notifyListeners();

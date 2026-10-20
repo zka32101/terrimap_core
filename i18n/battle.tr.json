@@ -292,5 +292,7 @@
   "goal.title": "Haftalık hedef",
   "goal.progress": "Bu hafta {total} sorudan {n}",
   "goal.reached": "Hedefe ulaşıldı!",
-  "goal.set": "Haftalık soru sayısı"
+  "goal.set": "Haftalık soru sayısı",
+  "fx.setting": "Savaş efektleri",
+  "fx.help": "Savaş sırasında atışlar, patlamalar, hasar sayıları ve ekran sarsıntısı."
 }
