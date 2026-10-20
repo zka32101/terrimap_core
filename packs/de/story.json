@@ -347,6 +347,230 @@
           }
         }
       ]
+    },
+    {
+      "id": "de_ch_north",
+      "kind": "regional",
+      "stageId": "north",
+      "requires": null,
+      "title": {
+        "en": "The Northern Coast",
+        "de": "Die Nordküste",
+        "ja": "北の海岸",
+        "es": "La costa norte",
+        "fr": "La côte nord",
+        "it": "La costa del nord",
+        "ko": "북쪽 해안",
+        "nl": "De noordkust",
+        "pt": "A costa norte",
+        "tr": "Kuzey Kıyısı",
+        "zh": "北部海岸"
+      },
+      "intro": [
+        {
+          "speaker": "narrator",
+          "text": {
+            "en": "Salt wind, wide tides and busy harbors. Defend the northern coast, where Germany meets the sea.",
+            "de": "Salzige Luft, weite Gezeiten und geschäftige Häfen. Verteidige die Nordküste, wo Deutschland auf das Meer trifft.",
+            "ja": "潮風、広い干潟、にぎやかな港。ドイツが海とふれあう北の海岸を守りましょう。",
+            "es": "Viento salado, grandes mareas y puertos bulliciosos. Defiende la costa norte, donde Alemania se encuentra con el mar.",
+            "fr": "Vent salé, grandes marées et ports animés. Défends la côte nord, là où l’Allemagne rencontre la mer.",
+            "it": "Vento salmastro, grandi maree e porti affollati. Difendi la costa settentrionale, dove la Germania incontra il mare.",
+            "ko": "짠 바닷바람, 넓은 갯벌, 북적이는 항구. 독일이 바다와 만나는 북쪽 해안을 지켜 주세요.",
+            "nl": "Zilte wind, wijde getijden en drukke havens. Verdedig de noordkust, waar Duitsland de zee ontmoet.",
+            "pt": "Vento salgado, grandes marés e portos movimentados. Defende a costa norte, onde a Alemanha encontra o mar.",
+            "tr": "Tuzlu rüzgâr, geniş gelgitler ve işlek limanlar. Almanya’nın denizle buluştuğu kuzey kıyısını koru.",
+            "zh": "咸咸的海风、宽阔的潮汐、繁忙的港口。守住德国与大海相遇的北部海岸。"
+          }
+        }
+      ],
+      "beforeBoss": [],
+      "outro": [
+        {
+          "speaker": "narrator",
+          "text": {
+            "en": "The North Sea tides rise and fall twice a day, and Hamburg's harbor is one of the busiest in Europe.",
+            "de": "Die Gezeiten der Nordsee kommen und gehen zweimal am Tag, und der Hamburger Hafen gehört zu den belebtesten Europas.",
+            "ja": "北海の潮は1日に2回満ち引きし、ハンブルクの港はヨーロッパでも指折りのにぎわいです。",
+            "es": "Las mareas del mar del Norte suben y bajan dos veces al día, y el puerto de Hamburgo es uno de los más activos de Europa.",
+            "fr": "Les marées de la mer du Nord montent et descendent deux fois par jour, et le port de Hambourg est l’un des plus actifs d’Europe.",
+            "it": "Le maree del Mare del Nord salgono e scendono due volte al giorno, e il porto di Amburgo è uno dei più attivi d’Europa.",
+            "ko": "북해의 조수는 하루에 두 번 밀려왔다 빠지고, 함부르크 항구는 유럽에서 가장 붐비는 항구 중 하나입니다.",
+            "nl": "Het getij van de Noordzee komt en gaat twee keer per dag, en de haven van Hamburg is een van de drukste van Europa.",
+            "pt": "As marés do Mar do Norte sobem e descem duas vezes por dia, e o porto de Hamburgo é um dos mais movimentados da Europa.",
+            "tr": "Kuzey Denizi’nin gelgiti günde iki kez yükselip alçalır; Hamburg Limanı da Avrupa’nın en işlek limanlarından biridir.",
+            "zh": "北海的潮水每天涨落两次，汉堡港是欧洲最繁忙的港口之一。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "de_ch_east",
+      "kind": "regional",
+      "stageId": "east",
+      "requires": null,
+      "title": {
+        "en": "Along the Elbe",
+        "de": "Entlang der Elbe",
+        "ja": "エルベ川にそって",
+        "es": "A lo largo del Elba",
+        "fr": "Le long de l’Elbe",
+        "it": "Lungo l’Elba",
+        "ko": "엘베강을 따라",
+        "nl": "Langs de Elbe",
+        "pt": "Ao longo do Elba",
+        "tr": "Elbe Boyunca",
+        "zh": "沿着易北河"
+      },
+      "intro": [
+        {
+          "speaker": "narrator",
+          "text": {
+            "en": "Old towns, wide skies and a river that winds toward the sea. Defend the east along the Elbe.",
+            "de": "Alte Städte, weiter Himmel und ein Fluss, der sich dem Meer entgegenwindet. Verteidige den Osten entlang der Elbe.",
+            "ja": "古い町並み、広い空、海へ向かってうねる川。エルベ川ぞいの東部を守りましょう。",
+            "es": "Ciudades antiguas, cielos amplios y un río que serpentea hacia el mar. Defiende el este, a lo largo del Elba.",
+            "fr": "Vieilles villes, grand ciel et un fleuve qui serpente vers la mer. Défends l’est, le long de l’Elbe.",
+            "it": "Città antiche, cieli ampi e un fiume che serpeggia verso il mare. Difendi l’est, lungo l’Elba.",
+            "ko": "오래된 마을, 드넓은 하늘, 바다를 향해 굽이치는 강. 엘베강을 따라 동부를 지켜 주세요.",
+            "nl": "Oude steden, wijde luchten en een rivier die zich naar de zee kronkelt. Verdedig het oosten, langs de Elbe.",
+            "pt": "Cidades antigas, céus amplos e um rio que serpenteia em direção ao mar. Defende o leste, ao longo do Elba.",
+            "tr": "Eski kasabalar, geniş gökyüzü ve denize doğru kıvrılan bir nehir. Elbe boyunca doğuyu koru.",
+            "zh": "古老的城镇、辽阔的天空，还有一条蜿蜒流向大海的河。沿着易北河守住东部。"
+          }
+        }
+      ],
+      "beforeBoss": [],
+      "outro": [
+        {
+          "speaker": "narrator",
+          "text": {
+            "en": "The Elbe flows through Saxony and on to the North Sea.",
+            "de": "Die Elbe fließt durch Sachsen weiter bis zur Nordsee.",
+            "ja": "エルベ川はザクセンを流れ、北海まで続いています。",
+            "es": "El Elba atraviesa Sajonia y sigue hasta el mar del Norte.",
+            "fr": "L’Elbe traverse la Saxe et se jette dans la mer du Nord.",
+            "it": "L’Elba attraversa la Sassonia e prosegue fino al Mare del Nord.",
+            "ko": "엘베강은 작센을 지나 북해까지 이어집니다.",
+            "nl": "De Elbe stroomt door Saksen en verder naar de Noordzee.",
+            "pt": "O Elba atravessa a Saxónia e segue até ao Mar do Norte.",
+            "tr": "Elbe, Saksonya’dan geçip Kuzey Denizi’ne ulaşır.",
+            "zh": "易北河流经萨克森，一路汇入北海。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "de_ch_west",
+      "kind": "regional",
+      "stageId": "west",
+      "requires": null,
+      "title": {
+        "en": "The Rhine Valley",
+        "de": "Das Rheintal",
+        "ja": "ライン渓谷",
+        "es": "El valle del Rin",
+        "fr": "La vallée du Rhin",
+        "it": "La valle del Reno",
+        "ko": "라인 계곡",
+        "nl": "Het Rijndal",
+        "pt": "O vale do Reno",
+        "tr": "Ren Vadisi",
+        "zh": "莱茵河谷"
+      },
+      "intro": [
+        {
+          "speaker": "narrator",
+          "text": {
+            "en": "Busy cities, cathedral towers and the Rhine flowing past them. Defend the west.",
+            "de": "Lebhafte Städte, Domtürme und der Rhein, der an ihnen vorbeifließt. Verteidige den Westen.",
+            "ja": "にぎやかな街、大聖堂の塔、そのそばを流れるライン川。西部を守りましょう。",
+            "es": "Ciudades animadas, torres de catedral y el Rin fluyendo a su lado. Defiende el oeste.",
+            "fr": "Villes animées, tours de cathédrales et le Rhin qui coule à leurs pieds. Défends l’ouest.",
+            "it": "Città vivaci, torri di cattedrali e il Reno che scorre accanto. Difendi l’ovest.",
+            "ko": "활기찬 도시, 대성당의 탑, 그 곁을 흐르는 라인강. 서부를 지켜 주세요.",
+            "nl": "Drukke steden, kathedraaltorens en de Rijn die er langs stroomt. Verdedig het westen.",
+            "pt": "Cidades movimentadas, torres de catedrais e o Reno a correr ao lado delas. Defende o oeste.",
+            "tr": "Hareketli şehirler, katedral kuleleri ve yanlarından akan Ren. Batıyı koru.",
+            "zh": "熙熙攘攘的城市、大教堂的塔楼，还有从它们身旁流过的莱茵河。守住西部。"
+          }
+        }
+      ],
+      "beforeBoss": [],
+      "outro": [
+        {
+          "speaker": "narrator",
+          "text": {
+            "en": "Cologne Cathedral took more than 600 years to finish.",
+            "de": "Am Kölner Dom wurde mehr als 600 Jahre lang gebaut.",
+            "ja": "ケルン大聖堂は、完成までに600年以上かかりました。",
+            "es": "La catedral de Colonia tardó más de 600 años en terminarse.",
+            "fr": "La cathédrale de Cologne a mis plus de 600 ans à être achevée.",
+            "it": "Il Duomo di Colonia ha richiesto più di 600 anni per essere completato.",
+            "ko": "쾰른 대성당은 완성되기까지 600년이 넘게 걸렸습니다.",
+            "nl": "Aan de Dom van Keulen is meer dan 600 jaar gebouwd.",
+            "pt": "A Catedral de Colónia demorou mais de 600 anos a ser concluída.",
+            "tr": "Köln Katedrali’nin tamamlanması 600 yıldan fazla sürdü.",
+            "zh": "科隆大教堂花了600多年才建成。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "de_ch_south",
+      "kind": "regional",
+      "stageId": "south",
+      "requires": null,
+      "title": {
+        "en": "Mountains of the South",
+        "de": "Berge des Südens",
+        "ja": "南の山々",
+        "es": "Las montañas del sur",
+        "fr": "Les montagnes du sud",
+        "it": "Le montagne del sud",
+        "ko": "남쪽의 산들",
+        "nl": "De bergen van het zuiden",
+        "pt": "As montanhas do sul",
+        "tr": "Güneyin Dağları",
+        "zh": "南部的群山"
+      },
+      "intro": [
+        {
+          "speaker": "narrator",
+          "text": {
+            "en": "Forests, lakes and the snowy Alps. Defend the south, from the Black Forest to the Bavarian peaks.",
+            "de": "Wälder, Seen und die verschneiten Alpen. Verteidige den Süden, vom Schwarzwald bis zu den bayerischen Gipfeln.",
+            "ja": "森と湖、雪をかぶったアルプス。黒い森からバイエルンの峰まで、南部を守りましょう。",
+            "es": "Bosques, lagos y los Alpes nevados. Defiende el sur, desde la Selva Negra hasta las cumbres bávaras.",
+            "fr": "Forêts, lacs et Alpes enneigées. Défends le sud, de la Forêt-Noire aux sommets bavarois.",
+            "it": "Foreste, laghi e Alpi innevate. Difendi il sud, dalla Foresta Nera alle vette bavaresi.",
+            "ko": "숲과 호수, 눈 덮인 알프스. 검은 숲에서 바이에른의 봉우리까지, 남부를 지켜 주세요.",
+            "nl": "Bossen, meren en de besneeuwde Alpen. Verdedig het zuiden, van het Zwarte Woud tot de Beierse toppen.",
+            "pt": "Florestas, lagos e os Alpes cobertos de neve. Defende o sul, da Floresta Negra aos cumes da Baviera.",
+            "tr": "Ormanlar, göller ve karlı Alpler. Kara Orman’dan Bavyera zirvelerine kadar güneyi koru.",
+            "zh": "森林、湖泊和白雪覆盖的阿尔卑斯山。从黑森林到巴伐利亚的山峰，守住南部。"
+          }
+        }
+      ],
+      "beforeBoss": [],
+      "outro": [
+        {
+          "speaker": "narrator",
+          "text": {
+            "en": "The Zugspitze, at 2,962 meters, is the highest mountain in Germany.",
+            "de": "Die Zugspitze ist mit 2.962 Metern der höchste Berg Deutschlands.",
+            "ja": "ツークシュピッツェは標高2,962メートルで、ドイツでいちばん高い山です。",
+            "es": "La Zugspitze, con 2962 metros, es la montaña más alta de Alemania.",
+            "fr": "La Zugspitze, avec ses 2 962 mètres, est la plus haute montagne d’Allemagne.",
+            "it": "La Zugspitze, con i suoi 2.962 metri, è la montagna più alta della Germania.",
+            "ko": "추크슈피체는 해발 2,962미터로, 독일에서 가장 높은 산입니다.",
+            "nl": "De Zugspitze is met 2962 meter de hoogste berg van Duitsland.",
+            "pt": "A Zugspitze, com 2962 metros, é a montanha mais alta da Alemanha.",
+            "tr": "2.962 metre yüksekliğiyle Zugspitze, Almanya’nın en yüksek dağıdır.",
+            "zh": "楚格峰海拔2962米，是德国最高的山。"
+          }
+        }
+      ]
     }
   ]
 }
