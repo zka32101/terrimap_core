@@ -109,6 +109,21 @@ void main() {
     expect([p.completedCount, p.next], [2, null]);
   });
 
+  test('主人公: 各国に1人いて、全章に主人公の文が1つ以上ある。定義がなければ検査で見つかる', () {
+    final us = load('us');
+    for (final e in {'de': de, 'us': us}.entries) {
+      final s = Story.parse(File('packs/${e.key}/story.json').readAsStringSync());
+      expect(s.hero, isNotNull, reason: e.key);
+      expect(s.hero!.name.of('ja'), s.hero!.name.of('en')); // 名前は言語によらず同じ
+      expect(s.hero!.role.of('ja'), isNot(s.hero!.role.of('en')));
+      for (final c in s.chapters) {
+        expect([...c.intro, ...c.outro].any((l) => l.speaker == Speaker.hero), true, reason: c.id);
+      }
+    }
+    final bad = Story.parse('{"chapters":[{"id":"x","kind":"normal","stageId":"DE-BY","title":{"en":"x"},"intro":[{"speaker":"hero","text":{"en":"a"}}]}]}');
+    expect(bad.validate(de).any((m) => m.contains('hero')), true);
+  });
+
   test('読み込み: 壊れた章・知らない語り手は読み飛ばす', () {
     final s = Story.parse('{"chapters":[{"id":"ok","kind":"normal","stageId":"DE-BY","title":{"en":"x"},"intro":[{"speaker":"ghost","text":{"en":"a"}},{"speaker":"narrator","text":{"en":"b"}}]},{"id":"bad","kind":"weird","stageId":"x"},5]}');
     expect(s.chapters.length, 1);

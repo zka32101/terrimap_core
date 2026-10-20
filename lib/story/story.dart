@@ -20,7 +20,21 @@ class LocalizedText {
 }
 
 /// 物語の語り手。note は「何が実在で何が伝説か」の注記（伝説を元にした章には必ず入れる）。
-enum Speaker { narrator, boss, note }
+/// hero は、その国の案内役の主人公（`story.json` の `hero` で定義する）。知らない語り手の文は読み飛ばす。
+enum Speaker { narrator, boss, note, hero }
+
+/// その国の主人公。名前は言語によらず同じでよい（訳がなければ英語）。role は一言の紹介。
+class Hero {
+  final String id;
+  final LocalizedText name;
+  final LocalizedText role;
+  const Hero({required this.id, required this.name, required this.role});
+
+  static Hero? fromJson(Object? j) {
+    if (j is! Map || j['id'] is! String) return null;
+    return Hero(id: j['id'] as String, name: LocalizedText.fromJson(j['name']), role: LocalizedText.fromJson(j['role']));
+  }
+}
 
 class DialogueLine {
   final Speaker speaker;
@@ -81,11 +95,17 @@ class StoryChapter {
 /// その国の物語（`packs/<国>/story.json`）。章の並びと、各章の文。画面にも保存先にも依存しない。
 class Story {
   final List<StoryChapter> chapters;
-  const Story(this.chapters);
+
+  /// 主人公（なければ null。その国の物語に主人公の文は入れられない）。
+  final Hero? hero;
+  const Story(this.chapters, {this.hero});
 
   factory Story.parse(String json) {
     final m = jsonDecode(json) as Map;
-    return Story([for (final c in (m['chapters'] as List? ?? const [])) StoryChapter.fromJson(c)].whereType<StoryChapter>().toList());
+    return Story(
+      [for (final c in (m['chapters'] as List? ?? const [])) StoryChapter.fromJson(c)].whereType<StoryChapter>().toList(),
+      hero: Hero.fromJson(m['hero']),
+    );
   }
 
   StoryChapter? chapter(String id) {
@@ -108,11 +128,14 @@ class Story {
     final errs = <String>[];
     final ids = <String>{};
     final profile = pack.profile;
+    final h = hero;
+    if (h != null && !h.name.hasEnglish) errs.add('hero: 名前の英語がない');
     for (final c in chapters) {
       if (!ids.add(c.id)) errs.add('${c.id}: 章の id が重複');
       if (!c.title.hasEnglish) errs.add('${c.id}: 題名の英語がない');
       for (final l in [...c.intro, ...c.beforeBoss, ...c.outro]) {
         if (!l.text.hasEnglish) errs.add('${c.id}: 英語のない文がある');
+        if (l.speaker == Speaker.hero && h == null) errs.add('${c.id}: 主人公の文があるが、hero が定義されていない');
       }
       switch (c.kind) {
         case StageKind.normal:
