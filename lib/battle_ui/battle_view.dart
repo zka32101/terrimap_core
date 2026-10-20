@@ -142,6 +142,20 @@ class _BattlePainter extends CustomPainter {
     canvas.drawImageRect(img, src, dst, paint);
   }
 
+  /// 天候の重ね画像を、盤面いっぱいに（縦横比を保って覆う）。止まって見えないよう、ゆっくり横に揺らし、濃さを呼吸させる。
+  static void _weatherArt(Canvas canvas, Size size, ui.Image img, double t) {
+    final k = math.max(size.width / img.width, size.height / img.height) * 1.06; // 揺らしても端が見えない大きさ
+    final w = img.width * k, h = img.height * k;
+    final dx = math.sin(t * 0.6) * size.width * 0.015, dy = math.cos(t * 0.45) * size.height * 0.01;
+    final dst = Rect.fromLTWH((size.width - w) / 2 + dx, (size.height - h) / 2 + dy, w, h);
+    final opacity = 0.85 + 0.15 * math.sin(t * 1.3);
+    canvas.save();
+    canvas.clipRect(Offset.zero & size);
+    canvas.drawImageRect(img, Rect.fromLTWH(0, 0, img.width.toDouble(), img.height.toDouble()), dst,
+        Paint()..filterQuality = FilterQuality.medium..color = Color.fromRGBO(0, 0, 0, opacity));
+    canvas.restore();
+  }
+
   @override
   void paint(Canvas canvas, Size size) {
     canvas.save();
@@ -153,7 +167,14 @@ class _BattlePainter extends CustomPainter {
       fx!.paint(canvas, size, (c, r) => Offset(l.dx + (c + 0.5) * l.cell, l.dy + (r + 0.5) * l.cell), l.cell, state.time);
     }
     canvas.restore();
-    if (weather != null) paintWeather(canvas, size, weather!, state.time);
+    if (weather != null) {
+      final img = art?.weather(weather!);
+      if (img != null) {
+        _weatherArt(canvas, size, img, state.time);
+      } else {
+        paintWeather(canvas, size, weather!, state.time);
+      }
+    }
   }
 
   void _paintBoard(Canvas canvas, Size size) {

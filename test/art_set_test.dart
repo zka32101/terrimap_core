@@ -43,6 +43,19 @@ void main() {
     expect(art.backdrop('alps'), isNull);
   });
 
+  testWidgets('天候の画像: ArtSet.weather が返し、あれば画像で、無ければ図形で描ける（どの天候でも例外にならない）', (t) async {
+    final img = (await t.runAsync(() => solid(16, 9, const Color(0x8880CBC4))))!;
+    final art = ArtSet(images: {'weather/storm': img});
+    expect(art.weather('storm'), same(img));
+    expect(art.weather('flood'), isNull);
+    final s = session();
+    for (final w in ['storm', 'flood']) {
+      await t.pumpWidget(MaterialApp(home: SizedBox(width: 360, height: 500, child: BattleView(stage: s.engine.stage, state: s.state, art: art, weather: w))));
+      await t.pump(const Duration(milliseconds: 100));
+      expect(t.takeException(), isNull, reason: w);
+    }
+  });
+
   testWidgets('画像ありでも描ける（背景・施設・敵・ボス）。画像が無い要素は null', (t) async {
     final img = (await t.runAsync(() => solid(8, 8, Colors.red)))!;
     final s = session();
