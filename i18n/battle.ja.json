@@ -292,5 +292,7 @@
   "goal.title": "今週の目標",
   "goal.progress": "今週は{total}問中{n}問",
   "goal.reached": "目標達成！",
-  "goal.set": "1週間の問題数"
+  "goal.set": "1週間の問題数",
+  "fx.setting": "バトルの演出",
+  "fx.help": "バトル中の弾・爆発・ダメージ数字・画面の揺れを表示します。"
 }

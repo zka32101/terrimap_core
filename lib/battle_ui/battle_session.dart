@@ -4,6 +4,7 @@ import '../battle/battle_engine.dart';
 import '../battle/grid.dart';
 import '../battle/replay.dart';
 import '../quiz/quiz_engine.dart';
+import 'battle_fx.dart';
 
 /// 画面とエンジンの間に入る、バトル1回ぶんの操作役。時間の進め方（速度・一時停止）、選択中のマス、直近のイベントを持つ。
 /// 時間は画面のフレームから [tick] で渡す（エンジンは固定の刻みで進める）。
@@ -23,6 +24,9 @@ class BattleSession extends ChangeNotifier {
   static const maxLog = 40;
 
   /// 操作の記録（リプレイ用）。
+  /// 演出（弾・爆発・ダメージ数字・揺れ）。画面の [BattleView.fx] に渡す。
+  final BattleFx fx = BattleFx();
+
   late final ReplayRecorder recorder = ReplayRecorder(engine);
 
   double _acc = 0; // 刻みに満たない残りの時間（毎回同じ刻みで進めるため。リプレイを正確にする）
@@ -55,6 +59,7 @@ class BattleSession extends ChangeNotifier {
     }
     if (state.isOver) _acc = 0;
     _add(events);
+    fx.consume(state, events, engine.stage);
     notifyListeners();
   }
 
@@ -112,6 +117,7 @@ class BattleSession extends ChangeNotifier {
     final r = recorder.startWave(state);
     state = r.state;
     _add(r.events);
+    fx.consume(state, r.events, engine.stage);
     notifyListeners();
   }
 

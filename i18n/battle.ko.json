@@ -292,5 +292,7 @@
   "goal.title": "주간 목표",
   "goal.progress": "이번 주 {total}문제 중 {n}문제",
   "goal.reached": "목표 달성!",
-  "goal.set": "주간 문제 수"
+  "goal.set": "주간 문제 수",
+  "fx.setting": "전투 연출",
+  "fx.help": "전투 중 탄환, 폭발, 피해 숫자, 화면 흔들림을 표시합니다."
 }
