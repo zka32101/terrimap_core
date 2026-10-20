@@ -299,5 +299,6 @@
   "story.next": "Siguiente",
   "story.done": "Listo",
   "story.locked": "Completa el capítulo anterior para leer este",
-  "story.cleared": "Superado"
+  "story.cleared": "Superado",
+  "synergy.hint": "Los edificios de distinto tipo que están juntos (incluso en diagonal) se refuerzan: +8 % de ataque por tipo, hasta +24 %."
 }

@@ -299,5 +299,6 @@
   "story.next": "つぎへ",
   "story.done": "おわり",
   "story.locked": "前の章をクリアすると読めます",
-  "story.cleared": "クリア済み"
+  "story.cleared": "クリア済み",
+  "synergy.hint": "違う種類の施設が隣り合う（斜めも）と、おたがいの攻撃が強くなります。1種類につき+8%、最大+24%。"
 }

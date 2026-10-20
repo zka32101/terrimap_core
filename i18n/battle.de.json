@@ -299,5 +299,6 @@
   "story.next": "Weiter",
   "story.done": "Fertig",
   "story.locked": "Schließe das vorherige Kapitel ab, um dieses zu lesen",
-  "story.cleared": "Geschafft"
+  "story.cleared": "Geschafft",
+  "synergy.hint": "Verschiedene Gebäudetypen nebeneinander (auch diagonal) verstärken sich gegenseitig: +8 % Angriff pro Typ, bis zu +24 %."
 }

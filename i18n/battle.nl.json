@@ -299,5 +299,6 @@
   "story.next": "Volgende",
   "story.done": "Klaar",
   "story.locked": "Voltooi het vorige hoofdstuk om dit te lezen",
-  "story.cleared": "Voltooid"
+  "story.cleared": "Voltooid",
+  "synergy.hint": "Gebouwen van verschillende typen naast elkaar (ook diagonaal) versterken elkaar: +8% aanval per type, tot +24%."
 }

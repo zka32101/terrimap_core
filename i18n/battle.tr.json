@@ -299,5 +299,6 @@
   "story.next": "İleri",
   "story.done": "Bitti",
   "story.locked": "Bunu okumak için önceki bölümü tamamla",
-  "story.cleared": "Tamamlandı"
+  "story.cleared": "Tamamlandı",
+  "synergy.hint": "Yan yana (çapraz da olur) duran farklı türdeki binalar birbirini güçlendirir: tür başına %8 saldırı, en fazla %24."
 }

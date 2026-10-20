@@ -299,5 +299,6 @@
   "story.next": "下一步",
   "story.done": "完成",
   "story.locked": "通关上一章后即可阅读",
-  "story.cleared": "已通关"
+  "story.cleared": "已通关",
+  "synergy.hint": "不同类型的设施相邻（含斜角）时会互相增强：每种类型攻击力+8%，最多+24%。"
 }

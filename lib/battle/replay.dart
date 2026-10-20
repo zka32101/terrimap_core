@@ -84,7 +84,7 @@ class ReplayRecorder {
   /// 記録から [Replay] を作る。結果は、記録を再生して求める（保存される結果と、再生の結果が必ず同じになる）。
   Replay toReplay({required String packId, required StageKind kind, required String stageId, required Difficulty difficulty}) {
     final r = Replay(
-        packId: packId, kind: kind, stageId: stageId, difficulty: difficulty, quizAssist: engine.quizAssist, ops: List.of(ops), result: const ReplayResult(false, 0, 0, 0, []));
+        packId: packId, kind: kind, stageId: stageId, difficulty: difficulty, quizAssist: engine.quizAssist, ops: List.of(ops), result: const ReplayResult(false, 0, 0, 0, []), rules: engine.rules);
     return r.withResult(r.play(engine));
   }
 }
@@ -114,7 +114,7 @@ class ReplayResult {
 
 /// バトル1回の記録（設計書 §6.13）。ステージの指定と操作の列だけ。計算が決定的なので、再生すると同じ結果になる。
 class Replay {
-  static const version = 1;
+  static const version = 2; // 2: ルールの版（'r'）を持つ。1（'r' なし）はルール1として読める
   final String packId;
   final StageKind kind;
   final String stageId; // 種別に応じた id（州・地方・エクストラ）
@@ -122,12 +122,15 @@ class Replay {
   final bool quizAssist;
   final List<ReplayOp> ops;
   final ReplayResult result;
-  const Replay({required this.packId, required this.kind, required this.stageId, required this.difficulty, required this.quizAssist, required this.ops, required this.result});
+
+  /// 記録したときのルールの版（[BattleEngine.rules]）。再生は、この版のルールで行う。
+  final int rules;
+  const Replay({required this.packId, required this.kind, required this.stageId, required this.difficulty, required this.quizAssist, required this.ops, required this.result, this.rules = BattleEngine.currentRules});
 
   /// この記録を再生するエンジン。pack が違えば [ArgumentError]。
   BattleEngine buildEngine(RegionPack pack) {
     if (pack.packId != packId) throw ArgumentError('packId が違います: ${pack.packId} != $packId');
-    return BattleEngine(StageGenerator(pack).generate(stageId, difficulty, kind: kind), profile: pack.profile, pack: pack, quizAssist: quizAssist);
+    return BattleEngine(StageGenerator(pack).generate(stageId, difficulty, kind: kind), profile: pack.profile, pack: pack, quizAssist: quizAssist, rules: rules);
   }
 
   /// 再生して、終わった状態と波ごとの被害を返す。操作が適用できなければ [StateError]（改ざん・版違い）。
@@ -173,7 +176,7 @@ class Replay {
   }
 
   Replay withResult(ReplayResult r) =>
-      Replay(packId: packId, kind: kind, stageId: stageId, difficulty: difficulty, quizAssist: quizAssist, ops: ops, result: r);
+      Replay(packId: packId, kind: kind, stageId: stageId, difficulty: difficulty, quizAssist: quizAssist, ops: ops, result: r, rules: rules);
 
   /// 再生した結果が、保存された結果と一致するか。
   bool verify(RegionPack pack) {
@@ -191,6 +194,7 @@ class Replay {
         'id': stageId,
         'diff': difficulty.name,
         'assist': quizAssist,
+        'r': rules,
         'ops': [for (final o in ops) o.toJson()],
         'result': result.toJson(),
       };
@@ -198,13 +202,14 @@ class Replay {
   String toJsonString() => jsonEncode(toJson());
 
   factory Replay.fromJson(Map<String, dynamic> j) {
-    if (j['v'] != version) throw FormatException('未対応の版: ${j['v']}');
+    if (j['v'] != 1 && j['v'] != version) throw FormatException('未対応の版: ${j['v']}');
     return Replay(
       packId: j['pack'] as String,
       kind: StageKind.values.byName(j['kind'] as String),
       stageId: j['id'] as String,
       difficulty: Difficulty.values.byName(j['diff'] as String),
       quizAssist: j['assist'] as bool,
+      rules: j['v'] == 1 ? 1 : (j['r'] as int? ?? 1),
       ops: [for (final o in (j['ops'] as List)) ReplayOp.fromJson(o as List)],
       result: ReplayResult.fromJson(j['result'] as Map<String, dynamic>),
     );
