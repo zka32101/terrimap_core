@@ -36,7 +36,7 @@ const enemyColors = <String, Color>{
 
 /// ステージの盤面（陸・進路・設置枠・拠点・施設・敵）を描く。[art] に画像があればそれを使い、無い要素は色と図形で描く。
 /// マスをタップすると [onCellTap] が呼ばれる。
-class BattleView extends StatelessWidget {
+class BattleView extends StatefulWidget {
   final Stage stage;
   final BattleState state;
   final GridPos? selected;
@@ -60,9 +60,13 @@ class BattleView extends StatelessWidget {
   /// 組み合わせボーナス（ルール2〜）の表示: 違う種類の施設が隣り合う施設を金色の枠と点で示す。古い記録（ルール1）では false にする。
   final bool synergy;
 
+  /// 拡大・縮小・元に戻すボタンを右下に出す(ピンチ操作に気づきにくい人向け)。
+  final bool showZoomControls;
+
   const BattleView(
       {super.key,
       this.synergy = false,
+      this.showZoomControls = true,
       required this.stage,
       required this.state,
       this.selected,
@@ -88,26 +92,85 @@ class BattleView extends StatelessWidget {
   }
 
   @override
+  State<BattleView> createState() => _BattleViewState();
+}
+
+class _BattleViewState extends State<BattleView> {
+  static const _minScale = 1.0, _maxScale = 3.0;
+  final _tc = TransformationController();
+  Size _size = Size.zero;
+
+  @override
+  void dispose() {
+    _tc.dispose();
+    super.dispose();
+  }
+
+  /// 盤面の中心を基準に倍率を[factor]倍する(1〜3倍)。拡大したまま縮めても、盤面が画面から外れないようにする。
+  void _zoomBy(double factor) {
+    final cur = _tc.value.getMaxScaleOnAxis();
+    final next = (cur * factor).clamp(_minScale, _maxScale);
+    if (next == cur) return;
+    if (next <= _minScale) {
+      _tc.value = Matrix4.identity();
+      return;
+    }
+    final f = next / cur;
+    final c = Offset(_size.width / 2, _size.height / 2);
+    final m = Matrix4.translationValues(c.dx, c.dy, 0) * Matrix4.diagonal3Values(f, f, f) * Matrix4.translationValues(-c.dx, -c.dy, 0) * _tc.value;
+    // 盤面が画面を覆う範囲に平行移動を収める
+    final tx = m.storage[12].clamp(_size.width - _size.width * next, 0.0);
+    final ty = m.storage[13].clamp(_size.height - _size.height * next, 0.0);
+    m.storage[12] = tx;
+    m.storage[13] = ty;
+    _tc.value = m;
+  }
+
+  Widget _controls() => Positioned(
+        right: 6,
+        bottom: 6,
+        child: Column(mainAxisSize: MainAxisSize.min, children: [
+          for (final (key, icon, tip, act) in <(String, IconData, String, VoidCallback)>[
+            ('board_zoom_in', Icons.add, 'Zoom in', () => _zoomBy(1.5)),
+            ('board_zoom_out', Icons.remove, 'Zoom out', () => _zoomBy(1 / 1.5)),
+          ])
+            Padding(
+              padding: const EdgeInsets.only(top: 4),
+              child: Material(
+                color: Colors.white.withValues(alpha: 0.85),
+                shape: const CircleBorder(side: BorderSide(color: Color(0xFFB0BEC5))),
+                child: IconButton(key: Key(key), icon: Icon(icon, size: 20), tooltip: tip, visualDensity: VisualDensity.compact, onPressed: act),
+              ),
+            ),
+        ]),
+      );
+
+  @override
   Widget build(BuildContext context) {
+    final w = widget;
     return LayoutBuilder(builder: (context, box) {
       final size = Size(box.maxWidth, box.maxHeight);
-      // 2本指（ピンチ）で拡大、拡大中は指スワイプで盤面を動かす。タップの座標は拡大後も盤面基準になる。
-      return InteractiveViewer(
-        minScale: 1,
-        maxScale: 3,
+      _size = size;
+      // 2本指（ピンチ）か右下のボタンで拡大、拡大中は指スワイプで盤面を動かす。タップの座標は拡大後も盤面基準になる。
+      final viewer = InteractiveViewer(
+        transformationController: _tc,
+        minScale: _minScale,
+        maxScale: _maxScale,
         clipBehavior: Clip.hardEdge,
         child: GestureDetector(
           behavior: HitTestBehavior.opaque,
           onTapUp: (d) {
-            final c = cellAt(d.localPosition, size, stage.cols, stage.rows);
-            if (c != null) onCellTap?.call(c);
+            final c = BattleView.cellAt(d.localPosition, size, w.stage.cols, w.stage.rows);
+            if (c != null) w.onCellTap?.call(c);
           },
           child: CustomPaint(
             size: size,
-            painter: _BattlePainter(stage, state, selected, selectedRange, facilityMaxHp, art, weather, fx, synergy),
+            painter: _BattlePainter(w.stage, w.state, w.selected, w.selectedRange, w.facilityMaxHp, w.art, w.weather, w.fx, w.synergy),
           ),
         ),
       );
+      if (!w.showZoomControls) return viewer;
+      return Stack(children: [Positioned.fill(child: viewer), _controls()]);
     });
   }
 }

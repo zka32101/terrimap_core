@@ -22,7 +22,9 @@ class RegionGeometry {
             ((size.height - 2 * pad) / (maxY - minY))
         ? (size.width - 2 * pad) / (maxX - minX)
         : (size.height - 2 * pad) / (maxY - minY);
-    Offset tf(Offset o) => Offset(pad + (o.dx - minX) * s, pad + (o.dy - minY) * s);
+    // 縦に合わせて拡大した地図(ドイツなど縦長)は、左右の余りを半分ずつにして、画面の真ん中に置く。
+    final offX = ((size.width - 2 * pad - (maxX - minX) * s) / 2).clamp(0, double.infinity);
+    Offset tf(Offset o) => Offset(pad + offX + (o.dx - minX) * s, pad + (o.dy - minY) * s);
     raw.forEach((id, rings) {
       final path = Path(); var total = 0.0;
       final anchors = <Offset>[]; var bestArea = -1.0; Offset best = Offset.zero;

@@ -39,7 +39,7 @@ class _State extends State<RegionMapView> {
     final f = next / cur;
     final c = _focus;
     _tc.value = Matrix4.translationValues(c.dx, c.dy, 0) *
-        Matrix4.diagonal3Values(f, f, 1) *
+        Matrix4.diagonal3Values(f, f, f) *
         Matrix4.translationValues(-c.dx, -c.dy, 0) *
         _tc.value;
     if (next == _minScale) _tc.value = Matrix4.identity();
