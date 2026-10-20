@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
 """Terrimap シリーズのアイコン(基本版)を packs の実データから生成する。設計: docs/terrimap_icon_design_v0_1.md
 
-使い方: tools/make_icon.py <de|us> <出力.png> [--size 1024] [--td]
+使い方: tools/make_icon.py <de|us> <出力.png> [--size 1024] [--td] [--label] [--mark] [--flag] [--brand]
   --td: タワーディフェンス版(塔・射程円・敵の進路と敵を足す。試作。設計書の「タワーディフェンス版」)
-  --label: 左下に国の略称バッジ(DE/US)。バッジの下辺に国旗色の帯を入れる
+  --label: 国の略称バッジ(DE/US)。バッジの下辺に国旗色の帯を入れる。左下（--mark と一緒なら左上）
+  --mark: 左下に Terrimap のマーク（白い丸バッジの中。tools/make_mark.py）
+  --flag: 背景に国旗をごく薄く敷く（地図の下）
+  --brand: --label --mark --flag をまとめて指定
 依存: Pillow(`pip install pillow`)。結果は決定的(同じ入力なら同じ画像)。
 """
 import argparse, json, math, pathlib, sys
@@ -97,15 +100,45 @@ def draw_td(img, country):
     d.pieslice([cx - dw / 2, top + h - dh - dw / 2, cx + dw / 2, top + h - dh + dw / 2], 180, 360, fill=ORANGE)
 
 
-def draw_label(img, country):
-    """左下に角丸の白いバッジ。国の略称と、下辺に国旗色の帯。"""
+def flag_overlay(country, S, alpha):
+    """国旗を薄く描いた透明レイヤー（背景に重ねる）。DE=黒・赤・金の横3本、US=赤い横縞と左上の青い領域。"""
+    L = Image.new("RGBA", (S, S), (0, 0, 0, 0))
+    d = ImageDraw.Draw(L)
+    if country == "de":
+        for i, col in enumerate(LABEL["de"]["bar"]):
+            d.rectangle([0, i * S / 3, S, (i + 1) * S / 3], fill=(*col, round(255 * alpha)))
+    else:
+        h = S / 13
+        for i in range(0, 13, 2):
+            d.rectangle([0, i * h, S, (i + 1) * h], fill=(178, 34, 52, round(255 * alpha)))
+        d.rectangle([0, 0, S * 0.4, h * 7], fill=(255, 255, 255, round(255 * alpha * 0.6)))
+    return L
+
+
+def draw_mark(img):
+    """左下に、白い丸いバッジに入れた Terrimap のマーク。"""
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("make_mark", pathlib.Path(__file__).with_name("make_mark.py"))
+    mm = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mm)
+    S = img.size[0]
+    d, pad = int(S * 0.20), int(S * 0.025)
+    badge = Image.new("RGBA", (d + 2 * pad, d + 2 * pad), (0, 0, 0, 0))
+    ImageDraw.Draw(badge).ellipse([0, 0, badge.width - 1, badge.height - 1], fill=(255, 255, 255, 255))
+    mark = mm.png_mark(mm.COLORS["indigo"], d * 2, with_bg=False, radius=0.5).resize((d, d), Image.LANCZOS)
+    badge.paste(mark, (pad, pad), mark)
+    img.paste(badge, (int(S * 0.05), S - badge.height - int(S * 0.05)), badge)
+
+
+def draw_label(img, country, top=False):
+    """角丸の白いバッジ。国の略称と、下辺に国旗色の帯。左下。top=True なら左上。"""
     from PIL import ImageFont
     S = img.size[0]
     cfg = LABEL[country]
     font = None
     for path in FONTS:
         try:
-            font = ImageFont.truetype(path, int(S * 0.13))
+            font = ImageFont.truetype(path, int(S * (0.10 if top else 0.13)))
             break
         except OSError:
             continue
@@ -117,6 +150,8 @@ def draw_label(img, country):
     pad, bar = int(S * 0.03), int(S * 0.022)
     x0 = int(S * 0.05)
     y1 = int(S * 0.95)
+    if top:
+        y1 = int(S * 0.05) + th + 2 * pad + bar
     box = [x0, y1 - (th + 2 * pad + bar), x0 + tw + 2 * pad, y1]
     d.rounded_rectangle(box, int(S * 0.035), fill=(255, 255, 255))
     d.text((x0 + pad - b[0], box[1] + pad - b[1]), cfg["text"], font=font, fill=CONFIG[country]["bg"])
@@ -131,7 +166,10 @@ def draw_label(img, country):
         d.rectangle([x_start, by0, x_end, by1], outline=(190, 190, 200), width=max(2, int(S * 0.002)))
 
 
-def render(country, size=1024, td=False, label=False):
+FLAG_ALPHA = {"de": 0.10, "us": 0.09}
+
+
+def render(country, size=1024, td=False, label=False, mark=False, flag=False):
     cfg = CONFIG[country]
     pack = json.loads((ROOT / "packs" / country / "pack.json").read_text())
     geo = json.loads((ROOT / "packs" / country / "geo.geojson").read_text())
@@ -156,6 +194,8 @@ def render(country, size=1024, td=False, label=False):
     tf = lambda p: (ox + (p[0] - minx) * scale, oy + (p[1] - miny) * scale)
 
     img = Image.new("RGB", (S, S), cfg["bg"])
+    if flag:
+        img = Image.alpha_composite(img.convert("RGBA"), flag_overlay(country, S, FLAG_ALPHA[country])).convert("RGB")
     d = ImageDraw.Draw(img)
     for rid, rings in regions:
         color = ORANGE if rid in cfg["paint"] else cfg["land"]
@@ -169,8 +209,13 @@ def render(country, size=1024, td=False, label=False):
     if td:
         draw_td(img, country)
     if label:
-        draw_label(img, country)
-    return img.resize((size, size), Image.LANCZOS)
+        draw_label(img, country, top=mark)
+    img = img.resize((size, size), Image.LANCZOS)
+    if mark:  # マークは縮小後に重ねる（マーク側が自分で滑らかに描く）
+        img = img.convert("RGBA")
+        draw_mark(img)
+        img = img.convert("RGB")
+    return img
 
 
 def main():
@@ -180,8 +225,13 @@ def main():
     ap.add_argument("--size", type=int, default=1024)
     ap.add_argument("--td", action="store_true", help="タワーディフェンス版(試作)")
     ap.add_argument("--label", action="store_true", help="左下に国の略称バッジ(国旗色の帯つき)")
+    ap.add_argument("--mark", action="store_true", help="左下に Terrimap のマーク（白い丸バッジ）")
+    ap.add_argument("--flag", action="store_true", help="背景に国旗をごく薄く敷く")
+    ap.add_argument("--brand", action="store_true", help="--label --mark --flag をまとめて指定")
     a = ap.parse_args()
-    render(a.country, a.size, td=a.td, label=a.label).save(a.out)
+    if a.brand:
+        a.label = a.mark = a.flag = True
+    render(a.country, a.size, td=a.td, label=a.label, mark=a.mark, flag=a.flag).save(a.out)
     print(f"wrote {a.out}")
 
 
