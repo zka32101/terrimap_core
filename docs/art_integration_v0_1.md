@@ -5,8 +5,8 @@
 ## 流れ（1枚ごと）
 
 1. Leonardo で生成（設定は `docs/art_prompts_v0_2.md`）。選んだ1枚を `art_raw/<国>/<種類>/<id>.png` に保存（ここはコミットしない）。
-2. 施設・敵・ボスは背景除去（Canva の背景除去など）→ 透過PNG → 512x512 に縮小。背景は 1344x768 のまま。
-3. `art/<国>/<種類>/<id>.png` に置き、`python3 tools/art_manifest.py --check` で検査（サイズ・16:9・透過・四隅・余白）。NG が出たら直す。
+2. 施設・敵・ボスは背景除去（Canva の背景除去など）→ 透過PNG → 512x512 に縮小。背景は俯瞰・縦長 768x1344(9:16)のまま(縮小しない)。
+3. `art/<国>/<種類>/<id>.png` に置き、`python3 tools/art_manifest.py --check` で検査（形式・サイズ・背景は9:16・スプライトは透過・四隅・余白）。NG が出たら直す。
 4. OK になった画像を、アプリ（`terrimap_ge` / `terrimap_us`）の `assets/art/<種類>/<id>.png` にコピー。`pubspec.yaml` の assets に各フォルダを追加（`assets/art/backdrops/` など）。
 
 置き場所は国ごとの画像がアプリ側（画像はコアに入れない）。`art/` と `art_raw/` は `.gitignore`。天候は国共通（`common/weather/`）で、組み込みは未対応。
@@ -15,7 +15,7 @@
 
 | 種類 | フォルダ | ファイル名の id | 最終サイズ |
 |---|---|---|---|
-| 背景 | backdrops | `theme.backdrops` のキー | 1344x768 不透明 |
+| 背景 | backdrops | `theme.backdrops` のキー | 768x1344(9:16・俯瞰) 不透明 |
 | 施設 | facilities | `facilities.*.skin` | 512x512 透過 |
 | 限定施設 | exclusive | `exclusiveFacility` の id | 512x512 透過 |
 | 敵 | enemies | `enemySkins.*.skin` | 512x512 透過 |
@@ -49,3 +49,13 @@
    - ボスが通常の敵と明確に区別できる大きさか。
    - 季節の地面色が背景画像から浮かないか（背景がある場合は地面を塗らない）。
 4. 気になる点は大きさ（`rad`）・背景の彩度（Leonardo の再生成か色調補正）で調整。良ければ残りを量産。
+
+## 俯瞰の背景(9:16)
+
+バトル盤面は縦長なので、背景は「真上から見た地面だけ」(空・地平線なし)の縦長にする。**中央は無地に近く空け、要素は左右の縁に置く**(進路帯・設置枠が見えるように)。
+
+- 生成: Leonardo Phoenix 1.0 / Dynamic / 768x1344 / contrast 3.5 / enhancePrompt・alchemy・public オフ / 1回4枚(約18クレジット)
+- 指示文: `flat ground texture of {場面} seen from above, {要素} only along the left and right borders, large empty plain {地面} area in the center, palette {3色}, no sky, no horizon, no buildings in the center, top-down view, bird's-eye, seamless, game map background, cute flat vector illustration, soft pastel colors, clean shapes, mobile tower-defense game art, no text, no people, no weapons`
+- 除外: `text, letters, numbers, words, writing, logo, watermark, horizon, sky, perspective, vanishing point, characters, people, road markings`
+- 彩度が強い絵(例: 赤い屋根)は、設置枠が見えにくくなる。地面の色は低彩度に。中央の模様が強いものは避ける。
+- **Leonardo の出力は、拡張子が .png でも実体は JPEG のことがある。** コミット前に本物のPNGに変換する(`PIL.Image.save(..., format="PNG")`)。検査ツールが「PNGではない(JPEG)」で検出する。

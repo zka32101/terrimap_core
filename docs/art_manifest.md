@@ -9,16 +9,16 @@
 
 | 試作 | 種類 | id | 備考 | 生成 | 最終 | ファイル | 状態 |
 |---|---|---|---|---|---|---|---|
-| ★ | 背景 | alps | アルプスの山と雪 | 1344x768 | 1344x768 | `de/backdrops/alps.png` | 未作成 |
-|  | 背景 | black_forest | 深い森と丘 | 1344x768 | 1344x768 | `de/backdrops/black_forest.png` | 未作成 |
-|  | 背景 | north_coast | 北海・バルト海の海岸と風車 | 1344x768 | 1344x768 | `de/backdrops/north_coast.png` | 未作成 |
-|  | 背景 | port | 港とコンテナ | 1344x768 | 1344x768 | `de/backdrops/port.png` | 未作成 |
-| ★ | 背景 | city | 都市のスカイライン | 1344x768 | 1344x768 | `de/backdrops/city.png` | 未作成 |
-|  | 背景 | vineyard | 川沿いのぶどう畑 | 1344x768 | 1344x768 | `de/backdrops/vineyard.png` | 未作成 |
-|  | 背景 | farmland | 麦畑と風力発電 | 1344x768 | 1344x768 | `de/backdrops/farmland.png` | 未作成 |
-|  | 背景 | industry | 工場と炭鉱の街 | 1344x768 | 1344x768 | `de/backdrops/industry.png` | 未作成 |
-|  | 背景 | lakes | 湖と森 | 1344x768 | 1344x768 | `de/backdrops/lakes.png` | 未作成 |
-|  | 背景 | castle_hills | 丘の上の城 | 1344x768 | 1344x768 | `de/backdrops/castle_hills.png` | 未作成 |
+| ★ | 背景 | alps | アルプスの山と雪 | 768x1344 | 768x1344 | `de/backdrops/alps.png` | 未作成 |
+|  | 背景 | black_forest | 深い森と丘 | 768x1344 | 768x1344 | `de/backdrops/black_forest.png` | 未作成 |
+|  | 背景 | north_coast | 北海・バルト海の海岸と風車 | 768x1344 | 768x1344 | `de/backdrops/north_coast.png` | 未作成 |
+|  | 背景 | port | 港とコンテナ | 768x1344 | 768x1344 | `de/backdrops/port.png` | 未作成 |
+| ★ | 背景 | city | 都市のスカイライン | 768x1344 | 768x1344 | `de/backdrops/city.png` | 未作成 |
+|  | 背景 | vineyard | 川沿いのぶどう畑 | 768x1344 | 768x1344 | `de/backdrops/vineyard.png` | 未作成 |
+|  | 背景 | farmland | 麦畑と風力発電 | 768x1344 | 768x1344 | `de/backdrops/farmland.png` | 未作成 |
+|  | 背景 | industry | 工場と炭鉱の街 | 768x1344 | 768x1344 | `de/backdrops/industry.png` | 未作成 |
+|  | 背景 | lakes | 湖と森 | 768x1344 | 768x1344 | `de/backdrops/lakes.png` | 未作成 |
+|  | 背景 | castle_hills | 丘の上の城 | 768x1344 | 768x1344 | `de/backdrops/castle_hills.png` | 未作成 |
 | ★ | 施設 | farm_windmill | farm / 農場と風車 | 1024x1024 | 512x512 | `de/facilities/farm_windmill.png` | 未作成 |
 | ★ | 施設 | harbor_cutter | fishery / 港の漁船 | 1024x1024 | 512x512 | `de/facilities/harbor_cutter.png` | 未作成 |
 | ★ | 施設 | automotive_plant | factory / 自動車工場 | 1024x1024 | 512x512 | `de/facilities/automotive_plant.png` | 未作成 |
@@ -67,18 +67,18 @@
 
 | 試作 | 種類 | id | 備考 | 生成 | 最終 | ファイル | 状態 |
 |---|---|---|---|---|---|---|---|
-|  | 背景 | desert | 砂漠と赤い岩 | 1344x768 | 1344x768 | `us/backdrops/desert.png` | 未作成 |
-|  | 背景 | plains | 大平原と地平線 | 1344x768 | 1344x768 | `us/backdrops/plains.png` | 未作成 |
-|  | 背景 | rockies | ロッキーの山と雪 | 1344x768 | 1344x768 | `us/backdrops/rockies.png` | 未作成 |
-|  | 背景 | bayou | 湿地とバイユー | 1344x768 | 1344x768 | `us/backdrops/bayou.png` | 未作成 |
-|  | 背景 | atlantic_coast | 大西洋岸の港と灯台 | 1344x768 | 1344x768 | `us/backdrops/atlantic_coast.png` | 未作成 |
-|  | 背景 | pacific_coast | 太平洋岸と霧 | 1344x768 | 1344x768 | `us/backdrops/pacific_coast.png` | 未作成 |
-|  | 背景 | great_lakes | 五大湖と港町 | 1344x768 | 1344x768 | `us/backdrops/great_lakes.png` | 未作成 |
-|  | 背景 | appalachia | アパラチアの丘と霧 | 1344x768 | 1344x768 | `us/backdrops/appalachia.png` | 未作成 |
-|  | 背景 | skyline | 摩天楼の街 | 1344x768 | 1344x768 | `us/backdrops/skyline.png` | 未作成 |
-|  | 背景 | tundra | 氷原とオーロラ | 1344x768 | 1344x768 | `us/backdrops/tundra.png` | 未作成 |
-|  | 背景 | tropics | 亜熱帯の海と島 | 1344x768 | 1344x768 | `us/backdrops/tropics.png` | 未作成 |
-|  | 背景 | cornfield | とうもろこし畑とサイロ | 1344x768 | 1344x768 | `us/backdrops/cornfield.png` | 未作成 |
+|  | 背景 | desert | 砂漠と赤い岩 | 768x1344 | 768x1344 | `us/backdrops/desert.png` | 未作成 |
+|  | 背景 | plains | 大平原と地平線 | 768x1344 | 768x1344 | `us/backdrops/plains.png` | 未作成 |
+|  | 背景 | rockies | ロッキーの山と雪 | 768x1344 | 768x1344 | `us/backdrops/rockies.png` | 未作成 |
+|  | 背景 | bayou | 湿地とバイユー | 768x1344 | 768x1344 | `us/backdrops/bayou.png` | 未作成 |
+|  | 背景 | atlantic_coast | 大西洋岸の港と灯台 | 768x1344 | 768x1344 | `us/backdrops/atlantic_coast.png` | 未作成 |
+|  | 背景 | pacific_coast | 太平洋岸と霧 | 768x1344 | 768x1344 | `us/backdrops/pacific_coast.png` | 未作成 |
+|  | 背景 | great_lakes | 五大湖と港町 | 768x1344 | 768x1344 | `us/backdrops/great_lakes.png` | 未作成 |
+|  | 背景 | appalachia | アパラチアの丘と霧 | 768x1344 | 768x1344 | `us/backdrops/appalachia.png` | 未作成 |
+|  | 背景 | skyline | 摩天楼の街 | 768x1344 | 768x1344 | `us/backdrops/skyline.png` | 未作成 |
+|  | 背景 | tundra | 氷原とオーロラ | 768x1344 | 768x1344 | `us/backdrops/tundra.png` | 未作成 |
+|  | 背景 | tropics | 亜熱帯の海と島 | 768x1344 | 768x1344 | `us/backdrops/tropics.png` | 未作成 |
+|  | 背景 | cornfield | とうもろこし畑とサイロ | 768x1344 | 768x1344 | `us/backdrops/cornfield.png` | 未作成 |
 |  | 施設 | grain_silo | farm / 穀物サイロ | 1024x1024 | 512x512 | `us/facilities/grain_silo.png` | 未作成 |
 |  | 施設 | fishing_trawler | fishery / 底引き漁船 | 1024x1024 | 512x512 | `us/facilities/fishing_trawler.png` | 未作成 |
 |  | 施設 | assembly_line | factory / 組立ライン | 1024x1024 | 512x512 | `us/facilities/assembly_line.png` | 未作成 |
