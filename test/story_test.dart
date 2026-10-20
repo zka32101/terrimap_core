@@ -33,8 +33,9 @@ void main() {
 
   test('ドイツの物語: グリム・ニーベルンゲンの章があり、伝説の章には注記がある', () {
     final s = story();
-    expect(s.chapters.map((c) => c.stageId), ['de_loreley', 'de_grimm', 'de_nibelung']);
-    for (final c in s.chapters) {
+    expect(s.chapters.where((c) => c.kind == StageKind.extra).map((c) => c.stageId), ['de_loreley', 'de_grimm', 'de_nibelung']);
+    expect(s.chapters.where((c) => c.kind == StageKind.regional).map((c) => c.stageId), ['north', 'east', 'west', 'south']); // 地方決戦の章
+    for (final c in s.chapters.where((c) => c.kind == StageKind.extra)) {
       expect(c.outro.any((l) => l.speaker == Speaker.note), true, reason: c.id);
       expect(c.title.of('de'), isNot(c.title.of('en')), reason: c.id); // ドイツ語がある
     }
@@ -43,9 +44,10 @@ void main() {
   test('米国の物語: 3章が読めて、データに問題がない。伝説・創作のボスには注記がある', () {
     final us = load('us');
     final s = Story.parse(File('packs/us/story.json').readAsStringSync());
-    expect(s.chapters.map((c) => c.stageId), ['us_bunyan', 'us_wright', 'us_moon']);
+    expect(s.chapters.where((c) => c.kind == StageKind.extra).map((c) => c.stageId), ['us_bunyan', 'us_wright', 'us_moon']);
+    expect(s.chapters.where((c) => c.kind == StageKind.regional).map((c) => c.stageId), ['northeast', 'midwest', 'south', 'west']);
     expect(s.validate(us), isEmpty);
-    for (final c in s.chapters) {
+    for (final c in s.chapters.where((c) => c.kind == StageKind.extra)) {
       expect(c.outro.any((l) => l.speaker == Speaker.note), true, reason: c.id); // 創作のボスも、実在と創作を分けて書く
       expect(c.title.of('ja'), isNot(c.title.of('en')));
     }
