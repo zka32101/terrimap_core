@@ -294,5 +294,10 @@
   "goal.reached": "目標達成！",
   "goal.set": "1週間の問題数",
   "fx.setting": "バトルの演出",
-  "fx.help": "バトル中の弾・爆発・ダメージ数字・画面の揺れを表示します。"
+  "fx.help": "バトル中の弾・爆発・ダメージ数字・画面の揺れを表示します。",
+  "story.title": "ものがたり",
+  "story.next": "つぎへ",
+  "story.done": "おわり",
+  "story.locked": "前の章をクリアすると読めます",
+  "story.cleared": "クリア済み"
 }

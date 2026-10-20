@@ -294,5 +294,10 @@
   "goal.reached": "Ziel erreicht!",
   "goal.set": "Fragen pro Woche",
   "fx.setting": "Kampfeffekte",
-  "fx.help": "Schüsse, Explosionen, Schadenszahlen und Bildschirmwackeln im Kampf."
+  "fx.help": "Schüsse, Explosionen, Schadenszahlen und Bildschirmwackeln im Kampf.",
+  "story.title": "Geschichte",
+  "story.next": "Weiter",
+  "story.done": "Fertig",
+  "story.locked": "Schließe das vorherige Kapitel ab, um dieses zu lesen",
+  "story.cleared": "Geschafft"
 }

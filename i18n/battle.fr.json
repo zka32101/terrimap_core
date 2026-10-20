@@ -294,5 +294,10 @@
   "goal.reached": "Objectif atteint !",
   "goal.set": "Questions par semaine",
   "fx.setting": "Effets de combat",
-  "fx.help": "Tirs, explosions, chiffres de dégâts et secousses d'écran pendant les combats."
+  "fx.help": "Tirs, explosions, chiffres de dégâts et secousses d'écran pendant les combats.",
+  "story.title": "Histoire",
+  "story.next": "Suivant",
+  "story.done": "Terminé",
+  "story.locked": "Termine le chapitre précédent pour lire celui-ci",
+  "story.cleared": "Terminé"
 }
