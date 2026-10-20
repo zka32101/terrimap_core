@@ -34,5 +34,11 @@
 - 課題: 48px ではバッジが小さく略称もマークも判別できない。ランチャー用は地図だけ、ストア画像など大きい表示でブランド版を使う
 - 未確認: DE の旗の金色が背景の青緑と混ざり、下の帯が緑がかって見える。実在の国旗をストア画像に使う際の規定は未確認
 
+## Android アダプティブアイコン
+- 生成: `python3 tools/make_icon.py <de|us> x --adaptive <出力ディレクトリ>` → `background.png`（背景色 + うっすら国旗）、`foreground.png`（地図だけ・透明背景）、`monochrome.png`（Android 13 のテーマアイコン用・地図の輪郭を1色で）
+- 地図は中央の安全領域（108dp のうち 66dp）に収める。国の略称バッジとマークのバッジは、丸く切り抜かれると隅が欠けるので入れない（従来の正方形アイコン・ストア画像にだけ入る）
+- アプリ側: `flutter_launcher_icons` の `adaptive_icon_background / foreground / monochrome` に指定する
+- 未確認: 実機のランチャー（丸・角丸・しずく型）での見え方、テーマアイコンの色
+
 ## 生成物(会話内で送付済み)
 terrimap_de_1024.png / terrimap_us_1024.png(基本版)、terrimap_de_td_1024.png / terrimap_us_td_1024.png(TD版)、preview.png / preview_td.png
