@@ -218,6 +218,56 @@ def render(country, size=1024, td=False, label=False, mark=False, flag=False):
     return img
 
 
+def render_adaptive(country, out_dir, size=1024, fit=None):
+    """Android のアダプティブアイコン用の3枚を書き出す。
+    background.png: 背景色 + うっすら国旗（全面）、foreground.png: 地図だけ（透明背景。flutter_launcher_icons が前景を内側に16%ずつ縮めて入れるので、その分大きめに描いて、結果が中央の安全領域 66/108 に収まるようにする）、
+    monochrome.png: 地図の輪郭を1色で（Android 13 のテーマアイコン用。塗る地域は同じ色で区別しない）。
+    国の略称バッジとマークのバッジは、丸く切り抜かれると隅が欠けるので入れない（従来の正方形アイコンにだけ入る）。"""
+    cfg = CONFIG[country]
+    out = pathlib.Path(out_dir)
+    out.mkdir(parents=True, exist_ok=True)
+    pack = json.loads((ROOT / "packs" / country / "pack.json").read_text())
+    geo = json.loads((ROOT / "packs" / country / "geo.geojson").read_text())
+    regions = []
+    for f in geo["features"]:
+        rid = f["properties"]["id"]
+        if rid in cfg["exclude"]:
+            continue
+        regions.append((rid, [[project(pack, x, y) for x, y in poly[0]] for poly in f["geometry"]["coordinates"]]))
+    xs = [x for _, rs in regions for r in rs for x, _ in r]
+    ys = [y for _, rs in regions for r in rs for _, y in r]
+    minx, maxx, miny, maxy = min(xs), max(xs), min(ys), max(ys)
+    w, h = maxx - minx, maxy - miny
+    fit = fit or {"de": 0.84, "us": 0.80}[country]
+    ss = 2
+    S = size * ss
+    scale = fit * S / max(w, h)
+    ox, oy = (S - w * scale) / 2, (S - h * scale) / 2
+    tf = lambda p: (ox + (p[0] - minx) * scale, oy + (p[1] - miny) * scale)
+    # 前景（透明背景）
+    fg = Image.new("RGBA", (S, S), (0, 0, 0, 0))
+    d = ImageDraw.Draw(fg)
+    mono = Image.new("RGBA", (S, S), (0, 0, 0, 0))
+    md = ImageDraw.Draw(mono)
+    for rid, rings in regions:
+        color = ORANGE if rid in cfg["paint"] else cfg["land"]
+        for r in rings:
+            pts = [tf(p) for p in r]
+            d.polygon(pts, fill=(*color, 255))
+            md.polygon(pts, fill=(0, 0, 0, 255))
+    line = max(2, round(S * 0.0035))
+    for _, rings in regions:
+        for r in rings:
+            pts = [tf(p) for p in r]
+            d.line(pts + [pts[0]], fill=(*cfg["bg"], 255), width=line, joint="curve")
+    # 背景（背景色 + 国旗）
+    bg = Image.new("RGBA", (S, S), (*cfg["bg"], 255))
+    bg = Image.alpha_composite(bg, flag_overlay(country, S, FLAG_ALPHA[country]))
+    for name, im in (("background", bg), ("foreground", fg), ("monochrome", mono)):
+        im.resize((size, size), Image.LANCZOS).save(out / f"{name}.png")
+    return out
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("country", choices=sorted(CONFIG))
@@ -228,7 +278,11 @@ def main():
     ap.add_argument("--mark", action="store_true", help="左下に Terrimap のマーク（白い丸バッジ）")
     ap.add_argument("--flag", action="store_true", help="背景に国旗をごく薄く敷く")
     ap.add_argument("--brand", action="store_true", help="--label --mark --flag をまとめて指定")
+    ap.add_argument("--adaptive", metavar="DIR", help="Android のアダプティブアイコン用の background/foreground/monochrome.png を DIR に書き出す（<出力.png> は使わない）")
     a = ap.parse_args()
+    if a.adaptive:
+        print(f"wrote {render_adaptive(a.country, a.adaptive, a.size)}")
+        return
     if a.brand:
         a.label = a.mark = a.flag = True
     render(a.country, a.size, td=a.td, label=a.label, mark=a.mark, flag=a.flag).save(a.out)
