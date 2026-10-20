@@ -294,5 +294,10 @@
   "goal.reached": "目标达成!",
   "goal.set": "每周题数",
   "fx.setting": "战斗特效",
-  "fx.help": "战斗中显示弹道、爆炸、伤害数字和屏幕震动。"
+  "fx.help": "战斗中显示弹道、爆炸、伤害数字和屏幕震动。",
+  "story.title": "故事",
+  "story.next": "下一步",
+  "story.done": "完成",
+  "story.locked": "通关上一章后即可阅读",
+  "story.cleared": "已通关"
 }

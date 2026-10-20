@@ -294,5 +294,10 @@
   "goal.reached": "Obiettivo raggiunto!",
   "goal.set": "Domande a settimana",
   "fx.setting": "Effetti di battaglia",
-  "fx.help": "Colpi, esplosioni, numeri dei danni e scosse dello schermo durante le battaglie."
+  "fx.help": "Colpi, esplosioni, numeri dei danni e scosse dello schermo durante le battaglie.",
+  "story.title": "Storia",
+  "story.next": "Avanti",
+  "story.done": "Fine",
+  "story.locked": "Completa il capitolo precedente per leggere questo",
+  "story.cleared": "Completato"
 }

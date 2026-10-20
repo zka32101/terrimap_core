@@ -294,5 +294,10 @@
   "goal.reached": "Meta atingida!",
   "goal.set": "Perguntas por semana",
   "fx.setting": "Efeitos de batalha",
-  "fx.help": "Tiros, explosões, números de dano e tremores de tela durante as batalhas."
+  "fx.help": "Tiros, explosões, números de dano e tremores de tela durante as batalhas.",
+  "story.title": "História",
+  "story.next": "Seguinte",
+  "story.done": "Concluir",
+  "story.locked": "Conclua o capítulo anterior para ler este",
+  "story.cleared": "Concluído"
 }

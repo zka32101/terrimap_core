@@ -294,5 +294,10 @@
   "goal.reached": "Doel bereikt!",
   "goal.set": "Vragen per week",
   "fx.setting": "Gevechtseffecten",
-  "fx.help": "Schoten, explosies, schadegetallen en schermschudden tijdens gevechten."
+  "fx.help": "Schoten, explosies, schadegetallen en schermschudden tijdens gevechten.",
+  "story.title": "Verhaal",
+  "story.next": "Volgende",
+  "story.done": "Klaar",
+  "story.locked": "Voltooi het vorige hoofdstuk om dit te lezen",
+  "story.cleared": "Voltooid"
 }

@@ -294,5 +294,10 @@
   "goal.reached": "목표 달성!",
   "goal.set": "주간 문제 수",
   "fx.setting": "전투 연출",
-  "fx.help": "전투 중 탄환, 폭발, 피해 숫자, 화면 흔들림을 표시합니다."
+  "fx.help": "전투 중 탄환, 폭발, 피해 숫자, 화면 흔들림을 표시합니다.",
+  "story.title": "이야기",
+  "story.next": "다음",
+  "story.done": "완료",
+  "story.locked": "이전 장을 클리어하면 읽을 수 있어요",
+  "story.cleared": "클리어"
 }

@@ -294,5 +294,10 @@
   "goal.reached": "Hedefe ulaşıldı!",
   "goal.set": "Haftalık soru sayısı",
   "fx.setting": "Savaş efektleri",
-  "fx.help": "Savaş sırasında atışlar, patlamalar, hasar sayıları ve ekran sarsıntısı."
+  "fx.help": "Savaş sırasında atışlar, patlamalar, hasar sayıları ve ekran sarsıntısı.",
+  "story.title": "Hikâye",
+  "story.next": "İleri",
+  "story.done": "Bitti",
+  "story.locked": "Bunu okumak için önceki bölümü tamamla",
+  "story.cleared": "Tamamlandı"
 }

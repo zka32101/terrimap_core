@@ -294,5 +294,10 @@
   "goal.reached": "¡Meta alcanzada!",
   "goal.set": "Preguntas por semana",
   "fx.setting": "Efectos de batalla",
-  "fx.help": "Disparos, explosiones, cifras de daño y sacudidas de pantalla durante las batallas."
+  "fx.help": "Disparos, explosiones, cifras de daño y sacudidas de pantalla durante las batallas.",
+  "story.title": "Historia",
+  "story.next": "Siguiente",
+  "story.done": "Listo",
+  "story.locked": "Completa el capítulo anterior para leer este",
+  "story.cleared": "Superado"
 }
