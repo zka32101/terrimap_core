@@ -30,7 +30,7 @@ class ArtSet {
   /// 図鑑カードの名所の画像（`landmarks/<名所id>`。facts.json の id）。無ければ null で、呼び出し側が代わりのアイコンを出す。
   ui.Image? landmark(String id) => images['landmarks/$id'];
 
-  /// 天候の重ね画像（`weather/<天候>`。hurricane / tornado / blizzard / heatwave / wildfire / flood / earthquake / storm。国共通・横長の透過）。
+  /// 天候の重ね画像（`weather/<天候>`。hurricane / tornado / blizzard / heatwave / wildfire / flood / earthquake / storm。国共通・縦長9:16（768x1344）の透過）。
   /// 無ければ null で、盤面は図形の演出（`paintWeather`）で描く。
   ui.Image? weather(String type) => images['weather/$type'];
 
