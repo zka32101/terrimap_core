@@ -132,6 +132,40 @@ void main() {
       await t.tapAt(box.topLeft + Offset(l.dx + (slot.col + 0.5) * l.cell, l.dy + (slot.row + 0.5) * l.cell));
       expect(tapped, slot);
     });
+    testWidgets('ズームボタン: ＋で1.5倍ずつ最大3倍、－で戻り、1倍で元の位置。縮めても盤面は画面から外れない。ボタンなしにもできる', (t) async {
+      final s = session();
+      Widget board({bool controls = true}) => MaterialApp(
+            home: Center(
+              child: SizedBox(width: 400, height: 400, child: BattleView(stage: s.engine.stage, state: s.state, showZoomControls: controls)),
+            ),
+          );
+      await t.pumpWidget(board());
+      double scale() => t.widget<InteractiveViewer>(find.byType(InteractiveViewer)).transformationController!.value.getMaxScaleOnAxis();
+      expect(scale(), 1);
+      await t.tap(find.byKey(const Key('board_zoom_in')));
+      expect(scale(), closeTo(1.5, 1e-9));
+      await t.tap(find.byKey(const Key('board_zoom_in')));
+      await t.tap(find.byKey(const Key('board_zoom_in')));
+      expect(scale(), closeTo(3, 1e-9)); // 3倍が上限
+      await t.tap(find.byKey(const Key('board_zoom_in')));
+      expect(scale(), closeTo(3, 1e-9));
+      // 拡大したまま隅に寄せてから縮めても、盤面が画面から外れない
+      final tc = t.widget<InteractiveViewer>(find.byType(InteractiveViewer)).transformationController!;
+      tc.value = Matrix4.translationValues(-800, -800, 0) * Matrix4.diagonal3Values(3, 3, 3);
+      await t.tap(find.byKey(const Key('board_zoom_out')));
+      final tx = tc.value.storage[12], ty = tc.value.storage[13], sc = scale();
+      expect(tx, greaterThanOrEqualTo(400 - 400 * sc - 1e-6));
+      expect(tx, lessThanOrEqualTo(1e-6));
+      expect(ty, greaterThanOrEqualTo(400 - 400 * sc - 1e-6));
+      expect(ty, lessThanOrEqualTo(1e-6));
+      for (var i = 0; i < 4; i++) {
+        await t.tap(find.byKey(const Key('board_zoom_out')));
+      }
+      expect(scale(), 1);
+      expect(tc.value, Matrix4.identity());
+      await t.pumpWidget(board(controls: false));
+      expect(find.byKey(const Key('board_zoom_in')), findsNothing);
+    });
     testWidgets('ピンチで拡大でき、拡大後もタップが同じマスに届く', (t) async {
       final s = session();
       GridPos? tapped;
