@@ -92,19 +92,38 @@ class StoryChapter {
   }
 }
 
+/// エンドレスの続きの章。エンドレスで [waves] 波まで守ると読める(州は問わない)。
+class StoryEpilogue {
+  final String id;
+  final int waves;
+  final LocalizedText title;
+  final List<DialogueLine> lines;
+  const StoryEpilogue({required this.id, required this.waves, required this.title, this.lines = const []});
+
+  static StoryEpilogue? fromJson(Object? j) {
+    if (j is! Map || j['id'] is! String || j['waves'] is! int) return null;
+    return StoryEpilogue(id: j['id'] as String, waves: j['waves'] as int, title: LocalizedText.fromJson(j['title']), lines: StoryChapter._lines(j['lines']));
+  }
+}
+
 /// その国の物語（`packs/<国>/story.json`）。章の並びと、各章の文。画面にも保存先にも依存しない。
 class Story {
   final List<StoryChapter> chapters;
 
   /// 主人公（なければ null。その国の物語に主人公の文は入れられない）。
   final StoryHero? hero;
-  const Story(this.chapters, {this.hero});
+
+  /// エンドレスの続きの章(守った波数の少ない順)。
+  final List<StoryEpilogue> epilogues;
+  const Story(this.chapters, {this.hero, this.epilogues = const []});
 
   factory Story.parse(String json) {
     final m = jsonDecode(json) as Map;
     return Story(
       [for (final c in (m['chapters'] as List? ?? const [])) StoryChapter.fromJson(c)].whereType<StoryChapter>().toList(),
       hero: StoryHero.fromJson(m['hero']),
+      epilogues: [for (final e in (m['endless'] as List? ?? const [])) StoryEpilogue.fromJson(e)].whereType<StoryEpilogue>().toList()
+        ..sort((a, b) => a.waves.compareTo(b.waves)),
     );
   }
 
@@ -151,6 +170,15 @@ class Story {
           }
       }
     }
+    for (final e in epilogues) {
+      if (!ids.add(e.id)) errs.add('${e.id}: id が重複');
+      if (e.waves <= 0) errs.add('${e.id}: waves は1以上');
+      if (!e.title.hasEnglish) errs.add('${e.id}: 題名の英語がない');
+      for (final l in e.lines) {
+        if (!l.text.hasEnglish) errs.add('${e.id}: 英語のない文がある');
+        if (l.speaker == Speaker.hero && h == null) errs.add('${e.id}: 主人公の文があるが、hero が定義されていない');
+      }
+    }
     final seen = <String>{};
     for (final c in chapters) {
       final r = c.requires;
@@ -187,4 +215,13 @@ class StoryProgress {
     }
     return null;
   }
+}
+
+/// エンドレスで守った波数から、続きの章の進み具合を出す(保存しない)。
+extension EndlessStory on Story {
+  /// [bestWaves] で読める章。
+  List<StoryEpilogue> unlockedEpilogues(int bestWaves) => [for (final e in epilogues) if (e.waves <= bestWaves) e];
+
+  /// 自己ベストが [before] から [after] に上がって、新しく読めるようになった章。
+  List<StoryEpilogue> newlyUnlocked(int before, int after) => [for (final e in epilogues) if (e.waves > before && e.waves <= after) e];
 }

@@ -7,6 +7,7 @@ import 'package:terrimap_core/battle/endless.dart';
 import 'package:terrimap_core/battle/grid.dart';
 import 'package:terrimap_core/battle/stage_generator.dart';
 import 'package:terrimap_core/pack/region_pack.dart';
+import 'package:terrimap_core/story/story.dart';
 
 RegionPack load(String id) {
   String r(String f) => File('packs/$id/$f').readAsStringSync();
@@ -18,7 +19,7 @@ RegionPack load(String id) {
 }
 
 void main() {
-  test('エンドレスのステージ: 30波で最後だけボス、同じ州なら毎回同じ、通常の盤面とは別', () {
+  test('エンドレスのステージ: 30波で10波ごとにボス、同じ州なら毎回同じ、通常の盤面とは別', () {
     for (final id in ['de', 'us']) {
       final pack = load(id);
       final g = StageGenerator(pack);
@@ -27,7 +28,7 @@ void main() {
       expect(a.toJsonString(), b.toJsonString());
       expect(a.waves.length, StageGenerator.endlessWaves);
       expect(a.kind, StageKind.normal);
-      expect(a.waves.where((w) => w.hasBoss).map((w) => w.number), [StageGenerator.endlessWaves]);
+      expect(a.waves.where((w) => w.hasBoss).map((w) => w.number), [10, 20, 30]); // 10波ごとにボス
       expect(a.waves.last.baseHp, greaterThan(a.waves.first.baseHp * 10));
       expect(a.seed, isNot(g.generate(region, a.difficulty).seed));
     }
@@ -66,5 +67,37 @@ void main() {
     expect(casual.wave, greaterThan(1));
     expect(expert.wave, greaterThan(1));
     expect(casual.won || expert.won, isFalse); // 30波は、ボットには届かない腕試し
+  });
+
+  test('今日の州: 日付で決まり、毎回同じ。絞り込んだ州の中から選ぶ', () {
+    final pack = load('us');
+    final a = EndlessDaily.regionFor(pack, '2026-10-21');
+    expect(EndlessDaily.regionFor(pack, '2026-10-21'), a);
+    expect({for (var d = 1; d <= 28; d++) EndlessDaily.regionFor(pack, '2026-10-${d.toString().padLeft(2, '0')}')}.length, greaterThan(5)); // 日替わりで散る
+    const free = {'US-CA', 'US-TX'};
+    for (var d = 1; d <= 28; d++) {
+      expect(free, contains(EndlessDaily.regionFor(pack, '2026-11-${d.toString().padLeft(2, '0')}', allowedIds: free)));
+    }
+    expect(() => EndlessDaily.regionFor(pack, '2026-10-21', allowedIds: {}), throwsArgumentError);
+  });
+
+  test('続きの章: 各国に3つ(10・20・30波)。守った波数で読める章が増え、新しく読める章だけ取り出せる', () {
+    for (final id in ['de', 'us']) {
+      final pack = load(id);
+      final story = Story.parse(File('packs/$id/story.json').readAsStringSync());
+      expect(story.validate(pack), isEmpty, reason: id);
+      expect([for (final e in story.epilogues) e.waves], [10, 20, 30], reason: id);
+      for (final e in story.epilogues) {
+        expect(e.title.of('ja'), isNotEmpty);
+        expect(e.lines.any((l) => l.speaker == Speaker.hero), isTrue, reason: e.id);
+        for (final lang in ['en', 'ja', 'de', 'fr', 'es', 'it', 'pt', 'nl', 'tr', 'ko', 'zh']) {
+          expect(e.lines.every((l) => l.text.of(lang).isNotEmpty), isTrue, reason: '${e.id} $lang');
+        }
+      }
+      expect(story.unlockedEpilogues(9), isEmpty);
+      expect(story.unlockedEpilogues(20).map((e) => e.waves), [10, 20]);
+      expect(story.newlyUnlocked(8, 22).map((e) => e.waves), [10, 20]);
+      expect(story.newlyUnlocked(20, 20), isEmpty);
+    }
   });
 }

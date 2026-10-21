@@ -55,13 +55,16 @@ class StageGenerator {
   /// エンドレス: 州ひとつを舞台に、最大 [endlessWaves] 波まで続く腕試し。敵のHPは通常の1.15倍、拠点が落ちるまで（または全波を守り切るまで）。
   /// 記録は「何波守ったか」。ステージの種類は通常のまま（リプレイ・招待には使わない）で、盤面は通常と別の乱数で作る。
   static const endlessWaves = 30;
+
+  /// エンドレスのボスの間隔(10・20・30波目にボスが出る)。
+  static const endlessBossEvery = 10;
   static const endlessHpScale = 1.15;
 
   Stage endless(String regionId) {
     final region = pack.regions.firstWhere((r) => r.id == regionId, orElse: () => throw ArgumentError('未知の地域: $regionId'));
     return _make(_Spec(
       key: '$regionId~endless', members: [region], center: region, difficulty: Difficulty.normal, kind: StageKind.normal,
-      waveCount: endlessWaves, hpScale: endlessHpScale, gridMax: _maxSize, minEntrances: 1,
+      waveCount: endlessWaves, hpScale: endlessHpScale, gridMax: _maxSize, minEntrances: 1, bossEvery: endlessBossEvery,
     ));
   }
 
@@ -178,7 +181,7 @@ class StageGenerator {
       for (final e in entrances)
         if (e.neighborId != null) e.neighborId!: _profile?.traitOf(e.neighborId!).enemyBias ?? const {},
     };
-    final waves = _waves(params, trait, entrances, neighborBias, seed, rng, waveCount: spec.waveCount, hpScale: spec.hpScale);
+    final waves = _waves(params, trait, entrances, neighborBias, seed, rng, waveCount: spec.waveCount, hpScale: spec.hpScale, bossEvery: spec.bossEvery);
 
     // 盤面にある州（その州の形の中にマスの中心があるもの。離れた土地の州は外れる）
     final present = [
@@ -440,7 +443,7 @@ class StageGenerator {
 
   List<StageWave> _waves(DifficultyParams p, RegionTrait? trait, List<StageEntrance> entrances,
       Map<String, Map<String, double>> neighborBias, int seed, Rng rng,
-      {required int waveCount, double hpScale = 1.0}) {
+      {required int waveCount, double hpScale = 1.0, int? bossEvery}) {
     final count = waveCount;
     final mix = _profile?.enemyMix ?? const {'normal': 1.0};
     return [
@@ -462,7 +465,7 @@ class StageGenerator {
             baseHp: (48 * w * p.hpMultiplier * hpScale).round(),
             baseAttack: (5 + w * 2 * p.hpMultiplier).round(),
             spawnInterval: math.max(0.5, 1.5 - w * 0.15),
-            hasBoss: w == count,
+            hasBoss: bossEvery == null ? w == count : (w == count || w % bossEvery == 0),
             enemyKinds: kinds,
             entranceIndices: idx,
           );
@@ -524,6 +527,7 @@ class _Spec {
   final StageKind kind;
   final int waveCount, gridMax, minEntrances;
   final double hpScale;
+  final int? bossEvery; // 指定すると、その間隔の波にもボスが出る(エンドレス)
   final String? groupId;
   final ExtraStage? extra;
   const _Spec({
@@ -538,5 +542,6 @@ class _Spec {
     required this.minEntrances,
     this.groupId,
     this.extra,
+    this.bossEvery,
   });
 }

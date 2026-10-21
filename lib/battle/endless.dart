@@ -1,5 +1,8 @@
 import 'dart:convert';
 
+import '../pack/region_pack.dart';
+import '../quiz/rng.dart';
+
 /// エンドレスの1回の結果。[waves] は守り切った波の数（全波を守り切ったら最大）。
 class EndlessResult {
   final String regionId;
@@ -56,5 +59,16 @@ class EndlessBoard {
     } catch (_) {
       return const EndlessBoard.empty();
     }
+  }
+}
+
+/// 今日の州。日付と packId から決まる(全員が同じ州)。[allowedIds] を渡すと、その州だけから選ぶ(無料の間は無料の州に絞る、など)。
+class EndlessDaily {
+  EndlessDaily._();
+
+  static String regionFor(RegionPack pack, String date, {Set<String>? allowedIds}) {
+    final ids = [for (final r in pack.regions) if (allowedIds == null || allowedIds.contains(r.id)) r.id]..sort();
+    if (ids.isEmpty) throw ArgumentError('選べる州がありません');
+    return ids[fnv1a('endless-daily|$date|${pack.packId}') % ids.length];
   }
 }

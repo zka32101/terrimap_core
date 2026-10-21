@@ -219,5 +219,15 @@ if (p/'story.json').exists():
         r = c.get("requires")
         if r is not None and r not in seen_ch: err.append(f"story.json: {cid} の前提の章 {r} が先にない")
         seen_ch.add(cid)
+    for e in (story.get("endless") or []):
+        eid = e.get("id")
+        if eid in seen_all: err.append(f"story.json: id が重複 {eid}")
+        seen_all.add(eid)
+        if not isinstance(e.get("waves"), int) or e["waves"] <= 0: err.append(f"story.json: {eid} の waves は1以上の整数")
+        if not (e.get("title") or {}).get("en"): err.append(f"story.json: {eid} の題名の英語がない")
+        for l in (e.get("lines") or []):
+            if l.get("speaker") not in SPEAKERS: err.append(f"story.json: {eid} の語り手が不正 {l.get('speaker')}")
+            if not (l.get("text") or {}).get("en"): err.append(f"story.json: {eid} に英語のない文がある")
+            if l.get("speaker") == "hero" and not hero: err.append(f"story.json: {eid} に主人公の文があるが、hero が定義されていない")
 print("\n".join(err) if err else f"OK {pack.get('packId')}: {len(ids)}地域")
 sys.exit(1 if err else 0)
