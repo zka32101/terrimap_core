@@ -8,7 +8,7 @@ import '../battle/stage.dart';
 /// バトルの演出（弾・命中の火花・撃破の爆発・ダメージ数字・拠点被弾・画面の揺れ・波とボスの表示）。
 /// エンジンのイベントから作る表示だけの層で、ゲームの結果には影響しない（リプレイ・バランスは変わらない）。
 /// 時間はバトルの時間（`state.time`）で進むので、一時停止・倍速・リプレイに合う。
-enum FxKind { shot, spark, burst, damage, coin, baseFlash, banner, ring }
+enum FxKind { shot, spark, burst, damage, coin, baseFlash, banner, ring, combo, confetti }
 
 class FxItem {
   final FxKind kind;
@@ -31,6 +31,14 @@ class BattleFx {
   final List<FxItem> items = [];
   final List<({double t0, double amp})> _shakes = [];
   Map<String, ({double x, double y})> _pos = {};
+
+  /// 連続撃破(コンボ): 直前の撃破からこの秒数以内に倒すと続く。
+  static const comboWindow = 1.2;
+  double _lastKill = -100;
+  int _combo = 0;
+
+  /// いまのコンボ数(表示用・テスト用)。
+  int get combo => _combo;
 
   BattleFx({this.enabled = true});
 
@@ -75,14 +83,48 @@ class BattleFx {
             final col = ev.crit ? const Color(0xFFFFB300) : (f == null ? Colors.white : _towerColor(f.type));
             _add(FxItem(FxKind.shot, now, 0.16, at, from: (x: fp.col.toDouble(), y: fp.row.toDouble()), color: col, crit: ev.crit));
             _add(FxItem(FxKind.spark, now + 0.1, 0.2, at, color: col, crit: ev.crit));
+            if (ev.crit) _addShake(now + 0.1, 0.25);
             if (ev.value != null) _add(FxItem(FxKind.damage, now + 0.1, 0.7, at, text: '${ev.value}', color: col, crit: ev.crit, size: ev.crit ? 1.5 : 1.0));
             break;
           case BattleEventType.kill:
+            // コンボ: 続けて倒すほど大きく。3連続から表示し、5の倍数で画面も揺らす。
+            _combo = now - _lastKill <= comboWindow ? _combo + 1 : 1;
+            _lastKill = now;
+            if (_combo >= 3) {
+              _add(FxItem(FxKind.combo, now, 1.0, (x: 0, y: 0), text: '×$_combo', color: const Color(0xFFFFD54F), size: math.min(1.0 + 0.08 * _combo, 2.2)));
+              if (_combo % 5 == 0) _addShake(now, 0.4);
+            }
             if (at == null) break;
             final big = ev.isBoss;
             _add(FxItem(FxKind.burst, now, big ? 0.9 : 0.45, at, color: big ? const Color(0xFFFFD54F) : const Color(0xFFFF8A65), size: big ? 2.6 : 1.0));
             if (ev.value != null && ev.value! > 0) _add(FxItem(FxKind.coin, now, 0.9, at, text: '+${ev.value}', color: const Color(0xFFFFD54F), size: big ? 1.4 : 1.0));
             if (big) _addShake(now, 1.2);
+            break;
+          case BattleEventType.spawn:
+            if (!ev.isBoss) break;
+            // ボスの登場: 赤い縁取り・大きな表示・揺れ
+            _add(FxItem(FxKind.baseFlash, now, 0.9, (x: 0, y: 0), color: const Color(0xFFB71C1C), size: 1.3));
+            _add(FxItem(FxKind.banner, now, 1.8, (x: 0, y: 0), text: 'BOSS', color: const Color(0xFFFF5252), size: 1.5));
+            if (at != null) _add(FxItem(FxKind.ring, now, 0.9, at, color: const Color(0xFFFF5252), size: 2.8));
+            _addShake(now, 1.0);
+            break;
+          case BattleEventType.waveClear:
+            _add(FxItem(FxKind.banner, now, 1.2, (x: 0, y: 0), text: 'WAVE ${ev.value ?? ''} CLEAR', color: const Color(0xFFB9F6CA)));
+            break;
+          case BattleEventType.victory:
+            // 勝利: 盤面のあちこちで、色とりどりの花火
+            const cols = [Color(0xFFFFD54F), Color(0xFF4FC3F7), Color(0xFFF48FB1), Color(0xFFAED581), Color(0xFFCE93D8), Color(0xFFFFB74D)];
+            for (var k = 0; k < 6; k++) {
+              final fx = (stage.cols * (0.15 + 0.14 * k)) % stage.cols, fy = stage.rows * (k.isEven ? 0.3 : 0.65);
+              _add(FxItem(FxKind.confetti, now + 0.12 * k, 1.1, (x: fx, y: fy), color: cols[k], size: 2.2));
+            }
+            _add(FxItem(FxKind.banner, now, 2.0, (x: 0, y: 0), text: 'VICTORY!', color: const Color(0xFFFFD54F), size: 1.4));
+            _addShake(now, 0.6);
+            break;
+          case BattleEventType.defeat:
+            _add(FxItem(FxKind.baseFlash, now, 1.2, (x: 0, y: 0), color: const Color(0xFFB71C1C), size: 1.6));
+            _add(FxItem(FxKind.banner, now, 2.0, (x: 0, y: 0), text: 'DEFEAT', color: const Color(0xFFEF9A9A), size: 1.4));
+            _addShake(now, 1.4);
             break;
           case BattleEventType.breach:
             _add(FxItem(FxKind.baseFlash, now, 0.5, (x: 0, y: 0), color: const Color(0xFFD32F2F), size: ev.isBoss ? 1.6 : 1.0));
@@ -113,6 +155,8 @@ class BattleFx {
   }
 
   void clear() {
+    _combo = 0;
+    _lastKill = -100;
     items.clear();
     _shakes.clear();
     _pos = {};
@@ -186,11 +230,29 @@ class BattleFx {
           final r = Offset.zero & size;
           canvas.drawRect(r, Paint()..shader = RadialGradient(colors: [Colors.transparent, i.color.withValues(alpha: alpha.clamp(0, 0.7))], stops: const [0.5, 1.0]).createShader(r));
           break;
+        case FxKind.combo:
+          // 右上に、弾むように大きくなって消えるコンボ数
+          final pop = a < 0.15 ? Curves.easeOut.transform(a / 0.15) : 1.0;
+          final fade = a > 0.7 ? (1 - a) / 0.3 : 1.0;
+          _text(canvas, '${i.text} COMBO', Offset(size.width - cell * 1.6, cell * 0.9), cell * 0.5 * i.size * (0.6 + 0.4 * pop), i.color.withValues(alpha: fade), bold: true);
+          break;
+        case FxKind.confetti:
+          // 花火: 外へ広がる光の粒と、落ちていく紙ふぶき
+          final c = center(i.at.x, i.at.y);
+          final r = cell * (0.3 + 1.6 * Curves.easeOut.transform(a)) * i.size * 0.5;
+          final p = Paint()..color = i.color.withValues(alpha: 1 - a);
+          for (var k = 0; k < 14; k++) {
+            final ang = k * math.pi * 2 / 14 + i.t0 * 3;
+            final drop = cell * 0.5 * a * a;
+            canvas.drawCircle(c + Offset(math.cos(ang) * r, math.sin(ang) * r + drop), cell * 0.07 * (1 - a * 0.6), p);
+          }
+          canvas.drawCircle(c, cell * 0.15 * (1 - a), Paint()..color = Colors.white.withValues(alpha: 1 - a));
+          break;
         case FxKind.banner:
           final k = a < 0.2 ? Curves.easeOut.transform(a / 0.2) : (a > 0.75 ? (1 - a) / 0.25 : 1.0);
           final c = Offset(size.width / 2, size.height * 0.3);
           canvas.drawRect(Rect.fromCenter(center: c, width: size.width, height: cell * 1.0 * k), Paint()..color = Colors.black.withValues(alpha: 0.35 * k));
-          _text(canvas, i.text ?? '', c, cell * 0.62, Colors.white.withValues(alpha: k), bold: true);
+          _text(canvas, i.text ?? '', c, cell * 0.62 * i.size, i.color.withValues(alpha: k), bold: true);
           break;
       }
     }
