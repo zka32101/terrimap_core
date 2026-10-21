@@ -151,7 +151,7 @@ void main() {
       expect(scale(), closeTo(3, 1e-9));
       // 拡大したまま隅に寄せてから縮めても、盤面が画面から外れない
       final tc = t.widget<InteractiveViewer>(find.byType(InteractiveViewer)).transformationController!;
-      tc.value = Matrix4.identity()..translate(-800.0, -800.0)..scale(3.0);
+      tc.value = Matrix4.translationValues(-800, -800, 0) * Matrix4.diagonal3Values(3, 3, 3);
       await t.tap(find.byKey(const Key('board_zoom_out')));
       final tx = tc.value.storage[12], ty = tc.value.storage[13], sc = scale();
       expect(tx, greaterThanOrEqualTo(400 - 400 * sc - 1e-6));
