@@ -156,6 +156,7 @@ if prof_path.exists():
             for k in (t.get("facilityBonus") or {}):
                 if k not in FACS: err.append(f"profile.json: {rid} の facilityBonus の未知の施設 {k}")
             if rid not in set(ids): err.append(f"profile.json: 未知の地域 {rid}")
+            if "blurb" in t and not (t["blurb"] or {}).get("en"): err.append(f"profile.json: {rid} の blurb に英語がない")
             if t.get("terrain") is not None and t["terrain"] not in TERRAINS: err.append(f"profile.json: {rid} の terrain が不正")
             for k, v in (t.get("facilityBonus") or {}).items():
                 if not isinstance(v, (int, float)) or not (1.0 <= v <= 2.0): err.append(f"profile.json: {rid} の facilityBonus.{k} は1.0〜2.0")

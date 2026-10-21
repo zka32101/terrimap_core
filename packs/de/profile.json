@@ -22,6 +22,19 @@
  },
  "regions": {
   "DE-BW": {
+   "blurb": {
+    "en": "In Germany's southwest, with the Black Forest and Lake Constance. Known for car makers and the old university of Heidelberg.",
+    "ja": "ドイツ南西部の州で、黒い森(シュヴァルツヴァルト)とボーデン湖があります。自動車メーカーとハイデルベルクの古い大学で知られます。",
+    "de": "Im Südwesten Deutschlands, mit Schwarzwald und Bodensee. Bekannt für Autohersteller und die alte Universität Heidelberg.",
+    "fr": "Au sud-ouest de l'Allemagne, avec la Forêt-Noire et le lac de Constance. Connu pour les constructeurs automobiles et la vieille université de Heidelberg.",
+    "es": "En el suroeste de Alemania, con la Selva Negra y el lago de Constanza. Conocido por los fabricantes de automóviles y la antigua universidad de Heidelberg.",
+    "it": "Nel sud-ovest della Germania, con la Foresta Nera e il Lago di Costanza. Noto per i produttori di automobili e per la vecchia università di Heidelberg.",
+    "pt": "No sudoeste da Alemanha, com a Floresta Negra e o Lago Constança. Conhecida pelas montadoras e pela antiga universidade de Heidelberg.",
+    "nl": "In het zuidwesten van Duitsland, met het Zwarte Woud en het Bodenmeer. Bekend om autofabrikanten en de oude universiteit van Heidelberg.",
+    "tr": "Almanya'nın güneybatısında, Kara Orman ve Konstanz Gölü ile birlikte. Araba üreticileri ve eski Heidelberg Üniversitesi ile tanınır.",
+    "ko": "독일 남서쪽에는 흑림(Black Forest)과 콘스탄스 호수(Lake Constance)가 있습니다. 자동차 제조사와 하이델베르그의 오래된 대학교로 유명합니다.",
+    "zh": "位于德国西南部，有黑森林和博登湖。以汽车制造商和古老的海德堡大学而闻名。"
+   },
    "terrain": "mixed",
    "tags": [
     "industry",
@@ -35,6 +48,19 @@
    "exclusiveFacility": "automotive_works"
   },
   "DE-BY": {
+   "blurb": {
+    "en": "Germany's largest state by area, in the southeast, with the Bavarian Alps and a strong beer culture. Neuschwanstein Castle is one of its best-known sights.",
+    "ja": "面積でドイツ最大の州で、南東部にあります。バイエルン・アルプスとビール文化で知られ、ノイシュヴァンシュタイン城が有名です。",
+    "de": "Flächenmäßig das größte Bundesland, im Südosten, mit den Bayerischen Alpen und starker Bierkultur. Schloss Neuschwanstein gehört zu den bekanntesten Sehenswürdigkeiten.",
+    "fr": "Le plus grand Land d'Allemagne en termes de superficie, au sud-est, avec les Alpes bavaroises et une forte culture de la bière. Le château de Neuschwanstein est l'un de ses sites les plus connus.",
+    "es": "El estado más grande de Alemania por superficie, en el sureste, con los Alpes bávaros y una fuerte cultura cervecera. El castillo de Neuschwanstein es uno de sus lugares más conocidos.",
+    "it": "Lo stato più grande della Germania per area, nel sud-est, con le Alpi bavaresi e una forte cultura della birra. Il castello di Neuschwanstein è uno dei suoi luoghi più famosi.",
+    "pt": "O maior estado da Alemanha em área, no sudeste, com os Alpes da Baviera e uma forte cultura cervejeira. O Castelo de Neuschwanstein é um dos seus pontos turísticos mais conhecidos.",
+    "nl": "Per gebied de grootste deelstaat van Duitsland, in het zuidoosten, met de Beierse Alpen en een sterke biercultuur. Kasteel Neuschwanstein is een van de bekendste bezienswaardigheden.",
+    "tr": "Güneydoğuda, Bavyera Alpleri ve güçlü bira kültürüyle Almanya'nın bölge bakımından en büyük eyaleti. Neuschwanstein Şatosu en bilinen turistik yerlerinden biridir.",
+    "ko": "바이에른 알프스와 강력한 맥주 문화가 있는 남동쪽에 위치한 독일 최대의 주입니다. 노이슈반슈타인 성은 가장 유명한 명소 중 하나입니다.",
+    "zh": "德国面积最大的州，位于东南部，拥有巴伐利亚阿尔卑斯山和浓厚的啤酒文化。新天鹅堡是其最著名的景点之一。"
+   },
    "terrain": "mountain",
    "tags": [
     "alps",
@@ -52,6 +78,19 @@
    }
   },
   "DE-BE": {
+   "blurb": {
+    "en": "Germany's capital city, which is also a state of its own, surrounded by Brandenburg. Known for the Brandenburg Gate, museums and remains of the Berlin Wall.",
+    "ja": "ドイツの首都で、それ自体が一つの州です。ブランデンブルク州に囲まれ、ブランデンブルク門や博物館、ベルリンの壁の跡で知られます。",
+    "de": "Hauptstadt Deutschlands und zugleich eigenes Bundesland, vom Land Brandenburg umgeben. Bekannt für das Brandenburger Tor, Museen und Reste der Berliner Mauer.",
+    "fr": "Capitale de l'Allemagne, qui est aussi un État à part entière, entourée par le Brandebourg. Connu pour la porte de Brandebourg, les musées et les vestiges du mur de Berlin.",
+    "es": "La capital de Alemania y su propio estado, rodeada por Brandeburgo. Conocido por la Puerta de Brandenburgo, los museos y los restos del Muro de Berlín.",
+    "it": "La capitale della Germania, che è anche uno stato a sé stante, circondata dal Brandeburgo. Conosciuto per la Porta di Brandeburgo, i musei e i resti del Muro di Berlino.",
+    "pt": "A capital da Alemanha, que também é um estado próprio, cercada por Brandemburgo. Conhecida pelo Portão de Brandemburgo, museus e ruínas do Muro de Berlim.",
+    "nl": "De hoofdstad van Duitsland, die ook een eigen staat is, omringd door Brandenburg. Bekend om de Brandenburger Tor, musea en overblijfselen van de Berlijnse Muur.",
+    "tr": "Brandenburg ile çevrili, aynı zamanda başlı başına bir eyalet olan Almanya'nın başkenti. Brandenburg Kapısı, müzeleri ve Berlin Duvarı kalıntılarıyla tanınır.",
+    "ko": "브란덴부르크에 둘러싸인 독일의 수도이자 독립된 국가입니다. 브란덴부르크 문, 박물관, 베를린 장벽 유적지로 유명합니다.",
+    "zh": "德国首都，也是一个独立的州，周围环绕着勃兰登堡。以勃兰登堡门、博物馆和柏林墙遗迹而闻名。"
+   },
    "terrain": "urban",
    "tags": [
     "capital",
@@ -64,6 +103,19 @@
    "exclusiveFacility": "parliament"
   },
   "DE-BB": {
+   "blurb": {
+    "en": "A state that surrounds Berlin, with many lakes, forests and wetlands such as the Spreewald. The palaces and parks of Potsdam are a UNESCO World Heritage site.",
+    "ja": "ベルリンを取り囲む州で、湖や森、シュプレーヴァルトなどの湿地が広がります。ポツダムの宮殿と庭園は世界遺産です。",
+    "de": "Das Land umgibt Berlin und ist reich an Seen, Wäldern und Feuchtgebieten wie dem Spreewald. Die Schlösser und Parks von Potsdam sind UNESCO-Welterbe.",
+    "fr": "Un État qui entoure Berlin, avec de nombreux lacs, forêts et zones humides comme le Spreewald. Les palais et parcs de Potsdam sont inscrits au patrimoine mondial de l'UNESCO.",
+    "es": "Un estado que rodea Berlín, con muchos lagos, bosques y humedales como el Spreewald. Los palacios y parques de Potsdam son Patrimonio de la Humanidad por la UNESCO.",
+    "it": "Uno stato che circonda Berlino, con molti laghi, foreste e zone umide come lo Spreewald. I palazzi e i parchi di Potsdam sono patrimonio mondiale dell'UNESCO.",
+    "pt": "Um estado que circunda Berlim, com muitos lagos, florestas e zonas húmidas como o Spreewald. Os palácios e parques de Potsdam são Patrimônio Mundial da UNESCO.",
+    "nl": "Een staat die Berlijn omringt, met veel meren, bossen en watergebieden zoals het Spreewald. De paleizen en parken van Potsdam staan ​​op de Werelderfgoedlijst van UNESCO.",
+    "tr": "Birçok göl, orman ve Spreewald gibi sulak alanlarla Berlin'i çevreleyen bir eyalet. Potsdam'ın sarayları ve parkları UNESCO Dünya Mirası listesindedir.",
+    "ko": "베를린을 둘러싸고 있는 주이며 많은 호수, 숲, 슈프레발트와 같은 습지가 있습니다. 포츠담의 궁전과 공원은 유네스코 세계문화유산으로 지정되어 있습니다.",
+    "zh": "柏林周边的一个州，拥有许多湖泊、森林和湿地，例如施普雷瓦尔德。波茨坦的宫殿和公园被联合国教科文组织列为世界遗产。"
+   },
    "terrain": "agriculture",
    "tags": [
     "lakes",
@@ -76,6 +128,19 @@
    "backdrop": "lakes"
   },
   "DE-HB": {
+   "blurb": {
+    "en": "The smallest German state, made up of the cities of Bremen and Bremerhaven on the North Sea coast. A port and trading city known for the Town Musicians statue.",
+    "ja": "ドイツで最も小さい州で、北海沿岸のブレーメンとブレーマーハーフェンからなります。港の商業都市で、ブレーメンの音楽隊の像で知られます。",
+    "de": "Das kleinste Bundesland, bestehend aus den Städten Bremen und Bremerhaven an der Nordsee. Hafen- und Handelsstadt, bekannt durch die Stadtmusikanten.",
+    "fr": "Le plus petit État allemand, composé des villes de Brême et Bremerhaven, sur la côte de la mer du Nord. Une ville portuaire et commerçante connue pour la statue des Musiciens de la ville.",
+    "es": "El estado alemán más pequeño, formado por las ciudades de Bremen y Bremerhaven en la costa del Mar del Norte. Un puerto y ciudad comercial conocida por la estatua de los Músicos de la Ciudad.",
+    "it": "Il più piccolo stato tedesco, formato dalle città di Brema e Bremerhaven, sulla costa del Mare del Nord. Un porto e una città commerciale nota per la statua dei musicanti.",
+    "pt": "O menor estado alemão, composto pelas cidades de Bremen e Bremerhaven, na costa do Mar do Norte. Uma cidade portuária e comercial conhecida pela estátua dos Músicos da Cidade.",
+    "nl": "De kleinste Duitse staat, bestaande uit de steden Bremen en Bremerhaven aan de Noordzeekust. Een haven- en handelsstad bekend om het standbeeld van de Stadsmuzikanten.",
+    "tr": "Kuzey Denizi kıyısındaki Bremen ve Bremerhaven şehirlerinden oluşan en küçük Alman eyaleti. Kasaba Mızıkacıları heykeliyle tanınan bir liman ve ticaret şehri.",
+    "ko": "북해 연안의 브레멘 시와 브레머하펜 시로 이루어진 독일의 가장 작은 주. 타운 뮤지션 동상으로 유명한 항구이자 무역 도시입니다.",
+    "zh": "德国最小的州，由北海沿岸的不来梅市和不来梅港市组成。一座港口和贸易城市，以城市音乐家雕像而闻名。"
+   },
    "terrain": "sea",
    "tags": [
     "port",
@@ -92,6 +157,19 @@
    }
   },
   "DE-HH": {
+   "blurb": {
+    "en": "A city-state on the Elbe river with one of Europe's biggest ports. Known for the Speicherstadt warehouses, the Elbphilharmonie and its many canals.",
+    "ja": "エルベ川沿いの都市州で、ヨーロッパ有数の大きな港があります。シュパイヒャーシュタットの倉庫街、エルプフィルハーモニー、たくさんの運河で知られます。",
+    "de": "Stadtstaat an der Elbe mit einem der größten Häfen Europas. Bekannt für die Speicherstadt, die Elbphilharmonie und viele Kanäle.",
+    "fr": "Une cité-État située sur l'Elbe et dotée de l'un des plus grands ports d'Europe. Connu pour les entrepôts de la Speicherstadt, la Philharmonie de l'Elbe et ses nombreux canaux.",
+    "es": "Una ciudad-estado a orillas del río Elba con uno de los puertos más grandes de Europa. Conocido por los almacenes Speicherstadt, la Elbphilharmonie y sus numerosos canales.",
+    "it": "Una città-stato sul fiume Elba con uno dei porti più grandi d'Europa. Noto per i magazzini Speicherstadt, l'Elbphilharmonie e i suoi numerosi canali.",
+    "pt": "Uma cidade-estado às margens do rio Elba com um dos maiores portos da Europa. Conhecida pelos armazéns de Speicherstadt, pela Elbphilharmonie e pelos seus muitos canais.",
+    "nl": "Een stadstaat aan de Elbe met een van de grootste havens van Europa. Bekend om de pakhuizen van Speicherstadt, de Elbphilharmonie en de vele grachten.",
+    "tr": "Elbe nehri üzerinde, Avrupa'nın en büyük limanlarından birine sahip bir şehir devleti. Speicherstadt depoları, Elbphilharmonie ve buradaki birçok kanalla tanınır.",
+    "ko": "유럽 ​​최대의 항구 중 하나가 있는 엘베강 유역의 도시 국가. 슈파이허슈타트 창고, 엘브필하모니 및 수많은 운하로 유명합니다.",
+    "zh": "易北河畔的城邦，拥有欧洲最大的港口之一。以仓库城仓库、易北爱乐音乐厅及其众多运河而闻名。"
+   },
    "terrain": "sea",
    "tags": [
     "port",
@@ -108,6 +186,19 @@
    }
   },
   "DE-HE": {
+   "blurb": {
+    "en": "A state in central Germany with Frankfurt, a major financial centre with a big international airport. Parts of the Rhine and Main valleys lie here.",
+    "ja": "ドイツ中部の州で、金融の中心地で大きな国際空港があるフランクフルトがあります。ラインやマインの川の谷の一部も含まれます。",
+    "de": "Bundesland in der Mitte Deutschlands mit Frankfurt, einem wichtigen Finanzzentrum mit großem internationalem Flughafen. Dazu gehören Teile des Rhein- und Maintals.",
+    "fr": "Un État du centre de l'Allemagne avec Francfort, une place financière majeure dotée d'un grand aéroport international. Certaines parties des vallées du Rhin et du Main se trouvent ici.",
+    "es": "Un estado en el centro de Alemania con Frankfurt, un importante centro financiero con un gran aeropuerto internacional. Aquí se encuentran partes de los valles del Rin y del Meno.",
+    "it": "Uno stato nella Germania centrale con Francoforte, un importante centro finanziario con un grande aeroporto internazionale. Qui si trovano parti delle valli del Reno e del Meno.",
+    "pt": "Um estado no centro da Alemanha com Frankfurt, um importante centro financeiro com um grande aeroporto internacional. Partes dos vales do Reno e do Meno ficam aqui.",
+    "nl": "Een staat in Midden-Duitsland met Frankfurt, een belangrijk financieel centrum met een grote internationale luchthaven. Delen van de Rijn- en Mainvallei liggen hier.",
+    "tr": "Büyük bir uluslararası havaalanına sahip büyük bir finans merkezi olan Frankfurt'la birlikte orta Almanya'da bir eyalet. Ren ve Main vadilerinin bir kısmı burada yatıyor.",
+    "ko": "큰 국제공항을 갖춘 주요 금융 중심지인 프랑크푸르트가 있는 독일 중부의 주입니다. 라인강과 마인 계곡의 일부가 여기에 있습니다.",
+    "zh": "德国中部的一个州，拥有主要金融中心法兰克福，并拥有大型国际机场。莱茵河和美因河谷的部分地区位于这里。"
+   },
    "terrain": "mixed",
    "tags": [
     "finance",
@@ -120,6 +211,19 @@
    "exclusiveFacility": "stock_exchange"
   },
   "DE-MV": {
+   "blurb": {
+    "en": "A state in the northeast on the Baltic Sea, with thousands of lakes and the chalk cliffs of Rügen island. Popular for beach holidays.",
+    "ja": "バルト海に面した北東部の州で、数多くの湖があり、リューゲン島には白い断崖があります。海辺の休暇で人気の地域です。",
+    "de": "Bundesland im Nordosten an der Ostsee mit Tausenden Seen und den Kreidefelsen auf Rügen. Beliebt für Strandurlaub.",
+    "fr": "Un État au nord-est de la mer Baltique, avec des milliers de lacs et les falaises de craie de l'île de Rügen. Populaire pour les vacances à la plage.",
+    "es": "Un estado en el noreste, a orillas del Mar Báltico, con miles de lagos y los acantilados calcáreos de la isla de Rügen. Popular para vacaciones en la playa.",
+    "it": "Uno stato nel nord-est sul Mar Baltico, con migliaia di laghi e le scogliere gessose dell'isola di Rügen. Popolare per le vacanze al mare.",
+    "pt": "Um estado no nordeste do Mar Báltico, com milhares de lagos e as falésias calcárias da ilha de Rügen. Popular para férias na praia.",
+    "nl": "Een staat in het noordoosten aan de Oostzee, met duizenden meren en de krijtrotsen van het eiland Rügen. Populair voor strandvakanties.",
+    "tr": "Baltık Denizi'nin kuzeydoğusunda, binlerce gölün ve Rügen adasının tebeşir kayalıklarının bulunduğu bir eyalet. Plaj tatilleri için popüler.",
+    "ko": "수천 개의 호수와 뤼겐 섬의 백악 절벽이 있는 발트해 북동쪽에 있는 주입니다. 해변 휴가로 인기가 있습니다.",
+    "zh": "波罗的海东北部的一个国家，拥有数千个湖泊和吕根岛的白垩悬崖。非常适合海滩度假。"
+   },
    "terrain": "sea",
    "tags": [
     "coast",
@@ -133,6 +237,19 @@
    "backdrop": "north_coast"
   },
   "DE-NI": {
+   "blurb": {
+    "en": "Germany's second-largest state by area, stretching from the North Sea coast to the Harz mountains. Volkswagen has its headquarters in Wolfsburg.",
+    "ja": "面積でドイツ第2位の州で、北海沿岸からハルツ山地まで広がります。フォルクスワーゲンの本社はヴォルフスブルクにあります。",
+    "de": "Flächenmäßig das zweitgrößte Bundesland, von der Nordseeküste bis zum Harz. In Wolfsburg sitzt der Hauptsitz von Volkswagen.",
+    "fr": "Le deuxième plus grand Land d'Allemagne en termes de superficie, s'étendant de la côte de la mer du Nord jusqu'aux montagnes du Harz. Volkswagen a son siège social à Wolfsburg.",
+    "es": "El segundo estado más grande de Alemania en términos de superficie, se extiende desde la costa del Mar del Norte hasta las montañas de Harz. Volkswagen tiene su sede en Wolfsburg.",
+    "it": "Il secondo stato più grande della Germania per area, si estende dalla costa del Mare del Nord fino alle montagne dell'Harz. La Volkswagen ha la sua sede a Wolfsburg.",
+    "pt": "O segundo maior estado da Alemanha em área, estendendo-se desde a costa do Mar do Norte até as montanhas Harz. A Volkswagen tem sede em Wolfsburg.",
+    "nl": "De op één na grootste deelstaat van Duitsland qua oppervlakte, die zich uitstrekt van de Noordzeekust tot aan het Harzgebergte. Volkswagen heeft zijn hoofdkantoor in Wolfsburg.",
+    "tr": "Kuzey Denizi kıyısından Harz dağlarına kadar uzanan, bölge bakımından Almanya'nın ikinci büyük eyaleti. Volkswagen'in genel merkezi Wolfsburg'dadır.",
+    "ko": "지역적으로 독일에서 두 번째로 큰 주로, 북해 연안에서 하르츠 산맥까지 뻗어 있습니다. 폭스바겐은 볼프스부르크에 본사를 두고 있다.",
+    "zh": "德国面积第二大的州，从北海沿岸延伸到哈尔茨山脉。大众汽车总部位于沃尔夫斯堡。"
+   },
    "terrain": "agriculture",
    "tags": [
     "farming",
@@ -147,6 +264,19 @@
    "backdrop": "farmland"
   },
   "DE-NW": {
+   "blurb": {
+    "en": "The most populous German state, along the lower Rhine and the Ruhr area, once a centre of coal and steel. Cologne Cathedral is its best-known landmark.",
+    "ja": "人口がドイツで最も多い州で、ライン川下流とルール地方があり、かつては石炭と鉄鋼の中心でした。ケルン大聖堂が代表的な名所です。",
+    "de": "Das bevölkerungsreichste Bundesland am Niederrhein und im Ruhrgebiet, einst Zentrum von Kohle und Stahl. Der Kölner Dom ist das bekannteste Wahrzeichen.",
+    "fr": "L'État allemand le plus peuplé, situé le long du Bas-Rhin et de la Ruhr, était autrefois un centre de charbon et d'acier. La cathédrale de Cologne est son monument le plus connu.",
+    "es": "El estado alemán más poblado, a lo largo del bajo Rin y la zona del Ruhr, que alguna vez fue un centro de carbón y acero. La Catedral de Colonia es su monumento más conocido.",
+    "it": "Lo stato tedesco più popoloso, lungo il basso Reno e la zona della Ruhr, un tempo centro del carbone e dell'acciaio. La Cattedrale di Colonia è il suo punto di riferimento più noto.",
+    "pt": "O estado alemão mais populoso, ao longo do baixo Reno e da região do Ruhr, que já foi um centro de carvão e aço. A Catedral de Colônia é o seu marco mais conhecido.",
+    "nl": "De dichtstbevolkte Duitse staat, langs de Nederrijn en het Ruhrgebied, ooit een centrum van kolen en staal. De Dom van Keulen is het bekendste herkenningspunt.",
+    "tr": "Aşağı Ren ve Ruhr bölgesi boyunca uzanan, bir zamanlar kömür ve çeliğin merkezi olan en kalabalık Alman eyaleti. Köln Katedrali onun en bilinen simgesidir.",
+    "ko": "라인 강 하류와 루르 지역을 따라 가장 인구가 많은 독일 주이자 한때 석탄과 철강의 중심지였습니다. 쾰른 대성당은 가장 잘 알려진 랜드마크입니다.",
+    "zh": "德国人口最多的州，位于莱茵河下游和鲁尔区，曾经是煤炭和钢铁中心。科隆大教堂是其最著名的地标。"
+   },
    "terrain": "urban",
    "tags": [
     "industry",
@@ -164,6 +294,19 @@
    }
   },
   "DE-RP": {
+   "blurb": {
+    "en": "A state in the west with the Middle Rhine valley, known for castles, vineyards and the Loreley rock. Gutenberg, who developed printing with movable type, was born in Mainz.",
+    "ja": "西部の州で、ライン川中流域は城とワイン畑、ローレライの岩で知られます。活版印刷を発展させたグーテンベルクはマインツの生まれです。",
+    "de": "Bundesland im Westen mit dem Mittelrheintal, bekannt für Burgen, Weinberge und den Loreley-Felsen. Gutenberg, der den Buchdruck mit beweglichen Lettern entwickelte, wurde in Mainz geboren.",
+    "fr": "Un État à l'ouest avec la vallée du Rhin moyen, connu pour ses châteaux, ses vignobles et le rocher de la Lorelei. Gutenberg, qui a développé l'imprimerie à caractères mobiles, est né à Mayence.",
+    "es": "Un estado federado del oeste con el valle del Medio Rin, conocido por sus castillos, viñedos y la roca Loreley. Gutenberg, quien desarrolló la imprenta con tipos móviles, nació en Mainz.",
+    "it": "Uno stato a ovest con la valle del Medio Reno, noto per i castelli, i vigneti e la roccia di Loreley. Gutenberg, che sviluppò la stampa a caratteri mobili, nacque a Magonza.",
+    "pt": "Um estado no oeste com o vale do Médio Reno, conhecido pelos castelos, vinhedos e pela rocha Loreley. Gutenberg, que desenvolveu a impressão com tipos móveis, nasceu em Mainz.",
+    "nl": "Een staat in het westen met het Midden-Rijndal, bekend om kastelen, wijngaarden en de Loreley-rots. Gutenberg, die het drukken met losse letters ontwikkelde, werd geboren in Mainz.",
+    "tr": "Kaleler, üzüm bağları ve Loreley kayasıyla tanınan, Orta Ren vadisine sahip batıda bir eyalet. Hareketli harflerle matbaayı geliştiren Gutenberg, Mainz'da doğdu.",
+    "ko": "성, 포도밭, 로렐라이 바위로 유명한 라인 중부 계곡이 있는 서쪽의 주입니다. 활자 인쇄술을 개발한 구텐베르크는 마인츠에서 태어났습니다.",
+    "zh": "位于莱茵河中游河谷的西部州份，以城堡、葡萄园和罗蕾莱岩石而闻名。发明了活字印刷术的古腾堡出生于美因茨。"
+   },
    "terrain": "mixed",
    "tags": [
     "wine",
@@ -176,6 +319,19 @@
    "exclusiveFacility": "winery"
   },
   "DE-SL": {
+   "blurb": {
+    "en": "A small state in the west on the French border, once a coal and steel region. The Saarschleife, a big bend of the Saar river, is a famous view.",
+    "ja": "フランスとの国境にある西部の小さな州で、かつては石炭と鉄鋼の地域でした。ザール川の大きな蛇行「ザールシュライフェ」が有名な景色です。",
+    "de": "Kleines Bundesland im Westen an der Grenze zu Frankreich, früher Kohle- und Stahlregion. Die Saarschleife, eine große Flussschleife der Saar, ist ein berühmter Ausblick.",
+    "fr": "Un petit État à l'ouest à la frontière française, autrefois une région du charbon et de l'acier. La Saarschleife, un grand méandre de la Sarre, est une vue célèbre.",
+    "es": "Un pequeño estado en el oeste, en la frontera francesa, que alguna vez fue una región de carbón y acero. El Saarschleife, un gran meandro del río Saar, es una vista famosa.",
+    "it": "Un piccolo stato a ovest, al confine con la Francia, un tempo regione del carbone e dell'acciaio. La Saarschleife, una grande ansa del fiume Saar, è una vista famosa.",
+    "pt": "Um pequeno estado no oeste, na fronteira com a França, que já foi uma região de carvão e aço. O Saarschleife, uma grande curva do rio Saar, é uma vista famosa.",
+    "nl": "Een kleine staat in het westen aan de Franse grens, ooit een kolen- en staalregio. De Saarschleife, een grote bocht van de rivier de Saar, is een beroemd uitzicht.",
+    "tr": "Batıda, Fransa sınırında, bir zamanlar kömür ve çelik bölgesi olan küçük bir eyalet. Saar nehrinin büyük bir kıvrımı olan Saarschleife, ünlü bir manzaradır.",
+    "ko": "프랑스 국경 서쪽에 있는 작은 주, 한때 석탄과 철강 지역이었습니다. 자르 강의 큰 굽이인 자르슐라이페(Saarschleife)는 유명한 풍경입니다.",
+    "zh": "法国边境西部的一个小州，曾经是煤炭和钢铁地区。萨尔河河湾（Saarschleife）是萨尔河的一个大拐弯处，是著名的景观。"
+   },
    "terrain": "urban",
    "tags": [
     "steel",
@@ -188,6 +344,19 @@
    "backdrop": "industry"
   },
   "DE-SN": {
+   "blurb": {
+    "en": "A state in the east, known for the rebuilt baroque old town of Dresden and for Leipzig's book fairs and music tradition. Part of the Elbe Sandstone Mountains lies here.",
+    "ja": "東部の州で、再建されたドレスデンのバロック様式の旧市街や、ライプツィヒの書籍見本市と音楽の伝統で知られます。エルベ砂岩山地の一部もあります。",
+    "de": "Bundesland im Osten, bekannt für die wiederaufgebaute barocke Altstadt von Dresden sowie Leipzigs Buchmesse und Musiktradition. Hier liegt auch ein Teil des Elbsandsteingebirges.",
+    "fr": "Un État de l'Est, connu pour la vieille ville baroque reconstruite de Dresde ainsi que pour les salons du livre et la tradition musicale de Leipzig. Une partie des montagnes de grès de l'Elbe se trouve ici.",
+    "es": "Un estado del este, conocido por el casco antiguo barroco reconstruido de Dresde y por las ferias del libro y la tradición musical de Leipzig. Aquí se encuentra parte de las montañas de arenisca del Elba.",
+    "it": "Uno stato dell'est, noto per il centro storico barocco ricostruito di Dresda e per le fiere del libro e la tradizione musicale di Lipsia. Qui si trova parte delle montagne di arenaria dell'Elba.",
+    "pt": "Um estado no leste, conhecido pela cidade velha barroca reconstruída de Dresden e pelas feiras de livros e pela tradição musical de Leipzig. Parte das montanhas de arenito do Elba fica aqui.",
+    "nl": "Een staat in het oosten, bekend om de herbouwde barokke oude binnenstad van Dresden en om de boekenbeurzen en muziektraditie van Leipzig. Een deel van het Elbezandsteengebergte ligt hier.",
+    "tr": "Doğuda, yeniden inşa edilen barok eski Dresden kenti ve Leipzig'in kitap fuarları ve müzik geleneğiyle tanınan bir eyalet. Elbe Kumtaşı Dağları'nın bir kısmı burada yatıyor.",
+    "ko": "재건된 바로크 양식의 구시가지 드레스덴과 라이프치히의 도서 박람회 및 음악 전통으로 유명한 동부의 주입니다. 엘베 사암 산맥의 일부가 여기에 있습니다.",
+    "zh": "东部的一个州，以重建的巴洛克式老城区德累斯顿以及莱比锡的书展和音乐传统而闻名。易北河砂岩山脉的一部分就位于这里。"
+   },
    "terrain": "mountain",
    "tags": [
     "ore_mountains",
@@ -200,6 +369,19 @@
    "exclusiveFacility": "porcelain_works"
   },
   "DE-ST": {
+   "blurb": {
+    "en": "A state in east-central Germany with the Harz mountains and Lutherstadt Wittenberg, where Martin Luther worked. The Elbe flows through it.",
+    "ja": "ドイツ中東部の州で、ハルツ山地と、マルティン・ルターが活動したヴィッテンベルクがあります。エルベ川が流れます。",
+    "de": "Bundesland im Osten Mitteldeutschlands mit dem Harz und der Lutherstadt Wittenberg, wo Martin Luther wirkte. Die Elbe fließt hindurch.",
+    "fr": "Un État du centre-est de l'Allemagne avec les montagnes du Harz et Lutherstadt Wittenberg, où travaillait Martin Luther. L'Elbe la traverse.",
+    "es": "Un estado en el centro-este de Alemania con las montañas de Harz y Lutherstadt Wittenberg, donde trabajó Martín Lutero. El Elba lo atraviesa.",
+    "it": "Uno stato nella Germania centro-orientale con le montagne dell'Harz e Lutherstadt Wittenberg, dove lavorò Martin Lutero. L'Elba lo attraversa.",
+    "pt": "Um estado no centro-leste da Alemanha com as montanhas Harz e Lutherstadt Wittenberg, onde Martinho Lutero trabalhou. O Elba flui através dele.",
+    "nl": "Een staat in Oost-Midden-Duitsland met het Harzgebergte en Lutherstadt Wittenberg, waar Maarten Luther werkte. De Elbe stroomt er doorheen.",
+    "tr": "Harz dağları ve Martin Luther'in çalıştığı Lutherstadt Wittenberg'in bulunduğu doğu-orta Almanya'da bir eyalet. Elbe içinden akıyor.",
+    "ko": "하르츠 산맥과 마르틴 루터가 활동했던 비텐베르크 루터슈타트가 있는 독일 중동부의 주. 엘베강이 흐르고 있습니다.",
+    "zh": "德国中东部的一个州，拥有哈茨山脉和路德施塔特·维滕贝格，马丁·路德曾在此工作过。易北河从中流过。"
+   },
    "terrain": "agriculture",
    "tags": [
     "farming",
@@ -211,6 +393,19 @@
    "backdrop": "farmland"
   },
   "DE-SH": {
+   "blurb": {
+    "en": "The northernmost state, between the North Sea and the Baltic Sea, bordering Denmark and with a Wadden Sea coast. Known for the old town of Lübeck and the island of Sylt.",
+    "ja": "北海とバルト海にはさまれた最北の州で、デンマークと国境を接し、ワッデン海の海岸があります。リューベックの旧市街やズュルト島で知られます。",
+    "de": "Das nördlichste Bundesland zwischen Nordsee und Ostsee, an der Grenze zu Dänemark, mit Wattenmeerküste. Bekannt für Lübecks Altstadt und die Insel Sylt.",
+    "fr": "L'État le plus septentrional, entre la mer du Nord et la mer Baltique, limitrophe du Danemark et bordé par la mer des Wadden. Connu pour la vieille ville de Lübeck et l'île de Sylt.",
+    "es": "El estado más septentrional, entre el Mar del Norte y el Mar Báltico, limita con Dinamarca y tiene costa en el Mar de Wadden. Conocido por el casco antiguo de Lübeck y la isla de Sylt.",
+    "it": "Lo stato più settentrionale, tra il Mare del Nord e il Mar Baltico, confinante con la Danimarca e con la costa del Mare di Wadden. Noto per il centro storico di Lubecca e l'isola di Sylt.",
+    "pt": "O estado mais ao norte, entre o Mar do Norte e o Mar Báltico, fazendo fronteira com a Dinamarca e com a costa do Mar de Wadden. Conhecida pelo centro histórico de Lübeck e pela ilha de Sylt.",
+    "nl": "De meest noordelijke staat, tussen de Noordzee en de Oostzee, grenzend aan Denemarken en met een Waddenzeekust. Bekend om de oude binnenstad van Lübeck en het eiland Sylt.",
+    "tr": "Kuzey Denizi ile Baltık Denizi arasında, Danimarka sınırında ve Wadden Denizi kıyısına sahip en kuzeydeki eyalet. Lübeck'in eski kenti ve Sylt adasıyla tanınır.",
+    "ko": "북해와 발트해 사이의 최북단 주이며 덴마크와 국경을 접하고 바덴해 연안을 접하고 있습니다. 뤼베크(Lübeck) 구시가지와 실트(Sylt) 섬으로 유명합니다.",
+    "zh": "最北端的州，位于北海和波罗的海之间，与丹麦接壤，濒临瓦登海海岸。以吕贝克老城和叙尔特岛而闻名。"
+   },
    "terrain": "sea",
    "tags": [
     "coast",
@@ -224,6 +419,19 @@
    "backdrop": "north_coast"
   },
   "DE-TH": {
+   "blurb": {
+    "en": "A hilly, forested state in the centre, called Germany's green heart. The Wartburg castle and the Thuringian Forest are famous, and Weimar was home to Goethe and Schiller.",
+    "ja": "「ドイツの緑の心臓」と呼ばれる、中央部の丘と森の州です。ヴァルトブルク城やテューリンゲンの森が有名で、ヴァイマルはゲーテとシラーゆかりの町です。",
+    "de": "Das „grüne Herz Deutschlands“, ein hügeliges, waldreiches Land in der Mitte. Bekannt sind die Wartburg und der Thüringer Wald; in Weimar lebten Goethe und Schiller.",
+    "fr": "Un État vallonné et boisé au centre, appelé le cœur vert de l'Allemagne. Le château de Wartburg et la forêt de Thuringe sont célèbres, et Weimar fut la demeure de Goethe et Schiller.",
+    "es": "Un estado montañoso y boscoso en el centro, llamado el corazón verde de Alemania. Son famosos el castillo de Wartburg y el bosque de Turingia, y Weimar fue el hogar de Goethe y Schiller.",
+    "it": "Uno stato collinoso e boscoso al centro, chiamato il cuore verde della Germania. Famosi sono il castello di Wartburg e la foresta della Turingia, Weimar è stata la patria di Goethe e Schiller.",
+    "pt": "Um estado montanhoso e arborizado no centro, chamado de coração verde da Alemanha. O castelo de Wartburg e a Floresta da Turíngia são famosos, e Weimar foi o lar de Goethe e Schiller.",
+    "nl": "Een heuvelachtige, bosrijke staat in het centrum, het groene hart van Duitsland genoemd. Het kasteel Wartburg en het Thüringer Woud zijn beroemd, en Weimar was de thuisbasis van Goethe en Schiller.",
+    "tr": "Merkezde, Almanya'nın yeşil kalbi olarak adlandırılan engebeli, ormanlık bir eyalet. Wartburg kalesi ve Thüringen Ormanı ünlüdür ve Weimar, Goethe ve Schiller'in eviydi.",
+    "ko": "독일의 녹색 심장이라 불리는 중앙에 위치한 언덕이 많고 숲이 우거진 주입니다. 바르트부르크 성과 튀링겐 숲이 유명하고, 바이마르는 괴테와 쉴러의 고향이었습니다.",
+    "zh": "中部多山、森林茂密的州，被称为德国的绿色心脏。瓦特堡城堡和图林根森林闻名，魏玛是歌德和席勒的故乡。"
+   },
    "terrain": "mountain",
    "tags": [
     "forest",

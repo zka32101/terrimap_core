@@ -99,6 +99,7 @@ class RegionTrait {
   final String? backdrop; // 背景の種類id(profile の theme.backdrops のキー)
   final String? exclusiveFacility; // この地域だけで置ける限定施設のid(ゲーム側が定義)
   final Map<String, double> enemyBias; // 敵の種類→出現の重みの倍率(0.5〜2.0)
+  final Map<String, String> blurb; // 言語→州の紹介文(解説ページに出す。足りない言語は英語)
   const RegionTrait({
     this.terrain,
     this.tags = const [],
@@ -107,7 +108,11 @@ class RegionTrait {
     this.backdrop,
     this.exclusiveFacility,
     this.enemyBias = const {},
+    this.blurb = const {},
   });
+
+  /// 紹介文。言語がなければ英語、英語もなければ空。
+  String blurbIn(String lang) => blurb[lang] ?? blurb['en'] ?? '';
 
   factory RegionTrait.fromJson(Map<String, dynamic> j) => RegionTrait(
         terrain: j['terrain'] as String?,
@@ -117,6 +122,7 @@ class RegionTrait {
         backdrop: j['backdrop'] as String?,
         exclusiveFacility: j['exclusiveFacility'] as String?,
         enemyBias: _obj(j['enemyBias']).map((k, v) => MapEntry(k, (v as num).toDouble())),
+        blurb: _obj(j['blurb']).map((k, v) => MapEntry(k, '$v')),
       );
 }
 
