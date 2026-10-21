@@ -52,6 +52,19 @@ class StageGenerator {
     ));
   }
 
+  /// エンドレス: 州ひとつを舞台に、最大 [endlessWaves] 波まで続く腕試し。敵のHPは通常の1.15倍、拠点が落ちるまで（または全波を守り切るまで）。
+  /// 記録は「何波守ったか」。ステージの種類は通常のまま（リプレイ・招待には使わない）で、盤面は通常と別の乱数で作る。
+  static const endlessWaves = 30;
+  static const endlessHpScale = 1.15;
+
+  Stage endless(String regionId) {
+    final region = pack.regions.firstWhere((r) => r.id == regionId, orElse: () => throw ArgumentError('未知の地域: $regionId'));
+    return _make(_Spec(
+      key: '$regionId~endless', members: [region], center: region, difficulty: Difficulty.normal, kind: StageKind.normal,
+      waveCount: endlessWaves, hpScale: endlessHpScale, gridMax: _maxSize, minEntrances: 1,
+    ));
+  }
+
   /// 地方決戦: 7波（easy 6・hard 8）、敵のHP 1.2倍、盤面は最大14、入口は2か所以上。
   static const regionalWaves = 7;
   static const regionalHpScale = 1.2;
