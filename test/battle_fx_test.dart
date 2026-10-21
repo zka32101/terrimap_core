@@ -76,4 +76,66 @@ void main() {
     ));
     expect(t.takeException(), isNull);
   });
+
+  test('演出: ボスの登場は、赤い縁取り・BOSSの表示・波紋・揺れが出る', () {
+    final fx = BattleFx();
+    final s = play(fx: false);
+    final st = s.state;
+    fx.consume(st, const [BattleEvent(BattleEventType.spawn, enemyId: 'none', isBoss: true)], s.engine.stage);
+    expect(fx.items.any((i) => i.kind == FxKind.banner && i.text == 'BOSS'), isTrue);
+    expect(fx.items.any((i) => i.kind == FxKind.baseFlash), isTrue);
+    expect(fx.shake(st.time + 0.02) == Offset.zero, false);
+    // ふつうの敵の登場では何も出ない
+    final fx2 = BattleFx();
+    fx2.consume(st, const [BattleEvent(BattleEventType.spawn, enemyId: 'none')], s.engine.stage);
+    expect(fx2.items, isEmpty);
+  });
+
+  test('演出: コンボは、間をあけずに倒すと増え、3連続から表示。間があくと1に戻る', () {
+    final fx = BattleFx();
+    final s = play(fx: false);
+    final st = s.state;
+    BattleState at(double t) => BattleState(
+        phase: st.phase, wave: st.wave, prepTimer: st.prepTimer, spawned: st.spawned, spawnAcc: st.spawnAcc, enemies: const [],
+        facilities: st.facilities, coins: st.coins, baseHp: st.baseHp, score: st.score, mistakes: st.mistakes, time: t, tickCount: st.tickCount);
+    const kill = [BattleEvent(BattleEventType.kill, value: 5)];
+    fx.consume(at(10.0), kill, s.engine.stage);
+    fx.consume(at(10.5), kill, s.engine.stage);
+    expect(fx.combo, 2);
+    expect(fx.items.where((i) => i.kind == FxKind.combo), isEmpty); // 2連続までは出さない
+    fx.consume(at(11.0), kill, s.engine.stage);
+    expect(fx.combo, 3);
+    expect(fx.items.where((i) => i.kind == FxKind.combo).single.text, '×3');
+    fx.consume(at(20.0), kill, s.engine.stage); // 間があいた
+    expect(fx.combo, 1);
+    fx.clear();
+    expect(fx.combo, 0);
+  });
+
+  test('演出: 勝利は花火と表示、敗北は赤い縁取りと強い揺れ。波クリアの表示も出る', () {
+    final s = play(fx: false);
+    final st = s.state;
+    final win = BattleFx()..consume(st, const [BattleEvent(BattleEventType.victory)], s.engine.stage);
+    expect(win.items.where((i) => i.kind == FxKind.confetti).length, 6);
+    expect(win.items.any((i) => i.kind == FxKind.banner && i.text == 'VICTORY!'), isTrue);
+    final lose = BattleFx()..consume(st, const [BattleEvent(BattleEventType.defeat)], s.engine.stage);
+    expect(lose.items.any((i) => i.kind == FxKind.baseFlash), isTrue);
+    expect(lose.items.any((i) => i.kind == FxKind.banner && i.text == 'DEFEAT'), isTrue);
+    expect(lose.shake(st.time + 0.02) == Offset.zero, false);
+    final clear = BattleFx()..consume(st, const [BattleEvent(BattleEventType.waveClear, value: 4)], s.engine.stage);
+    expect(clear.items.single.text, 'WAVE 4 CLEAR');
+  });
+
+  testWidgets('演出: ボス・コンボ・花火・敗北を全部描いてもエラーにならない', (t) async {
+    final s = play();
+    final st = s.state;
+    final fx = s.fx
+      ..consume(st, const [BattleEvent(BattleEventType.spawn, enemyId: 'x', isBoss: true), BattleEvent(BattleEventType.victory), BattleEvent(BattleEventType.defeat)], s.engine.stage);
+    for (var i = 0; i < 5; i++) {
+      fx.consume(st, const [BattleEvent(BattleEventType.kill, value: 3)], s.engine.stage);
+    }
+    await t.pumpWidget(MaterialApp(home: SizedBox(width: 400, height: 600, child: BattleView(stage: s.engine.stage, state: st, fx: fx))));
+    expect(t.takeException(), isNull);
+    expect(fx.items.any((i) => i.kind == FxKind.combo), isTrue);
+  });
 }
