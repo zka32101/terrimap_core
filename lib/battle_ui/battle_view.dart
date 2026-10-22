@@ -211,7 +211,7 @@ class _BattlePainter extends CustomPainter {
     final w = img.width * k, h = img.height * k;
     final dx = math.sin(t * 0.6) * size.width * 0.015, dy = math.cos(t * 0.45) * size.height * 0.01;
     final dst = Rect.fromLTWH((size.width - w) / 2 + dx, (size.height - h) / 2 + dy, w, h);
-    final opacity = 0.85 + 0.15 * math.sin(t * 1.3);
+    final opacity = 0.55 + 0.10 * math.sin(t * 1.3); // 盤面の部品が見えるよう、半分ほどの濃さ
     canvas.save();
     canvas.clipRect(Offset.zero & size);
     canvas.drawImageRect(img, Rect.fromLTWH(0, 0, img.width.toDouble(), img.height.toDouble()), dst,
@@ -230,13 +230,9 @@ class _BattlePainter extends CustomPainter {
       fx!.paint(canvas, size, (c, r) => Offset(l.dx + (c + 0.5) * l.cell, l.dy + (r + 0.5) * l.cell), l.cell, state.time);
     }
     canvas.restore();
-    if (weather != null) {
-      final img = art?.weather(weather!);
-      if (img != null) {
-        _weatherArt(canvas, size, img, state.time);
-      } else {
-        paintWeather(canvas, size, weather!, state.time);
-      }
+    // 画像のない天候は、図形で最前面に重ねる(画像のある天候は _paintBoard の中で、施設・敵の下に描いた)。
+    if (weather != null && art?.weather(weather!) == null) {
+      paintWeather(canvas, size, weather!, state.time);
     }
   }
 
@@ -315,6 +311,10 @@ class _BattlePainter extends CustomPainter {
               ..style = PaintingStyle.fill);
       }
     }
+
+    // 天候の画像は、施設と敵を描く前に重ねる(施設・敵は天候の上に見える)。
+    final weatherImg = weather == null ? null : art?.weather(weather!);
+    if (weatherImg != null) _weatherArt(canvas, size, weatherImg, state.time);
 
     // 施設
     for (final f in state.facilities.values) {
