@@ -97,6 +97,13 @@ def main():
                 out += [f"- **{v['skin']}**（{v['name']['ja']} / {k}）", "  ```",
                         f"  {SPRITE.get(v['skin'], v['skin'])}, single game sprite, front view, plain white background, {STYLE}",
                         "  ```"]
+        vs = [(k, v) for k, lst in (pf.get("enemyVariants") or {}).items() for v in lst]
+        if vs:
+            out += ["", "### 敵（見た目違い）", ""]
+            for k, v in vs:
+                out += [f"- **{v['skin']}**（{v['name']['ja']} / {k}の見た目違い）", "  ```",
+                        f"  {SPRITE.get(v['skin'], v['skin'])}, single game sprite, front view, plain white background, {STYLE}",
+                        "  ```"]
         ex = sorted({r["exclusiveFacility"] for r in pf["regions"].values() if r.get("exclusiveFacility")})
         out += ["", "### 限定施設（州ごとに1つ置ける特別な施設）", ""]
         for k in ex:

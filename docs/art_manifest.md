@@ -5,7 +5,7 @@
 - 生成サイズは Leonardo の設定、最終サイズはアプリに入れるサイズ（施設・敵・ボスは背景除去後に 512x512 へ縮小、PNG）。
 - ★ = 試作13枚（ドイツ）。
 
-## DE（53枚）
+## DE（62枚）
 
 | 試作 | 種類 | id | 備考 | 生成 | 最終 | ファイル | 状態 |
 |---|---|---|---|---|---|---|---|
@@ -39,6 +39,14 @@
 | ★ | 敵 | dash_gremlin | speedy / 疾走グレムリン | 1024x1024 | 512x512 | `de/enemies/dash_gremlin.png` | 未作成 |
 | ★ | 敵 | iron_golem | armored / 鉄のゴーレム | 1024x1024 | 512x512 | `de/enemies/iron_golem.png` | 未作成 |
 | ★ | 敵 | forest_sprite | healer / 森の精 | 1024x1024 | 512x512 | `de/enemies/forest_sprite.png` | 未作成 |
+|  | 敵 | kobold_miner | normal（見た目違い）/ 鉱山のコボルト | 1024x1024 | 512x512 | `de/enemies/kobold_miner.png` | 未作成 |
+|  | 敵 | wichtel | normal（見た目違い）/ ヴィヒテル(小人) | 1024x1024 | 512x512 | `de/enemies/wichtel.png` | 未作成 |
+|  | 敵 | field_hare | speedy（見た目違い）/ 疾走する野うさぎ | 1024x1024 | 512x512 | `de/enemies/field_hare.png` | 未作成 |
+|  | 敵 | rat_pack | speedy（見た目違い）/ ねずみの群れ | 1024x1024 | 512x512 | `de/enemies/rat_pack.png` | 未作成 |
+|  | 敵 | stone_giant | armored（見た目違い）/ 石の巨人 | 1024x1024 | 512x512 | `de/enemies/stone_giant.png` | 未作成 |
+|  | 敵 | ice_golem | armored（見た目違い）/ 氷のゴーレム | 1024x1024 | 512x512 | `de/enemies/ice_golem.png` | 未作成 |
+|  | 敵 | water_nixie | healer（見た目違い）/ 水の精(ニクセ) | 1024x1024 | 512x512 | `de/enemies/water_nixie.png` | 未作成 |
+|  | 敵 | flower_fairy | healer（見た目違い）/ 花の精 | 1024x1024 | 512x512 | `de/enemies/flower_fairy.png` | 未作成 |
 | ★ | ボス | de_loreley | Water Nymph of the Rhine | 1024x1024 | 512x512 | `de/bosses/de_loreley.png` | 未作成 |
 |  | ボス | de_grimm | The Great Grey Wolf | 1024x1024 | 512x512 | `de/bosses/de_grimm.png` | 未作成 |
 |  | ボス | de_nibelung | The Cave Dragon | 1024x1024 | 512x512 | `de/bosses/de_nibelung.png` | 未作成 |
@@ -64,7 +72,7 @@
 |  | 名所カード | holstentor | Holstentor (Lübeck) | 1024x1024 | 512x512 | `de/landmarks/holstentor.png` | 未作成 |
 |  | 名所カード | wartburg | Wartburg Castle | 1024x1024 | 512x512 | `de/landmarks/wartburg.png` | 未作成 |
 
-## US（70枚）
+## US（79枚）
 
 | 試作 | 種類 | id | 備考 | 生成 | 最終 | ファイル | 状態 |
 |---|---|---|---|---|---|---|---|
@@ -99,6 +107,14 @@
 |  | 敵 | tumbleweed | speedy / 回転草 | 1024x1024 | 512x512 | `us/enemies/tumbleweed.png` | 未作成 |
 |  | 敵 | rock_golem | armored / 岩のゴーレム | 1024x1024 | 512x512 | `us/enemies/rock_golem.png` | 未作成 |
 |  | 敵 | cactus_nurse | healer / サボテンの看護師 | 1024x1024 | 512x512 | `us/enemies/cactus_nurse.png` | 未作成 |
+|  | 敵 | dust_imp | normal（見た目違い）/ ほこりの小鬼 | 1024x1024 | 512x512 | `us/enemies/dust_imp.png` | 未作成 |
+|  | 敵 | mud_gnome | normal（見た目違い）/ ぬかるみの小人 | 1024x1024 | 512x512 | `us/enemies/mud_gnome.png` | 未作成 |
+|  | 敵 | jackalope | speedy（見た目違い）/ ジャッカロープ | 1024x1024 | 512x512 | `us/enemies/jackalope.png` | 未作成 |
+|  | 敵 | root_runner | speedy（見た目違い）/ 走る木の根 | 1024x1024 | 512x512 | `us/enemies/root_runner.png` | 未作成 |
+|  | 敵 | fossil_turtle | armored（見た目違い）/ 化石の亀 | 1024x1024 | 512x512 | `us/enemies/fossil_turtle.png` | 未作成 |
+|  | 敵 | scrap_bull | armored（見た目違い）/ 鉄くずの牛 | 1024x1024 | 512x512 | `us/enemies/scrap_bull.png` | 未作成 |
+|  | 敵 | honey_sprite | healer（見た目違い）/ 蜂蜜の精 | 1024x1024 | 512x512 | `us/enemies/honey_sprite.png` | 未作成 |
+|  | 敵 | rain_cloud_sprite | healer（見た目違い）/ 雨雲の精 | 1024x1024 | 512x512 | `us/enemies/rain_cloud_sprite.png` | 未作成 |
 |  | ボス | us_bunyan | The Giant Blue Ox | 1024x1024 | 512x512 | `us/bosses/us_bunyan.png` | 未作成 |
 |  | ボス | us_wright | The Gale Spirit | 1024x1024 | 512x512 | `us/bosses/us_wright.png` | 未作成 |
 |  | ボス | us_moon | The Moon Keeper | 1024x1024 | 512x512 | `us/bosses/us_moon.png` | 未作成 |

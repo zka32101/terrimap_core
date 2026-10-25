@@ -30,6 +30,7 @@ class CountryProfile {
   final Map<String, Backdrop> backdrops; // 背景の種類id→配色(地域の backdrop が参照する)
   final Map<String, Skin> facilitySkins; // 施設の種類→この国での見た目と名前
   final Map<String, Skin> enemySkins; // 敵の種類→この国での見た目と名前
+  final Map<String, List<EnemyVariant>> enemyVariants; // 敵の種類→見た目違い(強さは同じ。地方・州で出し分けられる)
   final Map<String, RegionGroup> groups; // 地方決戦の地方（id→州の集まり）。なければ地方決戦はない
   final List<ExtraStage> extras; // エクストラステージ（その国の歴史・伝記・伝説）。なければエクストラはない
 
@@ -48,6 +49,7 @@ class CountryProfile {
     this.backdrops = const {},
     this.facilitySkins = const {},
     this.enemySkins = const {},
+    this.enemyVariants = const {},
     this.groups = const {},
     this.extras = const [],
   });
@@ -70,6 +72,7 @@ class CountryProfile {
       backdrops: _obj(_obj(m['theme'])['backdrops']).map((k, v) => MapEntry(k, Backdrop.fromJson(_obj(v)))),
       facilitySkins: _obj(m['facilities']).map((k, v) => MapEntry(k, Skin.fromJson(_obj(v)))),
       enemySkins: _obj(m['enemySkins']).map((k, v) => MapEntry(k, Skin.fromJson(_obj(v)))),
+      enemyVariants: _obj(m['enemyVariants']).map((k, v) => MapEntry(k, [for (final x in (v as List? ?? const [])) EnemyVariant.fromJson(_obj(x))])),
       extras: [for (final e in (m['extras'] as List? ?? const [])) ExtraStage.fromJson(_obj(e))],
       groups: _obj(m['groups']).map((k, v) => MapEntry(k, RegionGroup.fromJson(k, _obj(v)))),
     );
@@ -86,6 +89,27 @@ class CountryProfile {
 
   /// 施設の攻撃アクション。書かれていない施設は null(ゲームの標準のまま)。
   FacilityAction? actionOf(String facility) => attackActions[facility];
+
+  /// その州が入っている地方のid(地方に入っていない州・地方のない国は null)。
+  String? groupOf(String regionId) {
+    for (final g in groups.values) {
+      if (g.regions.contains(regionId)) return g.id;
+    }
+    return null;
+  }
+
+  /// [kind] の敵の見た目の候補(skin id)。基本の見た目が先頭で、そのあとに、この州・地方で出る見た目違いが続く。
+  /// 見た目違いは、強さ・能力が基本と同じで、見た目と名前だけが違う。
+  List<String> enemySkinIds(String kind, {String? regionId, String? groupId}) {
+    final out = <String>[];
+    final base = enemySkins[kind]?.skin;
+    if (base != null) out.add(base);
+    final g = groupId ?? (regionId == null ? null : groupOf(regionId));
+    for (final v in enemyVariants[kind] ?? const <EnemyVariant>[]) {
+      if (v.matches(regionId: regionId, groupId: g) && !out.contains(v.skin)) out.add(v.skin);
+    }
+    return out;
+  }
 
   /// 地域の特性。書かれていない地域は「特性なし」。
   RegionTrait traitOf(String regionId) => regions[regionId] ?? const RegionTrait();
@@ -251,6 +275,32 @@ class Backdrop {
 }
 
 /// 施設・敵のこの国での見た目(素材id)と名前(言語→名称)。
+/// 敵の見た目違い。[groups]・[regions] のどちらも空なら、どこでも出る。どちらかに当てはまれば、その州・地方で出る。
+class EnemyVariant {
+  final String skin;
+  final Map<String, String> name;
+  final Set<String> groups, regions;
+  const EnemyVariant({required this.skin, required this.name, this.groups = const {}, this.regions = const {}});
+
+  factory EnemyVariant.fromJson(Map<String, dynamic> j) {
+    final when = _obj(j['when']);
+    return EnemyVariant(
+      skin: j['skin'] as String,
+      name: _obj(j['name']).map((k, v) => MapEntry(k, v as String)),
+      groups: {for (final g in (when['groups'] as List? ?? const [])) g as String},
+      regions: {for (final r in (when['regions'] as List? ?? const [])) r as String},
+    );
+  }
+
+  bool get everywhere => groups.isEmpty && regions.isEmpty;
+
+  bool matches({String? regionId, String? groupId}) =>
+      everywhere || (regionId != null && regions.contains(regionId)) || (groupId != null && groups.contains(groupId));
+
+  /// 表示名。言語がなければ英語、それもなければ素材id。
+  String nameIn(String lang) => name[lang] ?? name['en'] ?? skin;
+}
+
 class Skin {
   final String skin;
   final Map<String, String> name;

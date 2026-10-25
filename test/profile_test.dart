@@ -7,6 +7,7 @@ import 'package:terrimap_core/pack/pack_validator.dart';
 import 'package:terrimap_core/pack/region_pack.dart';
 
 String f(String id, String name) => File('packs/$id/$name').readAsStringSync();
+CountryProfile profile(String id) => CountryProfile.parse(f(id, 'profile.json'));
 
 List<String> validate(String id, {String? profile}) {
   final langs = (jsonDecode(f(id, 'pack.json'))['languages'] as List).cast<String>();
@@ -189,6 +190,60 @@ void themeAndRegionTests() {
       edit(m);
       return validate('de', profile: jsonEncode(m));
     }
+
+    test('敵の見た目違い: 全種類に2つ。基本の見た目とも重ならず、州・地方で出し分けられ、強さは変わらない', () {
+      for (final id in ['de', 'us']) {
+        final p = profile(id);
+        final all = <String>{...p.enemySkins.values.map((s) => s.skin)};
+        for (final kind in CountryProfile.enemyKinds) {
+          final vs = p.enemyVariants[kind] ?? const <EnemyVariant>[];
+          expect(vs.length, 2, reason: '$id $kind');
+          for (final v in vs) {
+            expect(all.add(v.skin), isTrue, reason: '${v.skin} が重複'); // 基本とも、ほかの見た目違いとも違う
+            expect(v.nameIn('en'), isNotEmpty);
+            expect(v.nameIn('xx'), v.nameIn('en')); // 言語がなければ英語
+            expect(v.nameIn('ja'), isNot(v.nameIn('en')));
+          }
+          // 候補は、基本の見た目が先頭
+          final regionId = p.regions.keys.first;
+          expect(p.enemySkinIds(kind, regionId: regionId).first, p.enemySkins[kind]!.skin);
+        }
+      }
+    });
+
+    test('敵の見た目の候補: どこでも出る見た目と、地方で出る見た目。地方のない州は、どこでも出るものだけ', () {
+      final de = profile('de');
+      expect(de.groupOf('DE-BY'), 'south');
+      expect(de.groupOf('DE-SH'), 'north');
+      // armored: stone_giant は south・west、ice_golem は north・east
+      expect(de.enemySkinIds('armored', regionId: 'DE-BY'), ['iron_golem', 'stone_giant']);
+      expect(de.enemySkinIds('armored', regionId: 'DE-SH'), ['iron_golem', 'ice_golem']);
+      // どこでも出る wichtel は、どの州にも入る
+      expect(de.enemySkinIds('normal', regionId: 'DE-SH'), ['rust_sprite', 'wichtel']);
+      expect(de.enemySkinIds('normal', regionId: 'DE-BY'), ['rust_sprite', 'kobold_miner', 'wichtel']);
+      // 地方を直接渡せる(地方決戦)
+      expect(de.enemySkinIds('speedy', groupId: 'north'), ['dash_gremlin', 'field_hare', 'rat_pack']);
+      // 知らない州・種類は、基本だけ／空
+      expect(de.enemySkinIds('armored', regionId: 'XX'), ['iron_golem']);
+      expect(de.enemySkinIds('unknown'), isEmpty);
+      // 変わらない: 強さ・能力は敵の種類で決まる(見た目違いは持たない)
+      expect(de.enemyOf('armored').armor, 1);
+    });
+
+    test('敵の見た目違いの不正を検出する', () {
+      List<String> v(void Function(Map<String, dynamic>) edit) => with_((m) {
+            m['enemyVariants'] ??= <String, dynamic>{};
+            edit(m);
+          });
+      Map<String, dynamic> first(Map<String, dynamic> m) => (((m['enemyVariants'] as Map)['normal'] as List).first as Map<String, dynamic>);
+      expect(v((m) => first(m)['skin'] = '').any((e) => e.contains('enemyVariants.normal の skin が空')), isTrue);
+      expect(v((m) => first(m)['skin'] = 'rust_sprite').any((e) => e.contains('重複')), isTrue); // 基本の見た目と同じ
+      expect(v((m) => first(m)['name'] = {'ja': 'x'}).any((e) => e.contains('name に英語がない')), isTrue);
+      expect(v((m) => (m['enemyVariants'] as Map)['dragon'] = []).any((e) => e.contains('未知の敵 dragon')), isTrue);
+      expect(v((m) => first(m)['when'] = {'groups': ['moon']}).any((e) => e.contains('未知の地方 moon')), isTrue);
+      expect(v((m) => first(m)['when'] = {'regions': ['DE-XX']}).any((e) => e.contains('未知の州 DE-XX')), isTrue);
+      expect(v((m) => (m['enemyVariants'] as Map)['normal'] = 'x').any((e) => e.contains('配列でない')), isTrue);
+    });
 
     test('不正な背景・見た目・天候・敵の偏りを検出する', () {
       expect(with_((m) => (((m['regions'] as Map)['DE-BY'] as Map))['backdrop'] = 'moon').any((e) => e.contains('theme.backdrops にない')), isTrue);
