@@ -184,7 +184,7 @@ class StageGenerator {
       for (final e in entrances)
         if (e.neighborId != null) e.neighborId!: _profile?.traitOf(e.neighborId!).enemyBias ?? const {},
     };
-    final waves = _waves(params, trait, entrances, neighborBias, seed, rng, waveCount: spec.waveCount, hpScale: spec.hpScale, bossEvery: spec.bossEvery);
+    final waves = _waves(params, trait, entrances, neighborBias, seed, rng, waveCount: spec.waveCount, hpScale: spec.hpScale, bossEvery: spec.bossEvery, difficulty: spec.difficulty, kind: spec.kind);
 
     // 盤面にある州（その州の形の中にマスの中心があるもの。離れた土地の州は外れる）
     final present = [
@@ -446,9 +446,19 @@ class StageGenerator {
 
   List<StageWave> _waves(DifficultyParams p, RegionTrait? trait, List<StageEntrance> entrances,
       Map<String, Map<String, double>> neighborBias, int seed, Rng rng,
-      {required int waveCount, double hpScale = 1.0, int? bossEvery}) {
+      {required int waveCount, double hpScale = 1.0, int? bossEvery, required Difficulty difficulty, required StageKind kind}) {
     final count = waveCount;
-    final mix = {...(_profile?.enemyMix ?? const {'normal': 1.0}), if (rules >= 3) ...?_profile?.enemyMixV3};
+    final mix = {
+      ...(_profile?.enemyMix ?? const {'normal': 1.0}),
+      if (rules >= 3) ...?_profile?.enemyMixV3,
+      if (rules >= 4 && difficulty == Difficulty.hard) ...?_profile?.enemyMixHard,
+    };
+    // ミニボス（版4から）: エンドレスは bossEvery ごとの波（最終波はボス）、地方決戦・エクストラは中盤の1波。通常の州ステージには出さない。
+    bool miniAt(int w) {
+      if (rules < 4 || w == count) return false;
+      if (bossEvery != null) return w % bossEvery == 0;
+      return kind != StageKind.normal && w == (count + 1) ~/ 2;
+    }
     return [
       for (var w = 1; w <= count; w++)
         () {
@@ -468,7 +478,8 @@ class StageGenerator {
             baseHp: (48 * w * p.hpMultiplier * hpScale).round(),
             baseAttack: (5 + w * 2 * p.hpMultiplier).round(),
             spawnInterval: math.max(0.5, 1.5 - w * 0.15),
-            hasBoss: bossEvery == null ? w == count : (w == count || w % bossEvery == 0),
+            hasBoss: bossEvery == null || rules >= 4 ? w == count : (w == count || w % bossEvery == 0),
+            miniBoss: miniAt(w),
             enemyKinds: kinds,
             entranceIndices: idx,
           );
@@ -478,7 +489,7 @@ class StageGenerator {
 
   /// 敵の種類を、国の構成(enemyMix)×その州の偏り×入口の隣の州の偏り(0.5乗)を重みに選ぶ。
   /// 敵の種類が最初に出る波。段階的に出して、序盤は通常の敵で施設を整える時間を作る。
-  static const kindUnlockWave = {'normal': 1, 'speedy': 2, 'healer': 3, 'armored': 4, 'flyer': 5, 'saboteur': 6, 'swarmer': 5, 'splitter': 7};
+  static const kindUnlockWave = {'normal': 1, 'speedy': 2, 'healer': 3, 'armored': 4, 'flyer': 5, 'saboteur': 6, 'swarmer': 5, 'splitter': 7, 'brute': 4, 'jammer': 6};
 
   static String _pickKind(Map<String, double> mix, Map<String, double> own, Map<String, double> neighbor, Rng r, int wave) {
     final keys = (mix.keys.toList()..sort());

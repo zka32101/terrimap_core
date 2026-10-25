@@ -40,6 +40,9 @@ const Map<String, EnemyBase> enemyBase = {
   'saboteur': EnemyBase(1.0, 0.9, 0),
   'swarmer': EnemyBase(0.8, 1.1, 0),
   'splitter': EnemyBase(1.6, 0.9, 0),
+  // ルール版4から、hard だけに出る敵（brute: 硬く重い / jammer: 近くの施設の射程を縮める）
+  'brute': EnemyBase(2.4, 0.75, 6),
+  'jammer': EnemyBase(1.0, 1.0, 0),
 };
 
 class Facility {
@@ -74,6 +77,7 @@ class Enemy {
   final double speed; // マス/秒
   final double progress; // 進路上の位置（0〜到達までの長さ）
   final bool isBoss;
+  final bool isMini; // ミニボス（ルール版4から。地方決戦・エクストラ・エンドレスの途中の波に出る。ボスより軽く、スキルを1つ使う）
   final int armor;
   final int breachDamage; // 拠点に届いたときの被害
   final String ability; // none/shield/regen/swarm/flying/disrupt（profile.enemies）
@@ -97,6 +101,7 @@ class Enemy {
     required this.speed,
     required this.progress,
     required this.isBoss,
+    this.isMini = false,
     required this.armor,
     required this.breachDamage,
     this.ability = 'none',
@@ -132,7 +137,7 @@ class Enemy {
   }) =>
       Enemy(
         id: id ?? this.id, kind: kind, pathIndex: pathIndex, hp: hp ?? this.hp, maxHp: maxHp ?? this.maxHp, speed: speed,
-        progress: progress ?? this.progress, isBoss: isBoss, armor: armor, breachDamage: breachDamage,
+        progress: progress ?? this.progress, isBoss: isBoss, isMini: isMini, armor: armor, breachDamage: breachDamage,
         ability: ability, action: action, bossSkill: bossSkill,
         shielded: shielded ?? this.shielded, slowUntil: slowUntil ?? this.slowUntil, slowFactor: slowFactor ?? this.slowFactor,
         burnUntil: burnUntil ?? this.burnUntil, burnDps: burnDps ?? this.burnDps, burnAcc: burnAcc ?? this.burnAcc,

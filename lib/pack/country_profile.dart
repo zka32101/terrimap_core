@@ -13,7 +13,9 @@ class CountryProfile {
   static const baseEnemyKinds = {'normal', 'speedy', 'armored', 'healer'};
   /// ルール版3から出る敵。出現の重みは `enemyMixV3`。
   static const newEnemyKinds = {'flyer', 'saboteur', 'swarmer', 'splitter'};
-  static const enemyKinds = {...baseEnemyKinds, ...newEnemyKinds};
+  /// ルール版4から、hard のステージだけに出る敵。出現の重みは `enemyMixHard`。
+  static const hardEnemyKinds = {'brute', 'jammer'};
+  static const enemyKinds = {...baseEnemyKinds, ...newEnemyKinds, ...hardEnemyKinds};
   static const terrains = {'sea', 'mountain', 'urban', 'agriculture', 'mixed'};
   static const pathLengths = {'short', 'medium', 'long'};
   // ゲーム側が実装する識別子の一覧(打ち間違いを検証で止める)。増やすときはここと検証を同時に更新する。
@@ -26,6 +28,8 @@ class CountryProfile {
 
   final String style; // 国の戦い方の型。UIの見出し・アイコン分けに使う識別子
   final Map<String, String> summary; // 言語→一言説明
+  final Map<String, double> enemyMixHard; // ルール版4から、hard のときだけ enemyMix に足す敵→重み
+  final Map<String, MiniBoss> miniBosses; // 地方のid→ミニボス（ルール版4から）
   final Map<String, double> enemyMixV3; // ルール版3から、enemyMix に足す敵の種類→重み（enemyMix と同じ単位で足し合わせる）
   final Map<String, double> enemyMix; // 敵の種類→出現の重み(合計1)
   final double startCoins, income, facilityCost; // 経済の倍率(1.0が基準)
@@ -46,6 +50,8 @@ class CountryProfile {
     required this.summary,
     required this.enemyMix,
     this.enemyMixV3 = const {},
+    this.enemyMixHard = const {},
+    this.miniBosses = const {},
     required this.startCoins,
     required this.income,
     required this.facilityCost,
@@ -68,6 +74,8 @@ class CountryProfile {
     return CountryProfile(
       style: m['style'] as String,
       summary: _obj(m['summary']).map((k, v) => MapEntry(k, v as String)),
+      enemyMixHard: _obj(m['enemyMixHard']).map((k, v) => MapEntry(k, (v as num).toDouble())),
+      miniBosses: _obj(m['miniBosses']).map((k, v) => MapEntry(k, MiniBoss.fromJson(_obj(v)))),
       enemyMixV3: _obj(m['enemyMixV3']).map((k, v) => MapEntry(k, (v as num).toDouble())),
       enemyMix: (m['enemyMix'] as Map<String, dynamic>).map((k, v) => MapEntry(k, (v as num).toDouble())),
       startCoins: (eco['startCoins'] as num).toDouble(),
@@ -118,6 +126,14 @@ class CountryProfile {
       if (v.matches(regionId: regionId, groupId: g) && !out.contains(v.skin)) out.add(v.skin);
     }
     return out;
+  }
+
+  /// この州・地方のミニボス。州が地方に入っていればその地方のもの、なければ地方idの先頭のもの。ミニボスがない国は null。
+  MiniBoss? miniBossFor(String regionId, {String? groupId}) {
+    if (miniBosses.isEmpty) return null;
+    final g = groupId ?? groupOf(regionId);
+    if (g != null && miniBosses.containsKey(g)) return miniBosses[g];
+    return miniBosses[(miniBosses.keys.toList()..sort()).first];
   }
 
   /// 敵 [enemyId] の見た目違い。基本の見た目なら null。[ArtSet.enemy] と同じ選び方（[enemySkinIds] の並びから、id で決まる）なので、
@@ -298,6 +314,22 @@ class Backdrop {
 
 /// 施設・敵のこの国での見た目(素材id)と名前(言語→名称)。
 /// 敵の見た目違い。[groups]・[regions] のどちらも空なら、どこでも出る。どちらかに当てはまれば、その州・地方で出る。
+/// 地方ごとのミニボス（見た目・名前・使うスキル）。画像は `bosses/<skin>`。
+class MiniBoss {
+  final String skin;
+  final Map<String, String> name;
+  final String skill; // speedBurst/hpRegen/summon/stunFacility
+  const MiniBoss({required this.skin, required this.name, required this.skill});
+
+  factory MiniBoss.fromJson(Map<String, dynamic> j) => MiniBoss(
+        skin: j['skin'] as String,
+        name: _obj(j['name']).map((k, v) => MapEntry(k, v as String)),
+        skill: j['skill'] as String,
+      );
+
+  String nameIn(String lang) => name[lang] ?? name['en'] ?? skin;
+}
+
 class EnemyVariant {
   final String skin;
   final Map<String, String> name;

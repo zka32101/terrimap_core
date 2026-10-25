@@ -67,13 +67,14 @@ if prof_path.exists():
     except Exception as e: prof = None; err.append(f"profile.json: 読込失敗 {e}")
     if prof is not None:
         NEW_ENEMIES = {"flyer", "saboteur", "swarmer", "splitter"}
-        ENEMIES = {"normal", "speedy", "armored", "healer"} | NEW_ENEMIES
+        HARD_ENEMIES = {"brute", "jammer"}
+        ENEMIES = {"normal", "speedy", "armored", "healer"} | NEW_ENEMIES | HARD_ENEMIES
         TERRAINS = {"sea", "mountain", "urban", "agriculture", "mixed"}
         if not prof.get("style"): err.append("profile.json: style が空")
         mix = prof.get("enemyMix") or {}
         if not mix: err.append("profile.json: enemyMix が空")
         for k, v in mix.items():
-            if k not in ENEMIES or k in NEW_ENEMIES: err.append(f"profile.json: enemyMix の未知の敵 {k}（新しい種類は enemyMixV3 に書く）")
+            if k not in ENEMIES or k in NEW_ENEMIES or k in HARD_ENEMIES: err.append(f"profile.json: enemyMix の未知の敵 {k}（新しい種類は enemyMixV3・enemyMixHard に書く）")
             if not isinstance(v, (int, float)) or v < 0: err.append(f"profile.json: enemyMix.{k} が負または数値でない")
         if mix and abs(sum(v for v in mix.values() if isinstance(v, (int, float))) - 1) > 0.01:
             err.append("profile.json: enemyMix の合計が1でない")
@@ -96,6 +97,17 @@ if prof_path.exists():
             if a is not None and (not isinstance(a, int) or not (0 <= a <= 3)): err.append(f"profile.json: enemies.{kind}.armor は0〜3の整数")
             if t.get("ability") is not None and t["ability"] not in ABIL: err.append(f"profile.json: enemies.{kind}.ability が不正")
             if t.get("action") is not None and t["action"] not in EACT: err.append(f"profile.json: enemies.{kind}.action が不正")
+        for k, x in (prof.get("enemyMixHard") or {}).items():
+            if k not in HARD_ENEMIES: err.append(f"profile.json: enemyMixHard の未知の敵 {k}")
+            if not isinstance(x, (int, float)) or x < 0: err.append(f"profile.json: enemyMixHard.{k} が負または数値でない")
+        _skins = {t.get("skin") for t in (prof.get("enemySkins") or {}).values() if isinstance(t, dict)}
+        for g, mb in (prof.get("miniBosses") or {}).items():
+            if g not in (prof.get("groups") or {}): err.append(f"profile.json: miniBosses の未知の地方 {g}")
+            if not mb.get("skin"): err.append(f"profile.json: miniBosses.{g} の skin が空")
+            elif mb["skin"] in _skins: err.append(f"profile.json: miniBosses の skin {mb['skin']} が重複")
+            else: _skins.add(mb["skin"])
+            if not (mb.get("name") or {}).get("en"): err.append(f"profile.json: miniBosses.{g} の name に英語がない")
+            if mb.get("skill") not in {"speedBurst", "hpRegen", "summon", "stunFacility"}: err.append(f"profile.json: miniBosses.{g}.skill が不正")
         for kind, lst in (prof.get("enemyVariants") or {}).items():
             for v in lst:
                 t = v.get("trait")

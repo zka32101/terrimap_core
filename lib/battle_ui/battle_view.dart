@@ -363,7 +363,7 @@ class _BattlePainter extends CustomPainter {
       final c = center(pos.x, pos.y);
       final img = art?.enemy(e);
       // 画像は図形より大きく見せる（絵の余白ぶん）
-      final rad = cell * (img != null ? (e.isBoss ? 0.5 : 0.32) : (e.isBoss ? 0.34 : 0.2));
+      final rad = cell * (img != null ? (e.isBoss ? 0.5 : e.isMini ? 0.42 : 0.32) : (e.isBoss ? 0.34 : e.isMini ? 0.28 : 0.2));
       if (img != null) {
         _sprite(canvas, img, Rect.fromCircle(center: c, radius: rad));
       } else {
@@ -372,9 +372,9 @@ class _BattlePainter extends CustomPainter {
             c,
             rad,
             Paint()
-              ..color = e.isBoss ? const Color(0xFFFFD54F) : Colors.white
+              ..color = e.isBoss ? const Color(0xFFFFD54F) : e.isMini ? const Color(0xFFFFA726) : Colors.white
               ..style = PaintingStyle.stroke
-              ..strokeWidth = e.isBoss ? 2.5 : 1.2);
+              ..strokeWidth = e.isBoss ? 2.5 : e.isMini ? 2.0 : 1.2);
       }
       _hpBar(canvas, Rect.fromLTWH(c.dx - rad, c.dy - rad - cell * 0.1, rad * 2, cell * 0.06), e.hp, e.maxHp);
     }

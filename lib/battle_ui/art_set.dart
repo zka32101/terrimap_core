@@ -25,7 +25,9 @@ class ArtSet {
   /// ボスの画像 id（エクストラの id。ボスのいないステージは null）。
   final String? bossId;
 
-  const ArtSet({this.images = const {}, this.facilitySkins = const {}, this.enemySkins = const {}, this.enemyVariants = const {}, this.bossId});
+  /// ミニボスの画像のid（`bosses/<id>`）。州・地方で決まる（[CountryProfile.miniBossFor]）。
+  final String? miniBossId;
+  const ArtSet({this.miniBossId, this.images = const {}, this.facilitySkins = const {}, this.enemySkins = const {}, this.enemyVariants = const {}, this.bossId});
 
   bool get isEmpty => images.isEmpty;
 
@@ -46,6 +48,10 @@ class ArtSet {
   }
 
   ui.Image? enemy(Enemy e) {
+    if (e.isMini) {
+      final id = miniBossId;
+      return id == null ? null : images['bosses/$id'];
+    }
     if (e.isBoss) {
       final id = bossId;
       return id == null ? null : images['bosses/$id'];
@@ -70,6 +76,7 @@ class ArtSet {
     Map<String, String> enemySkins = const {},
     Map<String, List<String>> enemyVariants = const {},
     String? bossId,
+    String? miniBossId,
   }) async {
     final images = <String, ui.Image>{};
     try {
@@ -87,6 +94,6 @@ class ArtSet {
     } catch (_) {
       // manifest が読めない場合は画像なし
     }
-    return ArtSet(images: images, facilitySkins: facilitySkins, enemySkins: enemySkins, enemyVariants: enemyVariants, bossId: bossId);
+    return ArtSet(images: images, facilitySkins: facilitySkins, enemySkins: enemySkins, enemyVariants: enemyVariants, bossId: bossId, miniBossId: miniBossId);
   }
 }
