@@ -467,11 +467,12 @@
   },
   "saboteur": {
    "action": "sabotage",
-   "hp": 1.2
+   "hp": 1.5
   },
   "swarmer": {
    "ability": "swarm",
-   "speed": 0.9
+   "speed": 0.9,
+   "hp": 1.5
   },
   "splitter": {
    "hp": 1.3,
