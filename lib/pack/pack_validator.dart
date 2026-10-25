@@ -194,21 +194,25 @@ class PackValidator {
     final sig = m['signature'];
     if (sig is! Map || ((sig['id'] ?? '') as Object).toString().isEmpty) err.add('profile.json: signature.id が空');
 
+    void checkTrait(String label, Object? t) {
+      if (t is! Map) return;
+      for (final k in ['hp', 'speed', 'baseDamage']) {
+        final v = t[k];
+        if (v != null && (v is! num || v < 0.5 || v > 2.0)) err.add('profile.json: $label.$k は0.5〜2.0');
+      }
+      final armor = t['armor'];
+      if (armor != null && (armor is! int || armor < 0 || armor > 3)) err.add('profile.json: $label.armor は0〜3の整数');
+      final ab = t['ability'];
+      if (ab != null && !CountryProfile.enemyAbilities.contains(ab)) err.add('profile.json: $label.ability が不正 $ab');
+      final ac = t['action'];
+      if (ac != null && !CountryProfile.enemyActions.contains(ac)) err.add('profile.json: $label.action が不正 $ac');
+    }
+
     final enemies = m['enemies'];
     if (enemies is Map) {
       enemies.forEach((kind, t) {
         if (!CountryProfile.enemyKinds.contains(kind)) err.add('profile.json: enemies の未知の敵 $kind');
-        if (t is! Map) return;
-        for (final k in ['hp', 'speed', 'baseDamage']) {
-          final v = t[k];
-          if (v != null && (v is! num || v < 0.5 || v > 2.0)) err.add('profile.json: enemies.$kind.$k は0.5〜2.0');
-        }
-        final armor = t['armor'];
-        if (armor != null && (armor is! int || armor < 0 || armor > 3)) err.add('profile.json: enemies.$kind.armor は0〜3の整数');
-        final ab = t['ability'];
-        if (ab != null && !CountryProfile.enemyAbilities.contains(ab)) err.add('profile.json: enemies.$kind.ability が不正 $ab');
-        final ac = t['action'];
-        if (ac != null && !CountryProfile.enemyActions.contains(ac)) err.add('profile.json: enemies.$kind.action が不正 $ac');
+        checkTrait('enemies.$kind', t);
       });
     }
     final actions = m['attackActions'];
@@ -281,6 +285,7 @@ class PackValidator {
           }
           final name = v['name'];
           if (name is! Map || '${name['en'] ?? ''}'.isEmpty) err.add('profile.json: enemyVariants.$kind.$skin の name に英語がない');
+          checkTrait('enemyVariants.$kind.$skin.trait', v['trait']);
           final when = v['when'];
           if (when is Map) {
             for (final r in (when['regions'] as List? ?? const [])) {

@@ -162,9 +162,10 @@ void main() {
       final w = StageWave(
           number: 1, enemyCount: 2, baseHp: 100, baseAttack: 7, spawnInterval: 1, hasBoss: false,
           enemyKinds: const ['normal', 'speedy'], entranceIndices: const [0]);
+      final engine = BattleEngine(stage, profile: de.profile, rules: 2); // 見た目違いの特性（版3）を除く
       final n = engine.makeEnemy(w, 0), s = engine.makeEnemy(w, 1);
       expect(s.speed / n.speed, closeTo(1.8 * de.profile!.enemyOf('speedy').speed / de.profile!.enemyOf('normal').speed, 1e-9));
-      final hard = BattleEngine(StageGenerator(de).generate('DE-BY', Difficulty.hard), profile: de.profile);
+      final hard = BattleEngine(StageGenerator(de).generate('DE-BY', Difficulty.hard), profile: de.profile, rules: 2);
       expect(hard.makeEnemy(w, 0).speed / n.speed, closeTo(difficultyParams[Difficulty.hard]!.speedMultiplier, 1e-9));
     });
 

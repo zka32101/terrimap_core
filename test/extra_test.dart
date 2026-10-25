@@ -75,7 +75,7 @@ void main() {
       final de = packs['de']!;
       final x = de.profile!.extras.first;
       final st = StageGenerator(de).generate(x.id, Difficulty.normal, kind: StageKind.extra);
-      final e = BattleEngine(st, profile: de.profile, pack: de);
+      final e = BattleEngine(st, profile: de.profile, pack: de, rules: 2); // 見た目違いの特性（版3）を除いて、季節の差だけを見る
       expect(e.bossSkill, x.bossSkill);
       // 秋 → 冬: 冬は敵が10%遅い
       final w1 = st.waves[0], w2 = st.waves[1];
