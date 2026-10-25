@@ -130,7 +130,7 @@ class Replay {
   /// この記録を再生するエンジン。pack が違えば [ArgumentError]。
   BattleEngine buildEngine(RegionPack pack) {
     if (pack.packId != packId) throw ArgumentError('packId が違います: ${pack.packId} != $packId');
-    return BattleEngine(StageGenerator(pack).generate(stageId, difficulty, kind: kind), profile: pack.profile, pack: pack, quizAssist: quizAssist, rules: rules);
+    return BattleEngine(StageGenerator(pack, rules: rules).generate(stageId, difficulty, kind: kind), profile: pack.profile, pack: pack, quizAssist: quizAssist, rules: rules);
   }
 
   /// 再生して、終わった状態と波ごとの被害を返す。操作が適用できなければ [StateError]（改ざん・版違い）。

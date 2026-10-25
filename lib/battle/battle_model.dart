@@ -35,6 +35,11 @@ const Map<String, EnemyBase> enemyBase = {
   'speedy': EnemyBase(0.5, 1.8, 0),
   'armored': EnemyBase(2.0, 0.7, 8),
   'healer': EnemyBase(1.3, 1.0, 0),
+  // ルール版3から（flyer: 進路を無視して直進 / saboteur: 近くの施設の威力を下げる / swarmer: 小さく数が多い / splitter: 倒すと2体に分かれる）
+  'flyer': EnemyBase(0.8, 1.1, 0),
+  'saboteur': EnemyBase(1.0, 0.9, 0),
+  'swarmer': EnemyBase(0.8, 1.1, 0),
+  'splitter': EnemyBase(1.6, 0.9, 0),
 };
 
 class Facility {

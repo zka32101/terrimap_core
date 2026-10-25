@@ -32,6 +32,10 @@ const enemyColors = <String, Color>{
   'speedy': Color(0xFFFF7043),
   'armored': Color(0xFF5E35B1),
   'healer': Color(0xFF26A69A),
+  'flyer': Color(0xFF29B6F6),
+  'saboteur': Color(0xFF8D6E63),
+  'swarmer': Color(0xFFFFCA28),
+  'splitter': Color(0xFFEC407A),
 };
 
 /// ステージの盤面（陸・進路・設置枠・拠点・施設・敵）を描く。[art] に画像があればそれを使い、無い要素は色と図形で描く。

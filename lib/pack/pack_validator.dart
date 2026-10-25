@@ -157,7 +157,7 @@ class PackValidator {
     } else {
       var sum = 0.0;
       mix.forEach((k, v) {
-        if (!CountryProfile.enemyKinds.contains(k)) err.add('profile.json: enemyMix の未知の敵 $k');
+        if (!CountryProfile.baseEnemyKinds.contains(k)) err.add('profile.json: enemyMix の未知の敵 $k（新しい種類は enemyMixV3 に書く）');
         if (v is! num || v < 0) {
           err.add('profile.json: enemyMix.$k が負または数値でない');
         } else {
@@ -165,6 +165,18 @@ class PackValidator {
         }
       });
       if ((sum - 1).abs() > 0.01) err.add('profile.json: enemyMix の合計が1でない($sum)');
+    }
+
+    final mix3 = m['enemyMixV3'];
+    if (mix3 != null) {
+      if (mix3 is! Map) {
+        err.add('profile.json: enemyMixV3 がオブジェクトでない');
+      } else {
+        mix3.forEach((k, v) {
+          if (!CountryProfile.newEnemyKinds.contains(k)) err.add('profile.json: enemyMixV3 の未知の敵 $k');
+          if (v is! num || v < 0) err.add('profile.json: enemyMixV3.$k が負または数値でない');
+        });
+      }
     }
 
     final eco = m['economy'];

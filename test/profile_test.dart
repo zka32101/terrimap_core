@@ -195,7 +195,7 @@ void themeAndRegionTests() {
       for (final id in ['de', 'us']) {
         final p = profile(id);
         final all = <String>{...p.enemySkins.values.map((s) => s.skin)};
-        for (final kind in CountryProfile.enemyKinds) {
+        for (final kind in CountryProfile.baseEnemyKinds) {
           final vs = p.enemyVariants[kind] ?? const <EnemyVariant>[];
           expect(vs.length, 2, reason: '$id $kind');
           for (final v in vs) {

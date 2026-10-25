@@ -458,7 +458,19 @@
   },
   "healer": {
    "action": "heal_aura"
-  }
+  },
+  "flyer": {
+   "ability": "flying",
+   "hp": 1.0,
+   "speed": 1.0
+  },
+  "saboteur": {
+   "action": "sabotage"
+  },
+  "swarmer": {
+   "ability": "swarm"
+  },
+  "splitter": {}
  },
  "attackActions": {
   "factory": {
@@ -652,52 +664,141 @@
     "en": "Forest Sprite",
     "de": "Waldgeist"
    }
+  },
+  "flyer": {
+   "skin": "wolpertinger",
+   "name": {
+    "ja": "ヴォルペルティンガー(羽うさぎ)",
+    "en": "Wolpertinger",
+    "de": "Wolpertinger"
+   }
+  },
+  "saboteur": {
+   "skin": "mine_imp",
+   "name": {
+    "ja": "坑道のいたずら小鬼",
+    "en": "Mine Imp",
+    "de": "Grubenwicht"
+   }
+  },
+  "swarmer": {
+   "skin": "bat_swarm",
+   "name": {
+    "ja": "こうもりの群れ",
+    "en": "Bat Swarm",
+    "de": "Fledermausschwarm"
+   }
+  },
+  "splitter": {
+   "skin": "mud_blob",
+   "name": {
+    "ja": "泥のかたまり",
+    "en": "Mud Blob",
+    "de": "Schlammklumpen"
+   }
   }
  },
  "enemyVariants": {
   "normal": [
    {
     "skin": "kobold_miner",
-    "name": {"en": "Kobold Miner", "ja": "鉱山のコボルト", "de": "Bergwerk-Kobold"},
-    "when": {"groups": ["west", "south"]}
+    "name": {
+     "en": "Kobold Miner",
+     "ja": "鉱山のコボルト",
+     "de": "Bergwerk-Kobold"
+    },
+    "when": {
+     "groups": [
+      "west",
+      "south"
+     ]
+    }
    },
    {
     "skin": "wichtel",
-    "name": {"en": "Wichtel", "ja": "ヴィヒテル(小人)", "de": "Wichtel"}
+    "name": {
+     "en": "Wichtel",
+     "ja": "ヴィヒテル(小人)",
+     "de": "Wichtel"
+    }
    }
   ],
   "speedy": [
    {
     "skin": "field_hare",
-    "name": {"en": "Dashing Hare", "ja": "疾走する野うさぎ", "de": "Rennhase"}
+    "name": {
+     "en": "Dashing Hare",
+     "ja": "疾走する野うさぎ",
+     "de": "Rennhase"
+    }
    },
    {
     "skin": "rat_pack",
-    "name": {"en": "Rat Pack", "ja": "ねずみの群れ", "de": "Rattenschwarm"},
-    "when": {"groups": ["north", "east"]}
+    "name": {
+     "en": "Rat Pack",
+     "ja": "ねずみの群れ",
+     "de": "Rattenschwarm"
+    },
+    "when": {
+     "groups": [
+      "north",
+      "east"
+     ]
+    }
    }
   ],
   "armored": [
    {
     "skin": "stone_giant",
-    "name": {"en": "Stone Giant", "ja": "石の巨人", "de": "Steinriese"},
-    "when": {"groups": ["south", "west"]}
+    "name": {
+     "en": "Stone Giant",
+     "ja": "石の巨人",
+     "de": "Steinriese"
+    },
+    "when": {
+     "groups": [
+      "south",
+      "west"
+     ]
+    }
    },
    {
     "skin": "ice_golem",
-    "name": {"en": "Ice Golem", "ja": "氷のゴーレム", "de": "Eis-Golem"},
-    "when": {"groups": ["north", "east"]}
+    "name": {
+     "en": "Ice Golem",
+     "ja": "氷のゴーレム",
+     "de": "Eis-Golem"
+    },
+    "when": {
+     "groups": [
+      "north",
+      "east"
+     ]
+    }
    }
   ],
   "healer": [
    {
     "skin": "water_nixie",
-    "name": {"en": "Water Nixie", "ja": "水の精(ニクセ)", "de": "Nixe"},
-    "when": {"groups": ["north", "west"]}
+    "name": {
+     "en": "Water Nixie",
+     "ja": "水の精(ニクセ)",
+     "de": "Nixe"
+    },
+    "when": {
+     "groups": [
+      "north",
+      "west"
+     ]
+    }
    },
    {
     "skin": "flower_fairy",
-    "name": {"en": "Flower Fairy", "ja": "花の精", "de": "Blumenfee"}
+    "name": {
+     "en": "Flower Fairy",
+     "ja": "花の精",
+     "de": "Blumenfee"
+    }
    }
   ]
  },
@@ -870,41 +971,47 @@
     "ja": "洞窟の竜"
    }
   },
- {
-  "id": "de_gutenberg",
-  "basis": "history",
-  "regions": [
-   "DE-RP"
-  ],
-  "center": "DE-RP",
-  "seasons": [
-   "spring",
-   "summer",
-   "autumn",
-   "winter"
-  ],
-  "weatherEvent": "storm",
-  "backdrop": "city",
-  "bossSkill": "speedBurst",
-  "waves": 10,
-  "title": {
-   "en": "The Printer of Mainz",
-   "de": "Der Drucker von Mainz",
-   "ja": "マインツの印刷工"
-  },
-  "summary": {
-   "en": "In Mainz, a printer set metal letters in rows to make books faster. Defend the workshop from ink creatures.",
-   "de": "In Mainz setzte ein Drucker Metallbuchstaben in Reihen, um Bücher schneller herzustellen. Verteidige die Werkstatt gegen Tintenwesen.",
-   "ja": "マインツでは、ある印刷工が金属の活字を並べて、本をすばやく作りました。インクの生き物たちから、工房を守りましょう。"
-  },
-  "fact": {
-   "en": "Johannes Gutenberg of Mainz developed printing with movable metal type in Europe around 1450. The Gutenberg Bible, printed in Mainz in the mid-1450s, is among the first major books made this way. The Ink Keeper is a fantasy figure."
-  },
-  "bossName": {
-   "en": "The Ink Keeper",
-   "de": "Der Tintenwächter",
-   "ja": "インクの番人"
+  {
+   "id": "de_gutenberg",
+   "basis": "history",
+   "regions": [
+    "DE-RP"
+   ],
+   "center": "DE-RP",
+   "seasons": [
+    "spring",
+    "summer",
+    "autumn",
+    "winter"
+   ],
+   "weatherEvent": "storm",
+   "backdrop": "city",
+   "bossSkill": "speedBurst",
+   "waves": 10,
+   "title": {
+    "en": "The Printer of Mainz",
+    "de": "Der Drucker von Mainz",
+    "ja": "マインツの印刷工"
+   },
+   "summary": {
+    "en": "In Mainz, a printer set metal letters in rows to make books faster. Defend the workshop from ink creatures.",
+    "de": "In Mainz setzte ein Drucker Metallbuchstaben in Reihen, um Bücher schneller herzustellen. Verteidige die Werkstatt gegen Tintenwesen.",
+    "ja": "マインツでは、ある印刷工が金属の活字を並べて、本をすばやく作りました。インクの生き物たちから、工房を守りましょう。"
+   },
+   "fact": {
+    "en": "Johannes Gutenberg of Mainz developed printing with movable metal type in Europe around 1450. The Gutenberg Bible, printed in Mainz in the mid-1450s, is among the first major books made this way. The Ink Keeper is a fantasy figure."
+   },
+   "bossName": {
+    "en": "The Ink Keeper",
+    "de": "Der Tintenwächter",
+    "ja": "インクの番人"
+   }
   }
+ ],
+ "enemyMixV3": {
+  "flyer": 0.08,
+  "saboteur": 0.06,
+  "swarmer": 0.1,
+  "splitter": 0.08
  }
- ]
 }
