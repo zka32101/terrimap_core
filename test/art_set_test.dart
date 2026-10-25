@@ -103,4 +103,30 @@ void main() {
     expect(art.landmark('europa_park'), isNull);
     expect(const ArtSet().landmark('heidelberg_castle'), isNull);
   });
+
+  testWidgets('敵の見た目違い: 敵のidで決まった1つが出る(いつも同じ)。画像がない見た目違いは、基本の見た目で出る', (t) async {
+    final base = (await t.runAsync(() => solid(8, 8, Colors.red)))!;
+    final alt = (await t.runAsync(() => solid(8, 8, Colors.blue)))!;
+    Enemy enemy(String id) => Enemy(
+        id: id, kind: 'normal', pathIndex: 0, hp: 10, maxHp: 10, speed: 1, progress: 0, isBoss: false, armor: 0, breachDamage: 1,
+        ability: 'none', action: 'none', shielded: false);
+    final art = ArtSet(
+      images: {'enemies/rust_sprite': base, 'enemies/wichtel': alt},
+      enemySkins: {'normal': 'rust_sprite'},
+      enemyVariants: {'normal': ['wichtel', 'kobold_miner']}, // kobold_miner の画像は無い
+    );
+    final seen = <ui.Image?>{};
+    for (var w = 1; w <= 6; w++) {
+      for (var n = 0; n < 6; n++) {
+        final a = art.enemy(enemy('e${w}_$n')), b = art.enemy(enemy('e${w}_$n'));
+        expect(a, same(b)); // 同じ敵はいつも同じ
+        expect(a, isNotNull); // 画像がない見た目違いも、基本の見た目で出る
+        seen.add(a);
+      }
+    }
+    expect(seen, {base, alt}); // 2枚の画像が両方使われる
+    // 見た目違いがない国・種類は、いつもの1枚
+    final plain = ArtSet(images: {'enemies/rust_sprite': base}, enemySkins: {'normal': 'rust_sprite'});
+    expect(plain.enemy(enemy('e1_0')), same(base));
+  });
 }

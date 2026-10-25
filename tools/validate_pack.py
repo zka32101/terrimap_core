@@ -114,6 +114,23 @@ if prof_path.exists():
                 if k not in allowed: err.append(f"profile.json: {key} の未知の{label} {k}")
                 if not (t or {}).get("skin"): err.append(f"profile.json: {key}.{k} の skin が空")
                 if not ((t or {}).get("name") or {}).get("en"): err.append(f"profile.json: {key}.{k} の name に英語がない")
+        used = {t.get("skin") for t in (prof.get("enemySkins") or {}).values() if isinstance(t, dict)}
+        grp_ids = set((prof.get("groups") or {}).keys())
+        for kind, lst in (prof.get("enemyVariants") or {}).items():
+            if kind not in ENEMIES: err.append(f"profile.json: enemyVariants の未知の敵 {kind}")
+            if not isinstance(lst, list): err.append(f"profile.json: enemyVariants.{kind} が配列でない"); continue
+            for v in lst:
+                if not isinstance(v, dict): err.append(f"profile.json: enemyVariants.{kind} に、オブジェクトでない要素がある"); continue
+                sk = v.get("skin") or ""
+                if not sk: err.append(f"profile.json: enemyVariants.{kind} の skin が空")
+                elif sk in used: err.append(f"profile.json: enemyVariants の skin {sk} が重複")
+                used.add(sk)
+                if not (v.get("name") or {}).get("en"): err.append(f"profile.json: enemyVariants.{kind}.{sk} の name に英語がない")
+                w = v.get("when") or {}
+                for r in w.get("regions") or []:
+                    if r not in set(ids): err.append(f"profile.json: enemyVariants.{kind}.{sk} の未知の州 {r}")
+                for g in w.get("groups") or []:
+                    if g not in grp_ids: err.append(f"profile.json: enemyVariants.{kind}.{sk} の未知の地方 {g}")
         xseen = set()
         for e in (prof.get("extras") or []):
             xid = e.get("id")

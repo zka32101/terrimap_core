@@ -3,6 +3,7 @@ import 'dart:ui' as ui;
 import 'package:flutter/services.dart';
 
 import '../battle/battle_model.dart';
+import '../quiz/rng.dart';
 
 /// バトル画面に出す画像のまとまり。画像が無い要素は null を返し、呼び出し側が図形の描画にフォールバックする。
 ///
@@ -18,10 +19,13 @@ class ArtSet {
   /// 敵の種類 → skin id（profile.json の enemySkins.*.skin）。
   final Map<String, String> enemySkins;
 
+  /// 敵の種類 → この州・地方で出る見た目違いの skin id（`CountryProfile.enemySkinIds` の2番目以降）。基本の見た目と合わせて、敵ごとに決まった1つが出る。
+  final Map<String, List<String>> enemyVariants;
+
   /// ボスの画像 id（エクストラの id。ボスのいないステージは null）。
   final String? bossId;
 
-  const ArtSet({this.images = const {}, this.facilitySkins = const {}, this.enemySkins = const {}, this.bossId});
+  const ArtSet({this.images = const {}, this.facilitySkins = const {}, this.enemySkins = const {}, this.enemyVariants = const {}, this.bossId});
 
   bool get isEmpty => images.isEmpty;
 
@@ -46,8 +50,15 @@ class ArtSet {
       final id = bossId;
       return id == null ? null : images['bosses/$id'];
     }
-    final skin = enemySkins[e.kind];
-    return skin == null ? null : images['enemies/$skin'];
+    final base = enemySkins[e.kind];
+    final variants = enemyVariants[e.kind];
+    if (variants != null && variants.isNotEmpty) {
+      // 敵のid から決まる(同じ敵はいつも同じ見た目)。画像がない見た目違いは、基本の見た目で出す。
+      final all = [if (base != null) base, ...variants];
+      final img = images['enemies/${all[fnv1a(e.id) % all.length]}'];
+      if (img != null) return img;
+    }
+    return base == null ? null : images['enemies/$base'];
   }
 
   /// [bundle] の assets のうち [prefix]（例 `assets/art/`）の下にある PNG を読み込む。
@@ -57,6 +68,7 @@ class ArtSet {
     String prefix = 'assets/art/',
     Map<String, String> facilitySkins = const {},
     Map<String, String> enemySkins = const {},
+    Map<String, List<String>> enemyVariants = const {},
     String? bossId,
   }) async {
     final images = <String, ui.Image>{};
@@ -75,6 +87,6 @@ class ArtSet {
     } catch (_) {
       // manifest が読めない場合は画像なし
     }
-    return ArtSet(images: images, facilitySkins: facilitySkins, enemySkins: enemySkins, bossId: bossId);
+    return ArtSet(images: images, facilitySkins: facilitySkins, enemySkins: enemySkins, enemyVariants: enemyVariants, bossId: bossId);
   }
 }

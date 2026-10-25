@@ -243,6 +243,45 @@ class PackValidator {
     skins('facilities', CountryProfile.facilityTypes, '施設');
     skins('enemySkins', CountryProfile.enemyKinds, '敵');
 
+    // 敵の見た目違い: 種類は実在、skin は空でなく重複せず(基本の見た目とも)、英語の名前があり、when の州・地方は実在する
+    final variants = m['enemyVariants'];
+    if (variants is Map) {
+      final used = <String>{
+        if (m['enemySkins'] is Map) for (final t in (m['enemySkins'] as Map).values) if (t is Map && t['skin'] is String) t['skin'] as String,
+      };
+      final groupIds = m['groups'] is Map ? (m['groups'] as Map).keys.map((k) => '$k').toSet() : <String>{};
+      variants.forEach((kind, list) {
+        if (!CountryProfile.enemyKinds.contains(kind)) err.add('profile.json: enemyVariants の未知の敵 $kind');
+        if (list is! List) {
+          err.add('profile.json: enemyVariants.$kind が配列でない');
+          return;
+        }
+        for (final v in list) {
+          if (v is! Map) {
+            err.add('profile.json: enemyVariants.$kind に、オブジェクトでない要素がある');
+            continue;
+          }
+          final skin = '${v['skin'] ?? ''}';
+          if (skin.isEmpty) {
+            err.add('profile.json: enemyVariants.$kind の skin が空');
+          } else if (!used.add(skin)) {
+            err.add('profile.json: enemyVariants の skin $skin が重複');
+          }
+          final name = v['name'];
+          if (name is! Map || '${name['en'] ?? ''}'.isEmpty) err.add('profile.json: enemyVariants.$kind.$skin の name に英語がない');
+          final when = v['when'];
+          if (when is Map) {
+            for (final r in (when['regions'] as List? ?? const [])) {
+              if (!regionIds.contains(r)) err.add('profile.json: enemyVariants.$kind.$skin の未知の州 $r');
+            }
+            for (final g in (when['groups'] as List? ?? const [])) {
+              if (!groupIds.contains(g)) err.add('profile.json: enemyVariants.$kind.$skin の未知の地方 $g');
+            }
+          }
+        }
+      });
+    }
+
     // 地方決戦の地方: 州は実在し、中心は地方の中に含まれ、地方どうしで重ならない
     final groups = m['groups'];
     if (groups is Map) {

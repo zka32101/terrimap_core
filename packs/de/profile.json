@@ -654,6 +654,53 @@
    }
   }
  },
+ "enemyVariants": {
+  "normal": [
+   {
+    "skin": "kobold_miner",
+    "name": {"en": "Kobold Miner", "ja": "鉱山のコボルト", "de": "Bergwerk-Kobold"},
+    "when": {"groups": ["west", "south"]}
+   },
+   {
+    "skin": "wichtel",
+    "name": {"en": "Wichtel", "ja": "ヴィヒテル(小人)", "de": "Wichtel"}
+   }
+  ],
+  "speedy": [
+   {
+    "skin": "field_hare",
+    "name": {"en": "Dashing Hare", "ja": "疾走する野うさぎ", "de": "Rennhase"}
+   },
+   {
+    "skin": "rat_pack",
+    "name": {"en": "Rat Pack", "ja": "ねずみの群れ", "de": "Rattenschwarm"},
+    "when": {"groups": ["north", "east"]}
+   }
+  ],
+  "armored": [
+   {
+    "skin": "stone_giant",
+    "name": {"en": "Stone Giant", "ja": "石の巨人", "de": "Steinriese"},
+    "when": {"groups": ["south", "west"]}
+   },
+   {
+    "skin": "ice_golem",
+    "name": {"en": "Ice Golem", "ja": "氷のゴーレム", "de": "Eis-Golem"},
+    "when": {"groups": ["north", "east"]}
+   }
+  ],
+  "healer": [
+   {
+    "skin": "water_nixie",
+    "name": {"en": "Water Nixie", "ja": "水の精(ニクセ)", "de": "Nixe"},
+    "when": {"groups": ["north", "west"]}
+   },
+   {
+    "skin": "flower_fairy",
+    "name": {"en": "Flower Fairy", "ja": "花の精", "de": "Blumenfee"}
+   }
+  ]
+ },
  "groups": {
   "north": {
    "name": {
