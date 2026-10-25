@@ -36,9 +36,9 @@ class BattleEngine {
   final Map<String, double>? reviewWeights;
 
   /// ルールの版。新しい記録は最新（[currentRules]）で作り、保存済みの古い記録は、記録された版（古い版）のまま再生する。
-  /// 1 = 組み合わせボーナスなし／2 = 組み合わせボーナスあり。ルールを変えたら、ここを上げて、古い版の分岐を残す。
+  /// 1 = 組み合わせボーナスなし／2 = 組み合わせボーナスあり／3 = 新しい種類の敵（flyer・saboteur・swarmer・splitter）。ルールを変えたら、ここを上げて、古い版の分岐を残す。
   final int rules;
-  static const currentRules = 2;
+  static const currentRules = 3;
   BattleEngine(this.stage, {this.profile, this.pack, this.quizAssist = true, this.reviewWeights, this.rules = currentRules});
 
   /// クイズ連動が有効か。
@@ -63,6 +63,8 @@ class BattleEngine {
   static const disableInterval = 6.0, disableRadius = 3.0, disableSeconds = 3.0; // ranged_disable
   static const sabotageInterval = 8.0, sabotageRadius = 2.5, sabotageSeconds = 4.0, sabotageRatio = 0.5;
   static const disruptRadius = 2.0, disruptRange = 0.7; // disrupt: 近くの施設の射程を縮める
+  static const splitCount = 2; // splitter: 倒すと分かれる数
+  static const splitHp = 0.35; // splitter: 分かれた1体のHP（元の最大HPに対する割合）
   static const swarmHp = 0.6; // swarm: 1体あたりのHPの割合（1回の出現で2体）
   static const bossSkillInterval = 8.0, bossHasteSeconds = 3.0, bossHasteFactor = 1.8, bossHealRatio = 0.10;
   static const bossSummonCount = 2, bossSummonHp = 0.5;
@@ -785,8 +787,20 @@ class BattleEngine {
     var coins = st.coins + refund, score = st.score;
     final resMul = exFacilities.any((p) => kindAt(p) == ExclusiveKind.resource) ? resourceCoin : 1.0;
     final alive = <_M>[];
+    final splits = <_M>[];
     for (final m in ms) {
       if (m.hp <= 0) {
+        if (rules >= 3 && m.e.kind == 'splitter' && !m.e.id.contains('_p')) {
+          for (var k = 0; k < splitCount; k++) {
+            final id = 'e${w.number}_p${summoned++}';
+            final hp = math.max(1, (m.e.maxHp * splitHp).round());
+            final child = Enemy(
+              id: id, kind: 'splitter', pathIndex: m.e.pathIndex, hp: hp, maxHp: hp, speed: m.e.speed * 1.1,
+              progress: math.max(0.0, m.progress - 0.2 * k), isBoss: false, armor: 0, breachDamage: 1);
+            splits.add(_M(child));
+            events.add(BattleEvent(BattleEventType.spawn, enemyId: id));
+          }
+        }
         final reward = _killReward(m.e, st.wave, st.skill, resMul);
         coins += reward;
         score += m.e.isBoss ? 200 : 50;
@@ -795,6 +809,8 @@ class BattleEngine {
         alive.add(m);
       }
     }
+
+    alive.addAll(splits);
 
     // 7. 拠点への到達
     var baseHp = math.min(stage.baseHp, st.baseHp + baseBonus), mistakes = st.mistakes;

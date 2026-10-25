@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import '../pack/country_profile.dart';
 import '../pack/region_pack.dart';
 import '../quiz/rng.dart';
+import 'battle_engine.dart';
 import 'difficulty.dart';
 import 'grid.dart';
 import 'stage.dart';
@@ -10,7 +11,9 @@ import 'stage.dart';
 /// 州の形で切り抜いたステージを作る（設計書 §5）。画面に依存しない純粋な計算で、同じ入力は同じ結果。
 class StageGenerator {
   final RegionPack pack;
-  StageGenerator(this.pack);
+  /// 作るステージのルールの版（[BattleEngine.rules]）。版3から、新しい種類の敵（`enemyMixV3`）が出る。
+  final int rules;
+  StageGenerator(this.pack, {this.rules = BattleEngine.currentRules});
 
   CountryProfile? get _profile => pack.profile;
 
@@ -445,7 +448,7 @@ class StageGenerator {
       Map<String, Map<String, double>> neighborBias, int seed, Rng rng,
       {required int waveCount, double hpScale = 1.0, int? bossEvery}) {
     final count = waveCount;
-    final mix = _profile?.enemyMix ?? const {'normal': 1.0};
+    final mix = {...(_profile?.enemyMix ?? const {'normal': 1.0}), if (rules >= 3) ...?_profile?.enemyMixV3};
     return [
       for (var w = 1; w <= count; w++)
         () {
@@ -475,7 +478,7 @@ class StageGenerator {
 
   /// 敵の種類を、国の構成(enemyMix)×その州の偏り×入口の隣の州の偏り(0.5乗)を重みに選ぶ。
   /// 敵の種類が最初に出る波。段階的に出して、序盤は通常の敵で施設を整える時間を作る。
-  static const kindUnlockWave = {'normal': 1, 'speedy': 2, 'healer': 3, 'armored': 4};
+  static const kindUnlockWave = {'normal': 1, 'speedy': 2, 'healer': 3, 'armored': 4, 'flyer': 5, 'saboteur': 6, 'swarmer': 5, 'splitter': 7};
 
   static String _pickKind(Map<String, double> mix, Map<String, double> own, Map<String, double> neighbor, Rng r, int wave) {
     final keys = (mix.keys.toList()..sort());

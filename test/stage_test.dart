@@ -6,6 +6,7 @@ import 'package:terrimap_core/battle/difficulty.dart';
 import 'package:terrimap_core/battle/grid.dart';
 import 'package:terrimap_core/battle/stage.dart';
 import 'package:terrimap_core/battle/stage_generator.dart';
+import 'package:terrimap_core/pack/country_profile.dart';
 import 'package:terrimap_core/pack/region_pack.dart';
 
 RegionPack load(String id) {
@@ -30,7 +31,7 @@ Iterable<GridPos> n4(GridPos p) => [GridPos(p.col + 1, p.row), GridPos(p.col - 1
 
 void main() {
   final packs = {for (final id in ['de', 'us']) id: load(id)};
-  const kinds = {'normal', 'speedy', 'armored', 'healer'};
+  final kinds = CountryProfile.enemyKinds;
 
   for (final id in ['de', 'us']) {
     final pack = packs[id]!;

@@ -5,7 +5,7 @@
 - 生成サイズは Leonardo の設定、最終サイズはアプリに入れるサイズ（施設・敵・ボスは背景除去後に 512x512 へ縮小、PNG）。
 - ★ = 試作13枚（ドイツ）。
 
-## DE（62枚）
+## DE（66枚）
 
 | 試作 | 種類 | id | 備考 | 生成 | 最終 | ファイル | 状態 |
 |---|---|---|---|---|---|---|---|
@@ -39,6 +39,10 @@
 | ★ | 敵 | dash_gremlin | speedy / 疾走グレムリン | 1024x1024 | 512x512 | `de/enemies/dash_gremlin.png` | 未作成 |
 | ★ | 敵 | iron_golem | armored / 鉄のゴーレム | 1024x1024 | 512x512 | `de/enemies/iron_golem.png` | 未作成 |
 | ★ | 敵 | forest_sprite | healer / 森の精 | 1024x1024 | 512x512 | `de/enemies/forest_sprite.png` | 未作成 |
+|  | 敵 | wolpertinger | flyer / ヴォルペルティンガー(羽うさぎ) | 1024x1024 | 512x512 | `de/enemies/wolpertinger.png` | 未作成 |
+|  | 敵 | mine_imp | saboteur / 坑道のいたずら小鬼 | 1024x1024 | 512x512 | `de/enemies/mine_imp.png` | 未作成 |
+|  | 敵 | bat_swarm | swarmer / こうもりの群れ | 1024x1024 | 512x512 | `de/enemies/bat_swarm.png` | 未作成 |
+|  | 敵 | mud_blob | splitter / 泥のかたまり | 1024x1024 | 512x512 | `de/enemies/mud_blob.png` | 未作成 |
 |  | 敵 | kobold_miner | normal（見た目違い）/ 鉱山のコボルト | 1024x1024 | 512x512 | `de/enemies/kobold_miner.png` | 未作成 |
 |  | 敵 | wichtel | normal（見た目違い）/ ヴィヒテル(小人) | 1024x1024 | 512x512 | `de/enemies/wichtel.png` | 未作成 |
 |  | 敵 | field_hare | speedy（見た目違い）/ 疾走する野うさぎ | 1024x1024 | 512x512 | `de/enemies/field_hare.png` | 未作成 |
@@ -72,7 +76,7 @@
 |  | 名所カード | holstentor | Holstentor (Lübeck) | 1024x1024 | 512x512 | `de/landmarks/holstentor.png` | 未作成 |
 |  | 名所カード | wartburg | Wartburg Castle | 1024x1024 | 512x512 | `de/landmarks/wartburg.png` | 未作成 |
 
-## US（79枚）
+## US（83枚）
 
 | 試作 | 種類 | id | 備考 | 生成 | 最終 | ファイル | 状態 |
 |---|---|---|---|---|---|---|---|
@@ -107,6 +111,10 @@
 |  | 敵 | tumbleweed | speedy / 回転草 | 1024x1024 | 512x512 | `us/enemies/tumbleweed.png` | 未作成 |
 |  | 敵 | rock_golem | armored / 岩のゴーレム | 1024x1024 | 512x512 | `us/enemies/rock_golem.png` | 未作成 |
 |  | 敵 | cactus_nurse | healer / サボテンの看護師 | 1024x1024 | 512x512 | `us/enemies/cactus_nurse.png` | 未作成 |
+|  | 敵 | dust_crow | flyer / ほこりのカラス | 1024x1024 | 512x512 | `us/enemies/dust_crow.png` | 未作成 |
+|  | 敵 | prairie_trickster | saboteur / 大草原のいたずら者 | 1024x1024 | 512x512 | `us/enemies/prairie_trickster.png` | 未作成 |
+|  | 敵 | locust_swarm | swarmer / イナゴの群れ | 1024x1024 | 512x512 | `us/enemies/locust_swarm.png` | 未作成 |
+|  | 敵 | tar_blob | splitter / タールのかたまり | 1024x1024 | 512x512 | `us/enemies/tar_blob.png` | 未作成 |
 |  | 敵 | dust_imp | normal（見た目違い）/ ほこりの小鬼 | 1024x1024 | 512x512 | `us/enemies/dust_imp.png` | 未作成 |
 |  | 敵 | mud_gnome | normal（見た目違い）/ ぬかるみの小人 | 1024x1024 | 512x512 | `us/enemies/mud_gnome.png` | 未作成 |
 |  | 敵 | jackalope | speedy（見た目違い）/ ジャッカロープ | 1024x1024 | 512x512 | `us/enemies/jackalope.png` | 未作成 |

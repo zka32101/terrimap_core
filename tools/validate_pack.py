@@ -66,13 +66,14 @@ if prof_path.exists():
     try: prof = json.loads(prof_path.read_text())
     except Exception as e: prof = None; err.append(f"profile.json: 読込失敗 {e}")
     if prof is not None:
-        ENEMIES = {"normal", "speedy", "armored", "healer"}
+        NEW_ENEMIES = {"flyer", "saboteur", "swarmer", "splitter"}
+        ENEMIES = {"normal", "speedy", "armored", "healer"} | NEW_ENEMIES
         TERRAINS = {"sea", "mountain", "urban", "agriculture", "mixed"}
         if not prof.get("style"): err.append("profile.json: style が空")
         mix = prof.get("enemyMix") or {}
         if not mix: err.append("profile.json: enemyMix が空")
         for k, v in mix.items():
-            if k not in ENEMIES: err.append(f"profile.json: enemyMix の未知の敵 {k}")
+            if k not in ENEMIES or k in NEW_ENEMIES: err.append(f"profile.json: enemyMix の未知の敵 {k}（新しい種類は enemyMixV3 に書く）")
             if not isinstance(v, (int, float)) or v < 0: err.append(f"profile.json: enemyMix.{k} が負または数値でない")
         if mix and abs(sum(v for v in mix.values() if isinstance(v, (int, float))) - 1) > 0.01:
             err.append("profile.json: enemyMix の合計が1でない")
