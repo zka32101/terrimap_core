@@ -712,6 +712,10 @@
       "west",
       "south"
      ]
+    },
+    "trait": {
+     "hp": 1.1,
+     "armor": 1
     }
    },
    {
@@ -720,6 +724,10 @@
      "en": "Wichtel",
      "ja": "ヴィヒテル(小人)",
      "de": "Wichtel"
+    },
+    "trait": {
+     "hp": 0.85,
+     "speed": 1.2
     }
    }
   ],
@@ -730,6 +738,10 @@
      "en": "Dashing Hare",
      "ja": "疾走する野うさぎ",
      "de": "Rennhase"
+    },
+    "trait": {
+     "hp": 0.85,
+     "speed": 1.15
     }
    },
    {
@@ -744,6 +756,9 @@
       "north",
       "east"
      ]
+    },
+    "trait": {
+     "ability": "swarm"
     }
    }
   ],
@@ -760,6 +775,10 @@
       "south",
       "west"
      ]
+    },
+    "trait": {
+     "hp": 1.3,
+     "speed": 0.85
     }
    },
    {
@@ -774,6 +793,9 @@
       "north",
       "east"
      ]
+    },
+    "trait": {
+     "ability": "regen"
     }
    }
   ],
@@ -790,6 +812,9 @@
       "north",
       "west"
      ]
+    },
+    "trait": {
+     "hp": 1.2
     }
    },
    {
@@ -798,6 +823,9 @@
      "en": "Flower Fairy",
      "ja": "花の精",
      "de": "Blumenfee"
+    },
+    "trait": {
+     "speed": 1.2
     }
    }
   ]

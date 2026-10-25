@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import '../quiz/rng.dart';
+
 /// JSONのオブジェクトを Map<String, dynamic> として読む(無ければ空)。const {} は型が合わず落ちるので使わない。
 Map<String, dynamic> _obj(Object? o) => o == null ? <String, dynamic>{} : Map<String, dynamic>.from(o as Map);
 
@@ -116,6 +118,19 @@ class CountryProfile {
       if (v.matches(regionId: regionId, groupId: g) && !out.contains(v.skin)) out.add(v.skin);
     }
     return out;
+  }
+
+  /// 敵 [enemyId] の見た目違い。基本の見た目なら null。[ArtSet.enemy] と同じ選び方（[enemySkinIds] の並びから、id で決まる）なので、
+  /// 画面に出る見た目と、効く特性がいつも一致する。
+  EnemyVariant? variantFor(String kind, String enemyId, {String? regionId, String? groupId}) {
+    final ids = enemySkinIds(kind, regionId: regionId, groupId: groupId);
+    if (ids.length < 2) return null;
+    final skin = ids[fnv1a(enemyId) % ids.length];
+    if (skin == enemySkins[kind]?.skin) return null;
+    for (final v in enemyVariants[kind] ?? const <EnemyVariant>[]) {
+      if (v.skin == skin) return v;
+    }
+    return null;
   }
 
   /// 地域の特性。書かれていない地域は「特性なし」。
@@ -287,7 +302,11 @@ class EnemyVariant {
   final String skin;
   final Map<String, String> name;
   final Set<String> groups, regions;
-  const EnemyVariant({required this.skin, required this.name, this.groups = const {}, this.regions = const {}});
+
+  /// この見た目の敵だけの特性（任意）。hp・speed・baseDamage は、その種類の国の特性に掛ける倍率、armor は足す値。
+  /// ability・action は、'none' 以外を書くと、その種類の能力・行動の代わりになる（ルール版3から）。
+  final EnemyTrait? trait;
+  const EnemyVariant({required this.skin, required this.name, this.groups = const {}, this.regions = const {}, this.trait});
 
   factory EnemyVariant.fromJson(Map<String, dynamic> j) {
     final when = _obj(j['when']);
@@ -296,6 +315,7 @@ class EnemyVariant {
       name: _obj(j['name']).map((k, v) => MapEntry(k, v as String)),
       groups: {for (final g in (when['groups'] as List? ?? const [])) g as String},
       regions: {for (final r in (when['regions'] as List? ?? const [])) r as String},
+      trait: j['trait'] == null ? null : EnemyTrait.fromJson(_obj(j['trait'])),
     );
   }
 

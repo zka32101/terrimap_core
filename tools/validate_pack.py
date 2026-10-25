@@ -96,6 +96,18 @@ if prof_path.exists():
             if a is not None and (not isinstance(a, int) or not (0 <= a <= 3)): err.append(f"profile.json: enemies.{kind}.armor は0〜3の整数")
             if t.get("ability") is not None and t["ability"] not in ABIL: err.append(f"profile.json: enemies.{kind}.ability が不正")
             if t.get("action") is not None and t["action"] not in EACT: err.append(f"profile.json: enemies.{kind}.action が不正")
+        for kind, lst in (prof.get("enemyVariants") or {}).items():
+            for v in lst:
+                t = v.get("trait")
+                if not t: continue
+                lb = f"enemyVariants.{kind}.{v.get('skin')}.trait"
+                for k in ("hp", "speed", "baseDamage"):
+                    x = t.get(k)
+                    if x is not None and (not isinstance(x, (int, float)) or not (0.5 <= x <= 2.0)): err.append(f"profile.json: {lb}.{k} は0.5〜2.0")
+                a = t.get("armor")
+                if a is not None and (not isinstance(a, int) or not (0 <= a <= 3)): err.append(f"profile.json: {lb}.armor は0〜3の整数")
+                if t.get("ability") is not None and t["ability"] not in ABIL: err.append(f"profile.json: {lb}.ability が不正")
+                if t.get("action") is not None and t["action"] not in EACT: err.append(f"profile.json: {lb}.action が不正")
         for fac, t in (prof.get("attackActions") or {}).items():
             if fac not in FACS: err.append(f"profile.json: attackActions の未知の施設 {fac}")
             if t.get("action") not in FACT: err.append(f"profile.json: attackActions.{fac}.action が不正")

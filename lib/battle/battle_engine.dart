@@ -342,7 +342,15 @@ class BattleEngine {
     final kind = w.enemyKinds[index];
     final isBoss = w.hasBoss && index == w.enemyCount - 1;
     final b = enemyBase[kind]!;
-    final t = profile?.enemyOf(kind);
+    final kindTrait = profile?.enemyOf(kind);
+    // 見た目違いごとの特性（版3から。ボスにはない）。見た目は ArtSet が同じ選び方で決める。
+    final vt = rules >= 3 && !isBoss ? profile?.variantFor(kind, 'e${w.number}_$index', regionId: stage.regionId, groupId: stage.groupId)?.trait : null;
+    final bt = kindTrait ?? const EnemyTrait();
+    final t = vt == null
+        ? kindTrait
+        : EnemyTrait(
+            hp: bt.hp * vt.hp, speed: bt.speed * vt.speed, baseDamage: bt.baseDamage * vt.baseDamage, armor: bt.armor + vt.armor,
+            ability: vt.ability != 'none' ? vt.ability : bt.ability, action: vt.action != 'none' ? vt.action : bt.action);
     final ability = isBoss ? 'none' : (t?.ability ?? 'none'); // ボスには能力を付けない（スキルを使う）
     final action = isBoss ? 'none' : (t?.action ?? 'none');
     var hp = isBoss ? (w.baseHp * 2.5).round() : (w.baseHp * b.hpMult * (t?.hp ?? 1.0)).round();

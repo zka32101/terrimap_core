@@ -118,4 +118,39 @@ void main() {
         isTrue);
     expect(r2.state.enemies.length, 0);
   });
+
+  test('見た目違いごとの特性: 版3は見た目違いの特性が効き、版2は基本のまま。選び方は見た目と同じ', () {
+    final pack = load('de');
+    final prof = pack.profile!;
+    final base = prof.enemyOf('armored');
+    final st = StageGenerator(pack).generate('DE-BY', Difficulty.normal);
+    final e3 = BattleEngine(st, profile: prof, pack: pack);
+    final e2 = BattleEngine(st, profile: prof, pack: pack, rules: 2);
+    final seen = <String>{};
+    for (var i = 0; i < 60; i++) {
+      final w = StageWave(
+          number: 1,
+          enemyCount: 60,
+          baseHp: 100,
+          baseAttack: 7,
+          spawnInterval: 1,
+          hasBoss: false,
+          enemyKinds: List.filled(60, 'armored'),
+          entranceIndices: const [0]);
+      final v = prof.variantFor('armored', 'e1_$i',
+          regionId: st.regionId, groupId: st.groupId);
+      final a = e3.makeEnemy(w, i), b = e2.makeEnemy(w, i);
+      expect(b.maxHp, (100 * 2.0 * base.hp).round(), reason: '版2は基本の特性');
+      if (v == null) {
+        expect(a.maxHp, b.maxHp);
+      } else {
+        seen.add(v.skin);
+        final t = v.trait!;
+        expect(a.maxHp, (100 * 2.0 * base.hp * t.hp).round(), reason: v.skin);
+        expect(a.armor, 8 + base.armor + t.armor, reason: v.skin);
+        if (t.ability != 'none') expect(a.ability, t.ability, reason: v.skin);
+      }
+    }
+    expect(seen, isNotEmpty);
+  });
 }
