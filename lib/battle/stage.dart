@@ -20,6 +20,7 @@ class StageWave {
   final int baseAttack;
   final double spawnInterval; // 秒
   final bool hasBoss;
+  final bool miniBoss; // この波の最後にミニボスが出る（ルール版4から。hasBoss とは同時にならない）
   final List<String> enemyKinds; // 出現順の敵の種類（normal/speedy/armored/healer）。長さ=enemyCount
   final List<int> entranceIndices; // このウェーブで使う入口（Stage.entrances の添字）
   const StageWave({
@@ -29,6 +30,7 @@ class StageWave {
     required this.baseAttack,
     required this.spawnInterval,
     required this.hasBoss,
+    this.miniBoss = false,
     required this.enemyKinds,
     required this.entranceIndices,
   });
@@ -39,6 +41,7 @@ class StageWave {
         'baseAttack': baseAttack,
         'spawnInterval': spawnInterval,
         'hasBoss': hasBoss,
+        if (miniBoss) 'miniBoss': true,
         'enemyKinds': enemyKinds,
         'entranceIndices': entranceIndices,
       };

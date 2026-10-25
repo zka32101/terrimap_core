@@ -101,7 +101,15 @@ class BattleFx {
             if (big) _addShake(now, 1.2);
             break;
           case BattleEventType.spawn:
-            if (!ev.isBoss) break;
+            if (!ev.isBoss) {
+              if (ev.detail == 'mini') {
+                // ミニボスの登場: ボスより控えめ（橙の表示と輪）
+                _add(FxItem(FxKind.banner, now, 1.4, (x: 0, y: 0), text: 'MINI BOSS', color: const Color(0xFFFFA726), size: 1.2));
+                if (at != null) _add(FxItem(FxKind.ring, now, 0.8, at, color: const Color(0xFFFFA726), size: 2.0));
+                _addShake(now, 0.5);
+              }
+              break;
+            }
             // ボスの登場: 赤い縁取り・大きな表示・揺れ
             _add(FxItem(FxKind.baseFlash, now, 0.9, (x: 0, y: 0), color: const Color(0xFFB71C1C), size: 1.3));
             _add(FxItem(FxKind.banner, now, 1.8, (x: 0, y: 0), text: 'BOSS', color: const Color(0xFFFF5252), size: 1.5));

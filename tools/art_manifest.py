@@ -44,6 +44,8 @@ def entries():
         for t, lst in (pf.get("enemyVariants") or {}).items():
             for v in lst:
                 out.append((cc, "enemies", v["skin"], f"{t}（見た目違い）/ {v['name']['ja']}"))
+        for g, mb in (pf.get("miniBosses") or {}).items():
+            out.append((cc, "bosses", mb["skin"], f"ミニボス（{g}）/ {mb['name']['ja']}"))
         for e in pf["extras"]:
             out.append((cc, "bosses", e["id"], e["bossName"]["en"]))
         facts = ROOT / "packs" / cc / "facts.json"

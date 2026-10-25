@@ -477,6 +477,16 @@
    "hp": 1.3,
    "speed": 0.9,
    "baseDamage": 1.2
+  },
+  "brute": {
+   "hp": 1.2,
+   "armor": 1,
+   "ability": "shield",
+   "baseDamage": 1.3
+  },
+  "jammer": {
+   "ability": "disrupt",
+   "hp": 1.1
   }
  },
  "attackActions": {
@@ -702,6 +712,22 @@
     "ja": "泥のかたまり",
     "en": "Mud Blob",
     "de": "Schlammklumpen"
+   }
+  },
+  "brute": {
+   "skin": "forest_ogre",
+   "name": {
+    "ja": "森の大鬼",
+    "en": "Forest Ogre",
+    "de": "Waldoger"
+   }
+  },
+  "jammer": {
+   "skin": "fog_wisp",
+   "name": {
+    "ja": "霧のいたずら火",
+    "en": "Fog Wisp",
+    "de": "Nebelirrlicht"
    }
   }
  },
@@ -1048,5 +1074,47 @@
   "saboteur": 0.08,
   "swarmer": 0.06,
   "splitter": 0.12
+ },
+ "enemyMixHard": {
+  "brute": 0.1,
+  "jammer": 0.06
+ },
+ "miniBosses": {
+  "north": {
+   "skin": "nebel_warden",
+   "name": {
+    "ja": "霧の海の番人",
+    "en": "Fog Warden",
+    "de": "Nebelwächter"
+   },
+   "skill": "stunFacility"
+  },
+  "south": {
+   "skin": "mountain_keeper",
+   "name": {
+    "ja": "山の岩の守り手",
+    "en": "Mountain Keeper",
+    "de": "Bergwächter"
+   },
+   "skill": "hpRegen"
+  },
+  "west": {
+   "skin": "black_forest_hunter",
+   "name": {
+    "ja": "黒い森の狩人",
+    "en": "Black Forest Hunter",
+    "de": "Schwarzwaldjäger"
+   },
+   "skill": "summon"
+  },
+  "east": {
+   "skin": "lake_master",
+   "name": {
+    "ja": "湖の水の主",
+    "en": "Lake Master",
+    "de": "Seemeister"
+   },
+   "skill": "speedBurst"
+  }
  }
 }

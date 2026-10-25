@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:terrimap_core/battle/battle_engine.dart';
 import 'package:terrimap_core/battle/difficulty.dart';
+import 'package:terrimap_core/battle/grid.dart';
 import 'package:terrimap_core/battle/stage_generator.dart';
 import 'package:terrimap_core/battle/stage.dart';
 import 'package:terrimap_core/pack/country_profile.dart';
@@ -172,5 +173,82 @@ void main() {
       expect(de.enemyMixV3[k], isNot(us.enemyMixV3[k]), reason: k);
     }
     expect(de.enemyOf('saboteur').action, isNot(us.enemyOf('saboteur').action));
+  });
+
+  test('hard だけの敵: 版4の hard にだけ出る。版3以前・easy・normal には出ない', () {
+    for (final id in ['de', 'us']) {
+      final pack = load(id);
+      Set<String> kindsAt(int rules, Difficulty d) => {
+            for (final r in pack.regions)
+              for (final w
+                  in StageGenerator(pack, rules: rules).generate(r.id, d).waves)
+                ...w.enemyKinds,
+          };
+      expect(
+          kindsAt(4, Difficulty.hard)
+              .intersection(CountryProfile.hardEnemyKinds),
+          CountryProfile.hardEnemyKinds,
+          reason: id);
+      expect(
+          kindsAt(4, Difficulty.normal)
+              .intersection(CountryProfile.hardEnemyKinds),
+          isEmpty,
+          reason: id);
+      expect(
+          kindsAt(4, Difficulty.easy)
+              .intersection(CountryProfile.hardEnemyKinds),
+          isEmpty,
+          reason: id);
+      expect(
+          kindsAt(3, Difficulty.hard)
+              .intersection(CountryProfile.hardEnemyKinds),
+          isEmpty,
+          reason: id);
+    }
+  });
+
+  test('ミニボス: 地方決戦・エクストラの中盤に1体、通常の州ステージにはいない。ボスより軽く、スキルを使う', () {
+    for (final id in ['de', 'us']) {
+      final pack = load(id);
+      final prof = pack.profile!;
+      final g = StageGenerator(pack);
+      expect(
+          g
+              .generate(pack.regions.first.id, Difficulty.hard)
+              .waves
+              .any((w) => w.miniBoss),
+          isFalse,
+          reason: id);
+      for (final grp in prof.groups.keys) {
+        final st = g.generate(grp, Difficulty.normal, kind: StageKind.regional);
+        final minis = st.waves.where((w) => w.miniBoss).toList();
+        expect(minis.length, 1, reason: '$id $grp');
+        expect(minis.single.hasBoss, isFalse);
+        final engine = BattleEngine(st, profile: prof, pack: pack);
+        final w = minis.single;
+        final e = engine.makeEnemy(w, w.enemyCount - 1);
+        final boss =
+            engine.makeEnemy(st.waves.last, st.waves.last.enemyCount - 1);
+        expect(e.isMini, isTrue);
+        expect(e.isBoss, isFalse);
+        expect(e.bossSkill, prof.miniBossFor(st.regionId, groupId: grp)!.skill);
+        expect(e.maxHp, (w.baseHp * BattleEngine.miniHp).round());
+        expect(e.maxHp / w.baseHp, lessThan(boss.maxHp / st.waves.last.baseHp));
+        // 版3では出ない
+        expect(
+            BattleEngine(st, profile: prof, pack: pack, rules: 3)
+                .makeEnemy(w, w.enemyCount - 1)
+                .isMini,
+            isFalse);
+      }
+      // 版3以前のステージには、ミニボスの印がない
+      expect(
+          StageGenerator(pack, rules: 3)
+              .generate(prof.groups.keys.first, Difficulty.normal,
+                  kind: StageKind.regional)
+              .waves
+              .any((w) => w.miniBoss),
+          isFalse);
+    }
   });
 }

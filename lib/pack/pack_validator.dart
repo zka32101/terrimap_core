@@ -157,7 +157,7 @@ class PackValidator {
     } else {
       var sum = 0.0;
       mix.forEach((k, v) {
-        if (!CountryProfile.baseEnemyKinds.contains(k)) err.add('profile.json: enemyMix の未知の敵 $k（新しい種類は enemyMixV3 に書く）');
+        if (!CountryProfile.baseEnemyKinds.contains(k)) err.add('profile.json: enemyMix の未知の敵 $k（新しい種類は enemyMixV3・enemyMixHard に書く）');
         if (v is! num || v < 0) {
           err.add('profile.json: enemyMix.$k が負または数値でない');
         } else {
@@ -175,6 +175,18 @@ class PackValidator {
         mix3.forEach((k, v) {
           if (!CountryProfile.newEnemyKinds.contains(k)) err.add('profile.json: enemyMixV3 の未知の敵 $k');
           if (v is! num || v < 0) err.add('profile.json: enemyMixV3.$k が負または数値でない');
+        });
+      }
+    }
+
+    final mixHard = m['enemyMixHard'];
+    if (mixHard != null) {
+      if (mixHard is! Map) {
+        err.add('profile.json: enemyMixHard がオブジェクトでない');
+      } else {
+        mixHard.forEach((k, v) {
+          if (!CountryProfile.hardEnemyKinds.contains(k)) err.add('profile.json: enemyMixHard の未知の敵 $k');
+          if (v is! num || v < 0) err.add('profile.json: enemyMixHard.$k が負または数値でない');
         });
       }
     }
@@ -258,6 +270,31 @@ class PackValidator {
     }
     skins('facilities', CountryProfile.facilityTypes, '施設');
     skins('enemySkins', CountryProfile.enemyKinds, '敵');
+
+    // ミニボス: 地方は実在、skin は空でなくほかの見た目と重ならず、英語の名前があり、スキルは実在する
+    final minis = m['miniBosses'];
+    if (minis is Map) {
+      final groupKeys = m['groups'] is Map ? (m['groups'] as Map).keys.map((k) => '$k').toSet() : <String>{};
+      final used = <String>{
+        if (m['enemySkins'] is Map) for (final t in (m['enemySkins'] as Map).values) if (t is Map && t['skin'] is String) t['skin'] as String,
+      };
+      minis.forEach((g, t) {
+        if (!groupKeys.contains(g)) err.add('profile.json: miniBosses の未知の地方 $g');
+        if (t is! Map) {
+          err.add('profile.json: miniBosses.$g がオブジェクトでない');
+          return;
+        }
+        final skin = '${t['skin'] ?? ''}';
+        if (skin.isEmpty) {
+          err.add('profile.json: miniBosses.$g の skin が空');
+        } else if (!used.add(skin)) {
+          err.add('profile.json: miniBosses の skin $skin が重複');
+        }
+        final name = t['name'];
+        if (name is! Map || '${name['en'] ?? ''}'.isEmpty) err.add('profile.json: miniBosses.$g の name に英語がない');
+        if (!ExtraStage.bossSkills.contains('${t['skill']}')) err.add('profile.json: miniBosses.$g.skill が不正 ${t['skill']}');
+      });
+    }
 
     // 敵の見た目違い: 種類は実在、skin は空でなく重複せず(基本の見た目とも)、英語の名前があり、when の州・地方は実在する
     final variants = m['enemyVariants'];

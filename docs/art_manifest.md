@@ -5,7 +5,7 @@
 - 生成サイズは Leonardo の設定、最終サイズはアプリに入れるサイズ（施設・敵・ボスは背景除去後に 512x512 へ縮小、PNG）。
 - ★ = 試作13枚（ドイツ）。
 
-## DE（66枚）
+## DE（72枚）
 
 | 試作 | 種類 | id | 備考 | 生成 | 最終 | ファイル | 状態 |
 |---|---|---|---|---|---|---|---|
@@ -43,6 +43,8 @@
 |  | 敵 | mine_imp | saboteur / 坑道のいたずら小鬼 | 1024x1024 | 512x512 | `de/enemies/mine_imp.png` | 未作成 |
 |  | 敵 | bat_swarm | swarmer / こうもりの群れ | 1024x1024 | 512x512 | `de/enemies/bat_swarm.png` | 未作成 |
 |  | 敵 | mud_blob | splitter / 泥のかたまり | 1024x1024 | 512x512 | `de/enemies/mud_blob.png` | 未作成 |
+|  | 敵 | forest_ogre | brute / 森の大鬼 | 1024x1024 | 512x512 | `de/enemies/forest_ogre.png` | 未作成 |
+|  | 敵 | fog_wisp | jammer / 霧のいたずら火 | 1024x1024 | 512x512 | `de/enemies/fog_wisp.png` | 未作成 |
 |  | 敵 | kobold_miner | normal（見た目違い）/ 鉱山のコボルト | 1024x1024 | 512x512 | `de/enemies/kobold_miner.png` | 未作成 |
 |  | 敵 | wichtel | normal（見た目違い）/ ヴィヒテル(小人) | 1024x1024 | 512x512 | `de/enemies/wichtel.png` | 未作成 |
 |  | 敵 | field_hare | speedy（見た目違い）/ 疾走する野うさぎ | 1024x1024 | 512x512 | `de/enemies/field_hare.png` | 未作成 |
@@ -51,6 +53,10 @@
 |  | 敵 | ice_golem | armored（見た目違い）/ 氷のゴーレム | 1024x1024 | 512x512 | `de/enemies/ice_golem.png` | 未作成 |
 |  | 敵 | water_nixie | healer（見た目違い）/ 水の精(ニクセ) | 1024x1024 | 512x512 | `de/enemies/water_nixie.png` | 未作成 |
 |  | 敵 | flower_fairy | healer（見た目違い）/ 花の精 | 1024x1024 | 512x512 | `de/enemies/flower_fairy.png` | 未作成 |
+|  | ボス | nebel_warden | ミニボス（north）/ 霧の海の番人 | 1024x1024 | 512x512 | `de/bosses/nebel_warden.png` | 未作成 |
+|  | ボス | mountain_keeper | ミニボス（south）/ 山の岩の守り手 | 1024x1024 | 512x512 | `de/bosses/mountain_keeper.png` | 未作成 |
+|  | ボス | black_forest_hunter | ミニボス（west）/ 黒い森の狩人 | 1024x1024 | 512x512 | `de/bosses/black_forest_hunter.png` | 未作成 |
+|  | ボス | lake_master | ミニボス（east）/ 湖の水の主 | 1024x1024 | 512x512 | `de/bosses/lake_master.png` | 未作成 |
 | ★ | ボス | de_loreley | Water Nymph of the Rhine | 1024x1024 | 512x512 | `de/bosses/de_loreley.png` | 未作成 |
 |  | ボス | de_grimm | The Great Grey Wolf | 1024x1024 | 512x512 | `de/bosses/de_grimm.png` | 未作成 |
 |  | ボス | de_nibelung | The Cave Dragon | 1024x1024 | 512x512 | `de/bosses/de_nibelung.png` | 未作成 |
@@ -76,7 +82,7 @@
 |  | 名所カード | holstentor | Holstentor (Lübeck) | 1024x1024 | 512x512 | `de/landmarks/holstentor.png` | 未作成 |
 |  | 名所カード | wartburg | Wartburg Castle | 1024x1024 | 512x512 | `de/landmarks/wartburg.png` | 未作成 |
 
-## US（83枚）
+## US（89枚）
 
 | 試作 | 種類 | id | 備考 | 生成 | 最終 | ファイル | 状態 |
 |---|---|---|---|---|---|---|---|
@@ -115,6 +121,8 @@
 |  | 敵 | prairie_trickster | saboteur / 大草原のいたずら者 | 1024x1024 | 512x512 | `us/enemies/prairie_trickster.png` | 未作成 |
 |  | 敵 | locust_swarm | swarmer / イナゴの群れ | 1024x1024 | 512x512 | `us/enemies/locust_swarm.png` | 未作成 |
 |  | 敵 | tar_blob | splitter / タールのかたまり | 1024x1024 | 512x512 | `us/enemies/tar_blob.png` | 未作成 |
+|  | 敵 | canyon_troll | brute / 峡谷のトロル | 1024x1024 | 512x512 | `us/enemies/canyon_troll.png` | 未作成 |
+|  | 敵 | static_spirit | jammer / 静電気の精 | 1024x1024 | 512x512 | `us/enemies/static_spirit.png` | 未作成 |
 |  | 敵 | dust_imp | normal（見た目違い）/ ほこりの小鬼 | 1024x1024 | 512x512 | `us/enemies/dust_imp.png` | 未作成 |
 |  | 敵 | mud_gnome | normal（見た目違い）/ ぬかるみの小人 | 1024x1024 | 512x512 | `us/enemies/mud_gnome.png` | 未作成 |
 |  | 敵 | jackalope | speedy（見た目違い）/ ジャッカロープ | 1024x1024 | 512x512 | `us/enemies/jackalope.png` | 未作成 |
@@ -123,6 +131,10 @@
 |  | 敵 | scrap_bull | armored（見た目違い）/ 鉄くずの牛 | 1024x1024 | 512x512 | `us/enemies/scrap_bull.png` | 未作成 |
 |  | 敵 | honey_sprite | healer（見た目違い）/ 蜂蜜の精 | 1024x1024 | 512x512 | `us/enemies/honey_sprite.png` | 未作成 |
 |  | 敵 | rain_cloud_sprite | healer（見た目違い）/ 雨雲の精 | 1024x1024 | 512x512 | `us/enemies/rain_cloud_sprite.png` | 未作成 |
+|  | ボス | dust_storm_lord | ミニボス（west）/ 砂嵐の主 | 1024x1024 | 512x512 | `us/bosses/dust_storm_lord.png` | 未作成 |
+|  | ボス | autumn_great_tree | ミニボス（northeast）/ 紅葉の大木 | 1024x1024 | 512x512 | `us/bosses/autumn_great_tree.png` | 未作成 |
+|  | ボス | prairie_wind_king | ミニボス（midwest）/ 大草原の風の王 | 1024x1024 | 512x512 | `us/bosses/prairie_wind_king.png` | 未作成 |
+|  | ボス | bayou_gator_king | ミニボス（south）/ 沼地の大ワニ | 1024x1024 | 512x512 | `us/bosses/bayou_gator_king.png` | 未作成 |
 |  | ボス | us_bunyan | The Giant Blue Ox | 1024x1024 | 512x512 | `us/bosses/us_bunyan.png` | 未作成 |
 |  | ボス | us_wright | The Gale Spirit | 1024x1024 | 512x512 | `us/bosses/us_wright.png` | 未作成 |
 |  | ボス | us_moon | The Moon Keeper | 1024x1024 | 512x512 | `us/bosses/us_moon.png` | 未作成 |

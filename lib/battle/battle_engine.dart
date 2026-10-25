@@ -36,9 +36,9 @@ class BattleEngine {
   final Map<String, double>? reviewWeights;
 
   /// ルールの版。新しい記録は最新（[currentRules]）で作り、保存済みの古い記録は、記録された版（古い版）のまま再生する。
-  /// 1 = 組み合わせボーナスなし／2 = 組み合わせボーナスあり／3 = 新しい種類の敵（flyer・saboteur・swarmer・splitter）。ルールを変えたら、ここを上げて、古い版の分岐を残す。
+  /// 1 = 組み合わせボーナスなし／2 = 組み合わせボーナスあり／3 = 新しい種類の敵（flyer・saboteur・swarmer・splitter）／4 = hard だけの敵（brute・jammer）とミニボス。ルールを変えたら、ここを上げて、古い版の分岐を残す。
   final int rules;
-  static const currentRules = 3;
+  static const currentRules = 4;
   BattleEngine(this.stage, {this.profile, this.pack, this.quizAssist = true, this.reviewWeights, this.rules = currentRules});
 
   /// クイズ連動が有効か。
@@ -65,6 +65,8 @@ class BattleEngine {
   static const disruptRadius = 2.0, disruptRange = 0.7; // disrupt: 近くの施設の射程を縮める
   static const splitCount = 2; // splitter: 倒すと分かれる数
   static const splitHp = 0.35; // splitter: 分かれた1体のHP（元の最大HPに対する割合）
+  static const miniHp = 1.4; // ミニボスのHP（基礎HPの倍。ボスは2.5倍）
+  static const miniSpeed = 0.75; // ミニボスの速さ（ボスは0.6倍）
   static const swarmHp = 0.6; // swarm: 1体あたりのHPの割合（1回の出現で2体）
   static const bossSkillInterval = 8.0, bossHasteSeconds = 3.0, bossHasteFactor = 1.8, bossHealRatio = 0.10;
   static const bossSummonCount = 2, bossSummonHp = 0.5;
@@ -339,28 +341,30 @@ class BattleEngine {
 
   /// 敵の性能（難易度・国の敵の特性を適用）。[index] は波の中の何番目か（最後がボス）。
   Enemy makeEnemy(StageWave w, int index) {
-    final kind = w.enemyKinds[index];
     final isBoss = w.hasBoss && index == w.enemyCount - 1;
+    final mini = rules >= 4 && w.miniBoss && index == w.enemyCount - 1 ? profile?.miniBossFor(stage.regionId, groupId: stage.groupId) : null;
+    final isMini = mini != null;
+    final kind = isMini ? 'normal' : w.enemyKinds[index]; // ミニボスは、通常の敵の枠で（強さは下で決める）
     final b = enemyBase[kind]!;
     final kindTrait = profile?.enemyOf(kind);
     // 見た目違いごとの特性（版3から。ボスにはない）。見た目は ArtSet が同じ選び方で決める。
-    final vt = rules >= 3 && !isBoss ? profile?.variantFor(kind, 'e${w.number}_$index', regionId: stage.regionId, groupId: stage.groupId)?.trait : null;
+    final vt = rules >= 3 && !isBoss && !isMini ? profile?.variantFor(kind, 'e${w.number}_$index', regionId: stage.regionId, groupId: stage.groupId)?.trait : null;
     final bt = kindTrait ?? const EnemyTrait();
     final t = vt == null
         ? kindTrait
         : EnemyTrait(
             hp: bt.hp * vt.hp, speed: bt.speed * vt.speed, baseDamage: bt.baseDamage * vt.baseDamage, armor: bt.armor + vt.armor,
             ability: vt.ability != 'none' ? vt.ability : bt.ability, action: vt.action != 'none' ? vt.action : bt.action);
-    final ability = isBoss ? 'none' : (t?.ability ?? 'none'); // ボスには能力を付けない（スキルを使う）
-    final action = isBoss ? 'none' : (t?.action ?? 'none');
-    var hp = isBoss ? (w.baseHp * 2.5).round() : (w.baseHp * b.hpMult * (t?.hp ?? 1.0)).round();
+    final ability = isBoss || isMini ? 'none' : (t?.ability ?? 'none'); // ボスには能力を付けない（スキルを使う）
+    final action = isBoss || isMini ? 'none' : (t?.action ?? 'none');
+    var hp = isBoss ? (w.baseHp * 2.5).round() : isMini ? (w.baseHp * miniHp).round() : (w.baseHp * b.hpMult * (t?.hp ?? 1.0)).round();
     if (ability == 'swarm') hp = (hp * swarmHp).round();
     final season = _seasonAt(w.number);
-    if (!isBoss && kind == 'normal') hp = (hp * season.normalHp).round();
-    final speed = b.speedMult * (isBoss ? 0.6 : 1.2) * (t?.speed ?? 1.0) * _params.speedMultiplier * season.enemySpeed * (kind == 'speedy' ? season.speedySpeed : 1.0) * lengthFactor(stage.paths[w.entranceIndices[index % w.entranceIndices.length]].length);
+    if (!isBoss && !isMini && kind == 'normal') hp = (hp * season.normalHp).round();
+    final speed = b.speedMult * (isBoss ? 0.6 : isMini ? miniSpeed : 1.2) * (t?.speed ?? 1.0) * _params.speedMultiplier * season.enemySpeed * (kind == 'speedy' ? season.speedySpeed : 1.0) * lengthFactor(stage.paths[w.entranceIndices[index % w.entranceIndices.length]].length);
     // 拠点への被害: 既存の規則（easyは常に1。ボス・装甲は重い）× 国の倍率
     final heavy = _params.heavyBreach;
-    final base = !heavy ? 1 : (isBoss ? (stage.difficulty == Difficulty.hard ? 3 : 2) : (kind == 'armored' ? 2 : 1));
+    final base = !heavy ? 1 : (isMini ? 2 : isBoss ? (stage.difficulty == Difficulty.hard ? 3 : 2) : (kind == 'armored' ? 2 : 1));
     return Enemy(
       id: 'e${w.number}_$index',
       kind: kind,
@@ -370,14 +374,15 @@ class BattleEngine {
       speed: speed,
       progress: 0,
       isBoss: isBoss,
+      isMini: isMini,
       armor: b.armor + (t?.armor ?? 0),
       breachDamage: math.max(1, (base * (t?.baseDamage ?? 1.0)).round()),
       ability: ability,
       action: action,
-      bossSkill: isBoss ? bossSkill : null,
+      bossSkill: isBoss ? bossSkill : mini?.skill,
       shielded: ability == 'shield',
       regenCd: ability == 'regen' ? regenInterval : 0,
-      actionCd: isBoss
+      actionCd: isBoss || isMini
           ? bossSkillInterval
           : switch (action) {
               'heal_aura' => healAuraInterval,
@@ -389,7 +394,7 @@ class BattleEngine {
   }
 
   int _killReward(Enemy e, int wave, String? skill, [double mult = 1.0]) {
-    final base = e.isBoss ? 60 + wave * 5 : 12 + wave * 3;
+    final base = e.isBoss ? 60 + wave * 5 : e.isMini ? 30 + wave * 4 : 12 + wave * 3;
     return math.max(1, (base * _params.rewardMultiplier * (profile?.income ?? 1.0) * (skill == 'waveCoinBonus' ? skillCoinBonus : 1.0) * _seasonAt(wave).coin * mult * (stage.kind != StageKind.normal ? regionalReward : 1.0)).round());
   }
 
@@ -453,7 +458,7 @@ class BattleEngine {
       acc -= w.spawnInterval;
       final e = makeEnemy(w, spawned);
       list.add(e);
-      events.add(BattleEvent(BattleEventType.spawn, enemyId: e.id, isBoss: e.isBoss));
+      events.add(BattleEvent(BattleEventType.spawn, enemyId: e.id, isBoss: e.isBoss, detail: e.isMini ? 'mini' : null));
       if (e.ability == 'swarm') {
         final twin = e.copyWith(id: '${e.id}b');
         list.add(twin);
@@ -811,7 +816,7 @@ class BattleEngine {
         }
         final reward = _killReward(m.e, st.wave, st.skill, resMul);
         coins += reward;
-        score += m.e.isBoss ? 200 : 50;
+        score += m.e.isBoss ? 200 : m.e.isMini ? 100 : 50;
         events.add(BattleEvent(BattleEventType.kill, enemyId: m.e.id, value: reward, isBoss: m.e.isBoss));
       } else {
         alive.add(m);
