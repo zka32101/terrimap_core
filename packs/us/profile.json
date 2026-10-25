@@ -1263,16 +1263,22 @@
   },
   "flyer": {
    "ability": "flying",
-   "hp": 1.0,
-   "speed": 1.0
+   "hp": 0.8,
+   "speed": 1.25
   },
   "saboteur": {
-   "action": "sabotage"
+   "action": "ranged_disable",
+   "speed": 1.1
   },
   "swarmer": {
-   "ability": "swarm"
+   "ability": "swarm",
+   "speed": 1.2,
+   "baseDamage": 1.2
   },
-  "splitter": {}
+  "splitter": {
+   "hp": 0.9,
+   "speed": 1.15
+  }
  },
  "attackActions": {
   "factory": {
@@ -1871,9 +1877,9 @@
   }
  ],
  "enemyMixV3": {
-  "flyer": 0.08,
-  "saboteur": 0.06,
-  "swarmer": 0.1,
-  "splitter": 0.08
+  "flyer": 0.12,
+  "saboteur": 0.05,
+  "swarmer": 0.14,
+  "splitter": 0.06
  }
 }

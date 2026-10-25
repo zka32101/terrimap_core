@@ -71,7 +71,11 @@ void main() {
           enemyKinds: [k],
           entranceIndices: const [0]);
       expect(engine.makeEnemy(w('flyer'), 0).flying, isTrue, reason: id);
-      expect(engine.makeEnemy(w('saboteur'), 0).action, 'sabotage', reason: id);
+      expect(engine.makeEnemy(w('saboteur'), 0).action,
+          pack.profile!.enemyOf('saboteur').action,
+          reason: id);
+      expect(pack.profile!.enemyOf('saboteur').action, isNot('none'),
+          reason: id);
       expect(engine.makeEnemy(w('swarmer'), 0).ability, 'swarm', reason: id);
     }
   });
@@ -152,5 +156,21 @@ void main() {
       }
     }
     expect(seen, isNotEmpty);
+  });
+
+  test('新しい敵は国ごとに違う: 能力・倍率・出る割合が、ドイツとアメリカで同じでない', () {
+    final de = load('de').profile!, us = load('us').profile!;
+    for (final k in CountryProfile.newEnemyKinds) {
+      final a = de.enemyOf(k), b = us.enemyOf(k);
+      final same = a.hp == b.hp &&
+          a.speed == b.speed &&
+          a.baseDamage == b.baseDamage &&
+          a.armor == b.armor &&
+          a.ability == b.ability &&
+          a.action == b.action;
+      expect(same, isFalse, reason: k);
+      expect(de.enemyMixV3[k], isNot(us.enemyMixV3[k]), reason: k);
+    }
+    expect(de.enemyOf('saboteur').action, isNot(us.enemyOf('saboteur').action));
   });
 }
